@@ -10,7 +10,8 @@
   ],
   "project_descriptions": {
     "personal-learning-agent": "围绕资料分步讲解与答题，通过邀请账户分别保存资料、聊天和学习进度。",
-    "antou-office-agent": "案头 v3.2：流式办公 Agent、Excel / Word 交付、本机会话与任务历史。"
+    "antou-office-agent": "案头 v3.2：流式办公 Agent、Excel / Word 交付、本机会话与任务历史。",
+    "newsdesk": "资讯台：Cloudflare RSS 聚合、搜索、收藏与已读同步；私人实例需本人登录。"
   },
   "planned_domain": "jjhbuilds.com"
 }

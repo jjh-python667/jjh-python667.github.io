@@ -12,6 +12,12 @@
   "done": [
     {
       "date": "2026-11-09",
+      "title": "完成私人资讯台与新版阅读界面",
+      "description": "接通 Cloudflare Workers、D1 与个人 Access 登录，采集回报 24/25 来源成功；新版动效前端完成 24 项本地模拟接口回归，公开源码并整理性能边界。",
+      "href": "projects/newsdesk.html"
+    },
+    {
+      "date": "2026-11-09",
       "title": "发布案头 v3.2 办公助手",
       "description": "以 v3.1 为基线补齐流式正文、参数适配、上下文预算、本机会话和任务历史。47 项本地测试通过，真实云端和 Office 应用内验收待补。",
       "href": "projects/antou-office-agent.html"

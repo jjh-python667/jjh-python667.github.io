@@ -2,7 +2,7 @@
 
 公开作品集：[jjh-python667.github.io](https://jjh-python667.github.io/)
 
-这是现有 JJH Builds 作品集的 GitHub Pages 静态展示版本，保留原有明暗主题、GSAP 开场、滚动编排、作品搜索和筛选。本次加入 [案头 ANTOU v3.2](https://github.com/jjh-python667/antou-office-agent) 的项目介绍、真实本地演示截图与成长记录。
+这是现有 JJH Builds 作品集的 GitHub Pages 静态展示版本，保留原有明暗主题、GSAP 开场、滚动编排、作品搜索和筛选。已收录 [资讯台 Newsdesk](https://github.com/jjh-python667/newsdesk)、[案头 ANTOU v3.2](https://github.com/jjh-python667/antou-office-agent) 等项目的介绍、演示截图与成长记录。
 
 ## 构建与预览
 
