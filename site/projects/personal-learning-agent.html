@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="deployment-mode" content="static-portfolio">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{var k='jjh-theme',t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}catch(e){}})();</script>
+  <title>学习搭子 · 工匠的 GitHub 工坊</title>
+  <meta name="description" content="把你自己的讲义或笔记，变成「讲解 → 出题 → 答题 → 继续」的一小轮练习。">
+  <link rel="canonical" href="https://jjh-python667.github.io/projects/personal-learning-agent.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="工匠的 GitHub 工坊">
+  <meta property="og:title" content="学习搭子 · 工匠的 GitHub 工坊">
+  <meta property="og:description" content="把你自己的讲义或笔记，变成「讲解 → 出题 → 答题 → 继续」的一小轮练习。">
+  <meta property="og:url" content="https://jjh-python667.github.io/projects/personal-learning-agent.html">
+  <meta property="og:image" content="https://jjh-python667.github.io/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="学习搭子 · 工匠的 GitHub 工坊">
+  <meta name="twitter:description" content="把你自己的讲义或笔记，变成「讲解 → 出题 → 答题 → 继续」的一小轮练习。">
+  <meta name="twitter:image" content="https://jjh-python667.github.io/assets/img/og.png">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/visual.css">
+  <link rel="stylesheet" href="../assets/css/refinement.css">
+  <link rel="stylesheet" href="../assets/css/motion.css">
+  <link rel="stylesheet" href="../assets/css/cinematic.css">
+  <link rel="stylesheet" href="../assets/css/impact.css">
+  <link rel="stylesheet" href="../assets/css/publication.css">
+</head>
+<body>
+  <div class="ambient-field" aria-hidden="true"><i class="ambient-orb orb-one"></i><i class="ambient-orb orb-two"></i><i class="ambient-orb orb-three"></i><span class="ambient-contour"></span></div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true">工</span>
+      <span class="brand-text">工匠</span>
+      <span class="brand-sub">JJH Builds</span>
+    </a>
+    <div class="header-tools"><button class="motion-toggle motion-toggle-header" type="button" data-motion-toggle aria-pressed="false" hidden>播放动效</button>
+      <button type="button" class="icon-btn cmdk-trigger" data-cmdk-open aria-haspopup="dialog" aria-controls="cmdk" aria-label="打开命令板">
+        <span aria-hidden="true">⌘</span>
+        <span class="cmdk-kbd">K</span>
+      </button>
+      <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-label="切换浅色或深色主题">
+        <span class="theme-icon-light" aria-hidden="true">🌙</span>
+        <span class="theme-icon-dark" aria-hidden="true">☀️</span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="打开导航">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <ul>
+        <li><a href="../index.html#works" data-nav-section="works" aria-current="page">作品</a></li><li><a href="../index.html#updates" data-nav-section="updates">动态</a></li><li><a href="../index.html#growth" data-nav-section="growth">成长记录</a></li><li><a href="../agent.html">学习空间</a></li><li><a class="ext" href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
+<div class="cmdk-backdrop" id="cmdk-backdrop" data-cmdk-backdrop hidden>
+  <div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="命令板" tabindex="-1">
+    <div class="cmdk-head"><strong>快速跳转</strong><span class="hint" style="margin-left:auto;color:var(--text-muted);font-size:0.8rem">Esc 关闭</span></div>
+    <ul class="cmdk-list" role="listbox" aria-label="命令">
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#works" aria-selected="false">精选作品<span class="hint">#works</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#updates" aria-selected="false">最近动态<span class="hint">#updates</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#growth" aria-selected="false">成长记录<span class="hint">#growth</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../agent.html" aria-selected="false">学习空间<span class="hint">Agent</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="theme" aria-selected="false">切换主题<span class="hint">浅/深</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="https://github.com/jjh-python667" data-external="1" aria-selected="false">打开 GitHub<span class="hint">外链</span></button></li>
+    </ul>
+    <div class="cmdk-foot">快速前往作品、动态与成长记录</div>
+  </div>
+</div>
+
+  <main id="main" class="wrap detail-page" data-detail-root>
+    <div class="detail-hero"><div class="section-display" aria-hidden="true"><span class="display-inner">PROJECT / 01</span></div>
+      <p class="crumb"><a href="../index.html">首页</a> / <a href="../index.html#works">作品</a> / 学习搭子</p>
+      <div class="card-top"><span class="status ">原型</span></div>
+      <h1>学习搭子</h1>
+      <p class="detail-en"><span class="mono">Personal Learning Agent · v0.4.0</span></p>
+      <p class="detail-value">把自己的讲义或笔记变成一小轮学习练习。v0.4.0 加入邀请登录，让每位用户分别保存自己的资料、聊天和学习进度。</p>
+      <ul class="tags"><li>Python</li><li>FastAPI</li><li>SQLite</li><li>DeepSeek API</li><li>QQ Bot</li></ul>
+      <div class="card-actions">
+        <a class="btn btn-primary" href="../agent.html">试用学习搭子</a>
+        <a class="btn btn-secondary" href="https://github.com/jjh-python667/personal-learning-agent" rel="noopener noreferrer" target="_blank">查看源码（新窗口）</a>
+        
+        <a class="btn btn-ghost" href="../index.html#works">返回精选</a>
+      </div>
+    </div>
+    
+<figure class="detail-shot product-shot"><a href="../assets/img/screenshots/pla-v020.png" target="_blank" rel="noopener noreferrer" aria-label="查看学习搭子界面大图（新窗口）"><img decoding="async" src="../assets/img/optimized/pla-v020-1440.webp" width="1440" height="940" alt="学习搭子网页，左侧学习导航，中间讲解与答题对话，右侧学习进度" loading="lazy"></a><figcaption>项目实际网页界面（v0.2.0）· 演示资料与模拟模型回复 · <a href="https://github.com/jjh-python667/personal-learning-agent" target="_blank" rel="noopener noreferrer">查看公开项目说明</a></figcaption></figure>
+<section class="detail-lead detail-media" aria-labelledby="pla-round-title">
+  <div class="detail-lead-card pla-round">
+    <div class="flow-badge">流程示意</div>
+    <h2 id="pla-round-title">一轮学习如何进行</h2>
+    <p class="detail-lead-sub">下面用一道列表索引题，演示「读资料、讲解、答题、继续」的学习过程。</p>
+    <ol class="pla-round-steps">
+      <li>
+        <span class="pla-k">输入 / 资料片段</span>
+        <pre class="flow-code"><code>items = [&quot;春&quot;, &quot;夏&quot;, &quot;秋&quot;, &quot;冬&quot;]</code></pre>
+      </li>
+      <li>
+        <span class="pla-k">出题</span>
+        <p class="pla-q">问：<code>items[1]</code> 的结果是什么？</p>
+      </li>
+      <li>
+        <span class="pla-k">反馈</span>
+        <p class="flow-feedback ok">对。下标 1 指向第二个元素「夏」。 答完可以说「继续」，进度留在任务里。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+    <div class="detail-sections detail-narrative">
+      <article data-sec="why"><div class="section-display" aria-hidden="true"><span class="display-inner">THE IDEA</span></div>
+        <h2>为什么做</h2>
+        <p>想把自己的 PDF/Word/Markdown 资料变成可逐步学习的任务，而不是一次性聊天。</p>
+      </article>
+      <article data-sec="built"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT I BUILT</span></div>
+        <h2>已做成</h2>
+        <ul><li>支持 PDF、DOCX、TXT、Markdown 文字导入与关键词检索</li><li>分块学习任务：暂停/继续、错题保存、进度需人工确认后才写入正式记录</li><li>v0.4.0 新增邀请登录与多用户数据隔离，课程、会话、资料、任务与学习记录按用户分别保存</li><li>升级前的原有数据迁入管理员账户；QQ 仍仅供原主人使用</li><li>继续支持按课程整理资料，在不同会话里保存聊天与执行记录</li></ul>
+      </article>
+      <article data-sec="try"><div class="section-display" aria-hidden="true"><span class="display-inner">EXPLORE IT</span></div>
+        <h2>试用与运行</h2>
+        <p><strong>邀请试用准备中。</strong>已接入本机学习空间，尚未部署公网，暂无公网试用链接，ICP备案仍在处理中。</p><p>目前可先查看下面的版本进展；希望在自己的设备上运行时，请按 <a href="https://github.com/jjh-python667/personal-learning-agent/blob/main/README.md" target="_blank" rel="noopener noreferrer">最新版 README</a> 配置。</p>
+      </article>
+      <article data-sec="next"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT’S NEXT</span></div>
+        <h2>当前验证进度</h2>
+        <p>项目验收记录显示，v0.4.0 本地 51 项测试通过，验收 1–6 通过。测试使用临时数据库和模拟模型调用。</p><p>手机完整流程与真实 HTTPS 待验证；第 5 项并发验收目前覆盖进程内重叠请求，两台浏览器同时操作仍待实测。</p><p><a href="https://github.com/jjh-python667/personal-learning-agent/pull/1" target="_blank" rel="noopener noreferrer">查看已合入的 PR #1</a> · <a href="https://github.com/jjh-python667/personal-learning-agent/blob/main/docs/ACCEPTANCE_v0.4.md" target="_blank" rel="noopener noreferrer">查看 v0.4 验收记录</a></p>
+      </article>
+      <article data-sec="notes"><div class="section-display" aria-hidden="true"><span class="display-inner">THE DETAILS</span></div>
+        <h2>资料说明</h2>
+        <p>以上说明根据 v0.4.0 的 README 与 PR #1 合入记录整理。51 项测试与验收结果引用项目记录，本次展示页更新未重新执行学习搭子后端测试。保留的界面截图来自 v0.2.0，使用演示资料与模拟模型回复。</p>
+      </article>
+    </div>
+  </main>
+  
+<footer class="site-footer">
+  <div class="wrap row">
+    <div>
+      <p>工匠 · 一点点学习，一件件做出来</p>
+      <p class="icp" hidden data-icp-placeholder></p>
+    </div>
+    <p><a href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">@jjh-python667</a></p>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+<script src="../assets/vendor/gsap/gsap.min.js" defer></script>
+<script src="../assets/vendor/gsap/ScrollTrigger.min.js" defer></script>
+<script src="../assets/js/refinement.js" defer></script>
+<script src="../assets/js/cinematic.js" defer></script>
+</body>
+</html>

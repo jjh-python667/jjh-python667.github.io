@@ -1,0 +1,16 @@
+{
+  "domain": "jjh-python667.github.io",
+  "github_user": "jjh-python667",
+  "icp_number": "",
+  "exclude_repositories": [
+    "jjh-python667",
+    "jjhbuilds",
+    "jjhbuilds.com",
+    "jjh-python667.github.io"
+  ],
+  "project_descriptions": {
+    "personal-learning-agent": "围绕资料分步讲解与答题，通过邀请账户分别保存资料、聊天和学习进度。",
+    "antou-office-agent": "案头 v3.2：流式办公 Agent、Excel / Word 交付、本机会话与任务历史。"
+  },
+  "planned_domain": "jjhbuilds.com"
+}

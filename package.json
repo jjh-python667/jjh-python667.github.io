@@ -1,0 +1,17 @@
+{
+  "name": "jjhbuilds-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs",
+    "sync": "node scripts/sync-github.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "vendoredDependencies": {
+    "gsap": "3.15.1"
+  }
+}

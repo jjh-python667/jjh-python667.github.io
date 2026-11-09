@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="deployment-mode" content="static-portfolio">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{var k='jjh-theme',t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}catch(e){}})();</script>
+  <title>星球大战 mini · 工匠的 GitHub 工坊</title>
+  <meta name="description" content="用 Pygame 练类、对象和游戏主循环的入门射击小游戏。">
+  <link rel="canonical" href="https://jjh-python667.github.io/projects/star-wars-mini.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="工匠的 GitHub 工坊">
+  <meta property="og:title" content="星球大战 mini · 工匠的 GitHub 工坊">
+  <meta property="og:description" content="用 Pygame 练类、对象和游戏主循环的入门射击小游戏。">
+  <meta property="og:url" content="https://jjh-python667.github.io/projects/star-wars-mini.html">
+  <meta property="og:image" content="https://jjh-python667.github.io/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="星球大战 mini · 工匠的 GitHub 工坊">
+  <meta name="twitter:description" content="用 Pygame 练类、对象和游戏主循环的入门射击小游戏。">
+  <meta name="twitter:image" content="https://jjh-python667.github.io/assets/img/og.png">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/visual.css">
+  <link rel="stylesheet" href="../assets/css/refinement.css">
+  <link rel="stylesheet" href="../assets/css/motion.css">
+  <link rel="stylesheet" href="../assets/css/cinematic.css">
+  <link rel="stylesheet" href="../assets/css/impact.css">
+  <link rel="stylesheet" href="../assets/css/publication.css">
+</head>
+<body>
+  <div class="ambient-field" aria-hidden="true"><i class="ambient-orb orb-one"></i><i class="ambient-orb orb-two"></i><i class="ambient-orb orb-three"></i><span class="ambient-contour"></span></div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true">工</span>
+      <span class="brand-text">工匠</span>
+      <span class="brand-sub">JJH Builds</span>
+    </a>
+    <div class="header-tools"><button class="motion-toggle motion-toggle-header" type="button" data-motion-toggle aria-pressed="false" hidden>播放动效</button>
+      <button type="button" class="icon-btn cmdk-trigger" data-cmdk-open aria-haspopup="dialog" aria-controls="cmdk" aria-label="打开命令板">
+        <span aria-hidden="true">⌘</span>
+        <span class="cmdk-kbd">K</span>
+      </button>
+      <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-label="切换浅色或深色主题">
+        <span class="theme-icon-light" aria-hidden="true">🌙</span>
+        <span class="theme-icon-dark" aria-hidden="true">☀️</span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="打开导航">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <ul>
+        <li><a href="../index.html#works" data-nav-section="works" aria-current="page">作品</a></li><li><a href="../index.html#updates" data-nav-section="updates">动态</a></li><li><a href="../index.html#growth" data-nav-section="growth">成长记录</a></li><li><a href="../agent.html">学习空间</a></li><li><a class="ext" href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
+<div class="cmdk-backdrop" id="cmdk-backdrop" data-cmdk-backdrop hidden>
+  <div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="命令板" tabindex="-1">
+    <div class="cmdk-head"><strong>快速跳转</strong><span class="hint" style="margin-left:auto;color:var(--text-muted);font-size:0.8rem">Esc 关闭</span></div>
+    <ul class="cmdk-list" role="listbox" aria-label="命令">
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#works" aria-selected="false">精选作品<span class="hint">#works</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#updates" aria-selected="false">最近动态<span class="hint">#updates</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#growth" aria-selected="false">成长记录<span class="hint">#growth</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../agent.html" aria-selected="false">学习空间<span class="hint">Agent</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="theme" aria-selected="false">切换主题<span class="hint">浅/深</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="https://github.com/jjh-python667" data-external="1" aria-selected="false">打开 GitHub<span class="hint">外链</span></button></li>
+    </ul>
+    <div class="cmdk-foot">快速前往作品、动态与成长记录</div>
+  </div>
+</div>
+
+  <main id="main" class="wrap detail-page" data-detail-root>
+    <div class="detail-hero"><div class="section-display" aria-hidden="true"><span class="display-inner">PROJECT / 02</span></div>
+      <p class="crumb"><a href="../index.html">首页</a> / <a href="../index.html#works">作品</a> / 星球大战 mini</p>
+      <div class="card-top"><span class="status done">已完成</span></div>
+      <h1>星球大战 mini</h1>
+      <p class="detail-en"><span class="mono">star-wars-mini</span></p>
+      <p class="detail-value">用 Pygame 练类、对象和游戏主循环的入门射击小游戏。</p>
+      <ul class="tags"><li>Python</li><li>Pygame</li><li>入门练习</li></ul>
+      <div class="card-actions">
+        <a class="btn btn-secondary" href="https://github.com/jjh-python667/star-wars-mini" rel="noopener noreferrer" target="_blank">查看源码（新窗口）</a>
+        
+        <a class="btn btn-ghost" href="../index.html#works">返回精选</a>
+      </div>
+    </div>
+    
+<section class="detail-lead" aria-labelledby="swm-play-title">
+  <figure class="detail-shot"><img decoding="async" src="../assets/img/optimized/swm-run-960.webp" alt="星球大战 mini 实机运行画面" width="960" height="640" loading="eager"><figcaption>游戏运行画面</figcaption></figure>
+  <div class="detail-lead-card">
+    <h2 id="swm-play-title">玩法</h2>
+    <ul><li>左右方向键移动飞船，空格射击。</li><li>P 或点击 Play 开始；Q 退出。</li><li>清完一波外星人会加速，分数与剩余生命显示在上方。</li></ul>
+
+  </div>
+</section>
+    <div class="detail-sections detail-narrative">
+      <article data-sec="why"><div class="section-display" aria-hidden="true"><span class="display-inner">THE IDEA</span></div>
+        <h2>为什么做</h2>
+        <p>跟着教材做完一遍后，想独立改结构和资源，确认自己理解游戏循环。</p>
+      </article>
+      <article data-sec="built"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT I BUILT</span></div>
+        <h2>已做成</h2>
+        <ul><li>左右移动、射击、分数与 Play 按钮</li><li>模块划分：settings / ship / bullet / alien / scoreboard 等</li><li>本地用 python alien_invasion.py 启动</li></ul>
+      </article>
+      <article data-sec="try"><div class="section-display" aria-hidden="true"><span class="display-inner">EXPLORE IT</span></div>
+        <h2>怎么试</h2>
+        <ul><li>安装 Python 3 与 pygame</li><li>在仓库目录运行：python alien_invasion.py</li><li>方向键移动，空格射击，P 开始，Q 退出</li></ul>
+      </article>
+      <article data-sec="next"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT’S NEXT</span></div>
+        <h2>下一步</h2>
+        <ul><li>如需公开演示，可补充录屏或浏览器版（当前无在线 demo）</li></ul>
+      </article>
+      <article data-sec="notes"><div class="section-display" aria-hidden="true"><span class="display-inner">THE DETAILS</span></div>
+        <h2>资料说明</h2>
+        <p>文案依据公开 README；图片素材授权需另行核对（仓库已说明）。</p>
+      </article>
+    </div>
+  </main>
+  
+<footer class="site-footer">
+  <div class="wrap row">
+    <div>
+      <p>工匠 · 一点点学习，一件件做出来</p>
+      <p class="icp" hidden data-icp-placeholder></p>
+    </div>
+    <p><a href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">@jjh-python667</a></p>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+<script src="../assets/vendor/gsap/gsap.min.js" defer></script>
+<script src="../assets/vendor/gsap/ScrollTrigger.min.js" defer></script>
+<script src="../assets/js/refinement.js" defer></script>
+<script src="../assets/js/cinematic.js" defer></script>
+</body>
+</html>

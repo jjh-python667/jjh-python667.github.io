@@ -1,0 +1,50 @@
+{
+  "doing": [
+    {
+      "title": "继续验证办公 Agent 的实际交付",
+      "description": "下一步补真实服务商联调与 Microsoft Office 内版式检查；保持原始资料与密钥不进入公开仓库。"
+    },
+    {
+      "title": "准备让作品集正式上线",
+      "description": "完成本地页面与手机布局检查，等待备案审核后，将作品发布到 jjhbuilds.com。"
+    }
+  ],
+  "done": [
+    {
+      "date": "2026-11-09",
+      "title": "发布案头 v3.2 办公助手",
+      "description": "以 v3.1 为基线补齐流式正文、参数适配、上下文预算、本机会话和任务历史。47 项本地测试通过，真实云端和 Office 应用内验收待补。",
+      "href": "projects/antou-office-agent.html"
+    },
+    {
+      "date": "2026-11-07",
+      "title": "让学习搭子在作品集里真正运行",
+      "description": "接通本机真实模型、资料上传与学习对话，补齐课程、会话与邀请隔离检查。公网试用仍在准备。",
+      "href": "projects/personal-learning-agent.html"
+    },
+    {
+      "date": "2026-11-05",
+      "title": "学习搭子 v0.4.0 合入 main",
+      "description": "新增邀请登录与多用户数据隔离。项目记录本地 51 项测试、验收 1–6 通过，手机完整流程与真实 HTTPS 待验证。",
+      "href": "projects/personal-learning-agent.html"
+    },
+    {
+      "date": "2026-11-05",
+      "title": "把作品和学习进度整理成个人网站",
+      "description": "完成手机、平板和桌面浏览器的页面检查；接下来准备正式上线。",
+      "href": "#works"
+    },
+    {
+      "date": "2026-11-04",
+      "title": "学习搭子更新到 v0.3.0",
+      "description": "加入课程与会话，让不同资料的学习过程可以分开保存。",
+      "href": "projects/personal-learning-agent.html"
+    },
+    {
+      "date": "2026-11-02",
+      "title": "公开学习搭子第一版",
+      "description": "发布可运行的学习原型，开始记录改进过程。",
+      "href": "projects/personal-learning-agent.html"
+    }
+  ]
+}

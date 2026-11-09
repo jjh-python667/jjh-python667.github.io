@@ -1,0 +1,42 @@
+{
+  "synced_at": "2026-11-09T09:15:54.373Z",
+  "source": "github_api",
+  "github_user": "jjh-python667",
+  "items": [
+    {
+      "name": "antou-office-agent",
+      "description": "案头 ANTOU v3.2：本地办公 Agent，支持流式正文、Excel/Word 交付、任务取消与本机会话历史。",
+      "language": "Python",
+      "pushed_at": "2026-11-09T09:14:16Z",
+      "html_url": "https://github.com/jjh-python667/antou-office-agent",
+      "topics": []
+    },
+    {
+      "name": "personal-learning-agent",
+      "description": "v0.3.0 · 个人学习 Agent｜课程与会话、QQ 分条回复、连学与资料检索缓存",
+      "language": "Python",
+      "pushed_at": "2026-11-05T13:50:43Z",
+      "html_url": "https://github.com/jjh-python667/personal-learning-agent",
+      "topics": [
+        "deepseek",
+        "document-search",
+        "fastapi",
+        "learning",
+        "multi-turn-conversation",
+        "personal-agent",
+        "python",
+        "qq-bot",
+        "sqlite",
+        "student-project"
+      ]
+    },
+    {
+      "name": "yujiang-deepseek",
+      "description": "大肥鱼 · 雨酱｜DeepSeek、QQ、B站和桌宠的个人部署文档",
+      "language": "JavaScript",
+      "pushed_at": "2026-11-04T09:58:13Z",
+      "html_url": "https://github.com/jjh-python667/yujiang-deepseek",
+      "topics": []
+    }
+  ]
+}

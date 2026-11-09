@@ -1,0 +1,42 @@
+{
+  "id": "list-index-0",
+  "title": "同一例子：列表从 0 开始索引",
+  "badge": "流程示意",
+  "hint": "可点步骤跳转，也可按「下一步」顺序体验 · 答错可重试 · 方向键移动焦点，Enter/空格激活",
+  "steps": [
+    { "id": "explain", "label": "讲解" },
+    { "id": "quiz", "label": "出题" },
+    { "id": "answer", "label": "答题" },
+    { "id": "continue", "label": "继续" }
+  ],
+  "explain": {
+    "kicker": "讲解",
+    "code": "items = [\"春\", \"夏\", \"秋\", \"冬\"]",
+    "body_html": "列表下标从 <strong>0</strong> 开始：第一个是 <code>items[0]</code>，第二个才是 <code>items[1]</code>。",
+    "next": { "step": "quiz", "label": "下一步：出题" }
+  },
+  "quiz": {
+    "kicker": "出题",
+    "body_html": "已知 <code>items = [\"春\", \"夏\", \"秋\", \"冬\"]</code>",
+    "question_html": "问：<code>items[1]</code> 的结果是什么？",
+    "next": { "step": "answer", "label": "下一步：答题" }
+  },
+  "answer": {
+    "kicker": "答题",
+    "prompt_html": "选择 <code>items[1]</code> 的结果：",
+    "choices": [
+      { "id": "a", "label": "\"春\"", "correct": false, "hint": "「春」是 items[0]，下标从 0 起算。" },
+      { "id": "b", "label": "\"夏\"", "correct": true, "hint": "" },
+      { "id": "c", "label": "\"秋\"", "correct": false, "hint": "「秋」是 items[2]，再往前看一位。" }
+    ],
+    "ok": "对。下标 1 指向第二个元素「夏」。",
+    "bad_fallback": "再看一眼：0 是「春」，所以 1 是「夏」。"
+  },
+  "continue": {
+    "kicker": "继续",
+    "body_html": "下一节可以学：用切片取出「夏、秋」——<code>items[1:3]</code>。",
+    "note_html": "真正的项目里，答完后可以说「继续」，进度会留在任务里。"
+  },
+  "restart_label": "重新体验",
+  "detail_label": "查看项目详情"
+}

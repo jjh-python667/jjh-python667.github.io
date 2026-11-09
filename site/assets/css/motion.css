@@ -1,0 +1,244 @@
+/* Purposeful motion: a living workshop, with stable links and a quiet reading area. */
+.creative-stage {
+  --float-range: 10px;
+  --float-angle: .8deg;
+  --orbit-path: path("M 175 0 A 175 110 0 1 1 175 220 A 175 110 0 1 1 175 0");
+}
+.hero-line-inner { display: block; }
+.portfolio-home .hero-enter, .portfolio-home .hero-enter .btn-cta-strong { animation: none; }
+
+.stage-mode-label {
+  position: absolute;
+  z-index: 4;
+  top: 17px;
+  left: 21px;
+  color: var(--text-muted);
+  font: 8px/1.5 var(--mono);
+  letter-spacing: .12em;
+  pointer-events: none;
+}
+.motion-toggle {
+  position: absolute;
+  z-index: 5;
+  top: 5px;
+  right: 10px;
+  min-height: 44px;
+  padding: 8px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 13px;
+  background: transparent;
+  color: var(--text-muted);
+  font: 10px/1.4 var(--font);
+  font-weight: 550;
+  cursor: pointer;
+}
+.motion-toggle:hover { background: color-mix(in srgb, var(--bg-elevated) 72%, transparent); color: var(--accent); }
+.motion-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.motion-toggle:disabled { cursor: default; opacity: .75; }
+.motion-toggle[hidden] { display: none; }
+.motion-toggle::before { content: "Ⅱ"; font: 10px/1 var(--mono); color: var(--accent); }
+.motion-toggle[aria-pressed="false"]::before { content: "▷"; }
+.motion-toggle:disabled::before { content: "—"; }
+
+/* The outer layer floats; the inner object retains pointer-based perspective. */
+.stage-float {
+  position: absolute;
+  z-index: 1;
+  top: 47%;
+  left: 55%;
+  width: 182px;
+  height: 206px;
+  transform: translate(-50%, -50%);
+  animation: workshop-float 7.6s ease-in-out infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+.stage-float .stage-core {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotateX(var(--stage-x)) rotateY(var(--stage-y)) rotate(-9deg);
+  transform-origin: 50% 55%;
+  transition: transform .28s cubic-bezier(.2, .7, .2, 1);
+}
+.creative-stage::before {
+  animation: workshop-shadow 7.6s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.stage-orbit { z-index: 0; }
+.orbit-beacon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--bg-elevated);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 10%, transparent);
+  offset-path: var(--orbit-path);
+  offset-rotate: 0deg;
+  offset-distance: 0%;
+  animation: workshop-orbit 18s linear infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+.stage-path {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  pointer-events: none;
+}
+.stage-route {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 3 13;
+  opacity: .24;
+  animation: workshop-route 22s linear infinite;
+  animation-play-state: paused;
+}
+.stage-route-secondary { opacity: .14; animation-duration: 28s; animation-direction: reverse; }
+.stage-status-tick {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 5px 1px 0;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: workshop-signal 3.8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+/* Only the visual surface drifts. The anchor's hit area stays in place. */
+.creative-stage .stage-ticket {
+  display: block;
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.stage-ticket-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  min-height: 67px;
+  padding: 11px 15px;
+  border: 1px solid color-mix(in srgb, var(--bg-elevated) 65%, var(--border));
+  border-radius: 18px;
+  background: var(--stage-ticket);
+  box-shadow: 0 8px 25px rgba(33, 55, 104, .075), inset 0 1px 0 rgba(255, 255, 255, .5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  translate: 0 0;
+  animation: workshop-ticket 6.4s ease-in-out infinite;
+  animation-play-state: paused;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.ticket-game .stage-ticket-body { animation-delay: -2.2s; animation-duration: 7.2s; }
+.ticket-notes .stage-ticket-body { animation-delay: -4.4s; animation-duration: 6.8s; }
+.stage-ticket:focus-visible { border-radius: 18px; outline: 2px solid var(--accent); outline-offset: 4px; }
+[data-theme="dark"] .stage-ticket-body { border-color: #3b4a68; box-shadow: 0 8px 25px rgba(0, 0, 0, .15); }
+[data-theme="dark"] .creative-stage .stage-ticket { border: 0; box-shadow: none; }
+
+[data-motion="running"] .creative-stage.is-stage-visible .stage-float,
+[data-motion="running"] .creative-stage.is-stage-visible .stage-ticket-body,
+[data-motion="running"] .creative-stage.is-stage-visible .orbit-beacon,
+[data-motion="running"] .creative-stage.is-stage-visible .stage-route,
+[data-motion="running"] .creative-stage.is-stage-visible .stage-status-tick,
+[data-motion="running"] .creative-stage.is-stage-visible::before { animation-play-state: running; }
+
+@keyframes workshop-float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(-.4deg); }
+  50% { transform: translate(-50%, -50%) translateY(calc(var(--float-range) * -1)) rotate(var(--float-angle)); }
+}
+@keyframes workshop-shadow {
+  0%, 100% { transform: rotate(-10deg) scale(1); opacity: 1; }
+  50% { transform: rotate(-10deg) scale(.88); opacity: .7; }
+}
+@keyframes workshop-ticket {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+@keyframes workshop-orbit { to { offset-distance: 100%; } }
+@keyframes workshop-route { to { stroke-dashoffset: -100; } }
+@keyframes workshop-signal {
+  0%, 100% { opacity: .4; }
+  50% { opacity: 1; }
+}
+
+/* Finite hover feedback is limited to visual covers, never the quiz controls. */
+.card .cover-shot img, .preview-project > img, .preview-note, .card .notes-sheet, .card .workspace-mark {
+  transition: transform .55s cubic-bezier(.2, .7, .2, 1);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  [data-motion="running"] .card-interactive:hover .cover-shot img { transform: scale(1.035); }
+  [data-motion="running"] .card-interactive:hover .notes-sheet { transform: translateY(-3px) rotate(-.6deg); }
+  [data-motion="running"] .card-interactive:hover .workspace-mark { transform: rotate(6deg) translateY(-2px); }
+  [data-motion="running"] .preview-project:hover > img { transform: scale(1.055); }
+  [data-motion="running"] .preview-project:hover .preview-note { transform: translateY(-2px); }
+  [data-motion="running"] .stage-ticket:hover .stage-ticket-body,
+  [data-motion="running"] .stage-ticket:focus-visible .stage-ticket-body { animation-play-state: paused !important; border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+}
+[data-motion="paused"] .stage-float .stage-core { transition: none; }
+[data-motion="paused"] .btn-cta-strong.is-magnetic { transform: none !important; }
+[data-motion="paused"] .stage-ticket:hover, [data-motion="paused"] .preview-project:hover,
+[data-motion="paused"] .portfolio-home .card-interactive:hover { transform: none; }
+[data-motion="paused"] .ticket-agent:hover { transform: rotate(-5deg); }
+[data-motion="paused"] .ticket-game:hover { transform: rotate(6deg); }
+[data-motion="paused"] .ticket-notes:hover { transform: rotate(-3deg); }
+[data-motion="paused"] .card .cover-shot img, [data-motion="paused"] .preview-project > img,
+[data-motion="paused"] .preview-note, [data-motion="paused"] .card .notes-sheet,
+[data-motion="paused"] .card .workspace-mark { transition: none; }
+
+@media (max-width: 1100px) and (min-width: 900px) {
+  .stage-ticket-body { padding-inline: 11px; }
+}
+@media (max-width: 899px) {
+  .stage-float { left: 54%; }
+}
+@media (max-width: 640px) {
+  .creative-stage { --orbit-path: path("M 145 0 A 145 87.5 0 1 1 145 175 A 145 87.5 0 1 1 145 0"); }
+  .stage-float { width: 150px; height: 175px; top: 46%; }
+  .stage-mode-label { top: 18px; left: 16px; font-size: 7px; letter-spacing: .08em; }
+  .motion-toggle { top: 4px; right: 7px; padding-inline: 8px; font-size: 10px; }
+  .ticket-agent { top: 48px; }
+  .stage-ticket-body { grid-template-columns: 25px minmax(0, 1fr); column-gap: 7px; min-height: 48px; padding: 9px 11px; border-radius: 14px; }
+}
+@media (max-width: 359px) {
+  .stage-float { width: 135px; height: 158px; }
+  .ticket-agent { top: 46px; }
+  .stage-mode-label { left: 13px; font-size: 6px; }
+  .stage-ticket-body { padding-inline: 9px; }
+}
+@media (pointer: coarse) {
+  .creative-stage { --float-range: 5px; --float-angle: .35deg; }
+  .stage-float .stage-core { transform: rotate(-9deg); }
+  .stage-ticket-body, .orbit-beacon, .stage-route, .stage-status-tick { animation: none; }
+  .orbit-beacon { opacity: .55; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-float, .stage-ticket-body, .orbit-beacon, .stage-route, .stage-status-tick,
+  .creative-stage::before { animation: none !important; }
+  .stage-float { transform: translate(-50%, -50%); }
+  .stage-float .stage-core { transform: rotate(-9deg); transition: none; }
+  .stage-ticket, .preview-project, .portfolio-home .card-interactive,
+  .card .cover-shot img, .preview-project > img, .preview-note,
+  .card .notes-sheet, .card .workspace-mark { transition: none; }
+  .stage-ticket:hover, .preview-project:hover, .portfolio-home .card-interactive:hover { transform: none; }
+  .ticket-agent:hover { transform: rotate(-5deg); }
+  .ticket-game:hover { transform: rotate(6deg); }
+  .ticket-notes:hover { transform: rotate(-3deg); }
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="deployment-mode" content="static-portfolio">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{var k='jjh-theme',t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}catch(e){}})();</script>
+  <title>大肥鱼·雨酱 · 工匠的 GitHub 工坊</title>
+  <meta name="description" content="用公开文档说明本机 DeepSeek 工作台里雨酱的个人部署与验收——不是可下载的产品本体。">
+  <link rel="canonical" href="https://jjh-python667.github.io/projects/yujiang-deepseek.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="工匠的 GitHub 工坊">
+  <meta property="og:title" content="大肥鱼·雨酱 · 工匠的 GitHub 工坊">
+  <meta property="og:description" content="用公开文档说明本机 DeepSeek 工作台里雨酱的个人部署与验收——不是可下载的产品本体。">
+  <meta property="og:url" content="https://jjh-python667.github.io/projects/yujiang-deepseek.html">
+  <meta property="og:image" content="https://jjh-python667.github.io/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="大肥鱼·雨酱 · 工匠的 GitHub 工坊">
+  <meta name="twitter:description" content="用公开文档说明本机 DeepSeek 工作台里雨酱的个人部署与验收——不是可下载的产品本体。">
+  <meta name="twitter:image" content="https://jjh-python667.github.io/assets/img/og.png">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/visual.css">
+  <link rel="stylesheet" href="../assets/css/refinement.css">
+  <link rel="stylesheet" href="../assets/css/motion.css">
+  <link rel="stylesheet" href="../assets/css/cinematic.css">
+  <link rel="stylesheet" href="../assets/css/impact.css">
+  <link rel="stylesheet" href="../assets/css/publication.css">
+</head>
+<body>
+  <div class="ambient-field" aria-hidden="true"><i class="ambient-orb orb-one"></i><i class="ambient-orb orb-two"></i><i class="ambient-orb orb-three"></i><span class="ambient-contour"></span></div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true">工</span>
+      <span class="brand-text">工匠</span>
+      <span class="brand-sub">JJH Builds</span>
+    </a>
+    <div class="header-tools"><button class="motion-toggle motion-toggle-header" type="button" data-motion-toggle aria-pressed="false" hidden>播放动效</button>
+      <button type="button" class="icon-btn cmdk-trigger" data-cmdk-open aria-haspopup="dialog" aria-controls="cmdk" aria-label="打开命令板">
+        <span aria-hidden="true">⌘</span>
+        <span class="cmdk-kbd">K</span>
+      </button>
+      <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-label="切换浅色或深色主题">
+        <span class="theme-icon-light" aria-hidden="true">🌙</span>
+        <span class="theme-icon-dark" aria-hidden="true">☀️</span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="打开导航">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <ul>
+        <li><a href="../index.html#works" data-nav-section="works" aria-current="page">作品</a></li><li><a href="../index.html#updates" data-nav-section="updates">动态</a></li><li><a href="../index.html#growth" data-nav-section="growth">成长记录</a></li><li><a href="../agent.html">学习空间</a></li><li><a class="ext" href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
+<div class="cmdk-backdrop" id="cmdk-backdrop" data-cmdk-backdrop hidden>
+  <div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="命令板" tabindex="-1">
+    <div class="cmdk-head"><strong>快速跳转</strong><span class="hint" style="margin-left:auto;color:var(--text-muted);font-size:0.8rem">Esc 关闭</span></div>
+    <ul class="cmdk-list" role="listbox" aria-label="命令">
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#works" aria-selected="false">精选作品<span class="hint">#works</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#updates" aria-selected="false">最近动态<span class="hint">#updates</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../index.html#growth" aria-selected="false">成长记录<span class="hint">#growth</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="../agent.html" aria-selected="false">学习空间<span class="hint">Agent</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="theme" aria-selected="false">切换主题<span class="hint">浅/深</span></button></li>
+      <li><button type="button" class="cmdk-item" role="option" data-cmdk-action="goto" data-href="https://github.com/jjh-python667" data-external="1" aria-selected="false">打开 GitHub<span class="hint">外链</span></button></li>
+    </ul>
+    <div class="cmdk-foot">快速前往作品、动态与成长记录</div>
+  </div>
+</div>
+
+  <main id="main" class="wrap detail-page" data-detail-root>
+    <div class="detail-hero"><div class="section-display" aria-hidden="true"><span class="display-inner">PROJECT / 04</span></div>
+      <p class="crumb"><a href="../index.html">首页</a> / <a href="../index.html#works">作品</a> / 大肥鱼·雨酱</p>
+      <div class="card-top"><span class="status wip">开发中</span></div>
+      <h1>大肥鱼·雨酱</h1>
+      <p class="detail-en"><span class="mono">yujiang-deepseek</span></p>
+      <p class="detail-value">用公开文档说明本机 DeepSeek 工作台里雨酱的个人部署与验收——不是可下载的产品本体。</p>
+      <ul class="tags"><li>文档</li><li>部署</li><li>DeepSeek</li></ul>
+      <div class="card-actions">
+        <a class="btn btn-secondary" href="https://github.com/jjh-python667/yujiang-deepseek" rel="noopener noreferrer" target="_blank">查看文档（新窗口）</a>
+        
+        <a class="btn btn-ghost" href="../index.html#works">返回精选</a>
+      </div>
+    </div>
+    
+<section class="detail-lead" aria-labelledby="notes-excerpt-title">
+  <div class="detail-lead-card notes-excerpt">
+    <div class="flow-badge">个人部署文档</div>
+    <h2 id="notes-excerpt-title">摘录：仓库定位</h2>
+    <blockquote class="notes-quote">
+      <p>仓库包含个人部署文档和精选的集成源码。账号凭据、私聊原文、角色记忆、模型权重、安装包与本机运行状态文件由本机单独保管。</p>
+    </blockquote>
+    <p class="notes-source">来源：README.md（公开仓库 · 核对日 2026-11-04） · 不含密钥或私有配置</p>
+  </div>
+</section>
+    <div class="detail-sections detail-narrative">
+      <article data-sec="why"><div class="section-display" aria-hidden="true"><span class="display-inner">THE IDEA</span></div>
+        <h2>为什么做</h2>
+        <p>把本机 DeepSeek 工作台上雨酱的部署、验收与维护方式写成可公开文档，并标明哪些是 MIT 开源组件、哪些仍由本机单独保管。</p>
+      </article>
+      <article data-sec="built"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT I BUILT</span></div>
+        <h2>已做成</h2>
+        <ul><li>公开 README：日常对话与陪伴、QQ（SurfCore / SnowLuma）、B 站收件箱监听与验收记录（核对日 2026-11-04）</li><li>文档目录：日常使用与运维、验收／已知边界与待办</li><li>已开放两项 MIT 集成组件：QQ / OneBot 登录账号校验，以及 B 站回复与 @ 收件箱读取（可独立测试）</li></ul>
+      </article>
+      <article data-sec="try"><div class="section-display" aria-hidden="true"><span class="display-inner">EXPLORE IT</span></div>
+        <h2>怎么试</h2>
+        <ul><li>阅读仓库 README 与 docs/operations.md、docs/verification.md</li><li>查看 docs/open-source.md 了解 MIT 开源组件与上游来源；勿索要账号凭据或本机运行状态文件</li></ul>
+      </article>
+      <article data-sec="next"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT’S NEXT</span></div>
+        <h2>下一步</h2>
+        <ul><li>按本机验收进度继续补充运维与边界说明</li><li>保持开源组件与个人部署文档的边界清晰</li></ul>
+      </article>
+      <article data-sec="notes"><div class="section-display" aria-hidden="true"><span class="display-inner">THE DETAILS</span></div>
+        <h2>资料说明</h2>
+        <p>本仓库为个人部署文档与精选集成源码说明，非产品源码／非开源本体；核对日 2026-11-04。能力与限制均摘自公开 README。</p>
+      </article>
+    </div>
+  </main>
+  
+<footer class="site-footer">
+  <div class="wrap row">
+    <div>
+      <p>工匠 · 一点点学习，一件件做出来</p>
+      <p class="icp" hidden data-icp-placeholder></p>
+    </div>
+    <p><a href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">@jjh-python667</a></p>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+<script src="../assets/vendor/gsap/gsap.min.js" defer></script>
+<script src="../assets/vendor/gsap/ScrollTrigger.min.js" defer></script>
+<script src="../assets/js/refinement.js" defer></script>
+<script src="../assets/js/cinematic.js" defer></script>
+</body>
+</html>

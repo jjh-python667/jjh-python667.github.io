@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jjh-python667.github.io/sitemap.xml
