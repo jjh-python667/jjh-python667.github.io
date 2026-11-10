@@ -97,7 +97,7 @@
   <figure class="detail-shot"><img decoding="async" src="../assets/img/optimized/swm-run-960.webp" alt="星球大战 mini 实机运行画面" width="960" height="640" loading="eager"><figcaption>游戏运行画面</figcaption></figure>
   <div class="detail-lead-card">
     <h2 id="swm-play-title">玩法</h2>
-    <ul><li>左右方向键移动飞船，空格射击。</li><li>P 或点击 Play 开始；Q 退出。</li><li>清完一波外星人会加速，分数与剩余生命显示在上方。</li></ul>
+    <ul><li>左右方向键移动飞船，空格射击。</li><li>P 或点击 Play 开始；游戏中用 P / Esc 暂停，切出窗口自动暂停；Q 退出。</li><li>清完一波外星人会加速，分数与剩余生命显示在上方。</li></ul>
 
   </div>
 </section>
@@ -107,12 +107,12 @@
         <p>跟着教材做完一遍后，想独立改结构和资源，确认自己理解游戏循环。</p>
       </article>
       <article data-sec="built"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT I BUILT</span></div>
-        <h2>已做成</h2>
+        <h2>已做成</h2><p>2026-11-10 修复子弹上限、三条命计数、移动越界与精确计分；增加暂停、失焦保护、图片缓存及非阻塞受击恢复。30 项回归测试通过，Windows / Ubuntu、Python 3.10 / 3.12 四组 CI 通过。</p><p><a href="https://github.com/jjh-python667/star-wars-mini/blob/main/GAMEPLAY.md" target="_blank" rel="noopener noreferrer">查看最新操作与验证范围 ↗</a></p>
         <ul><li>左右移动、射击、分数与 Play 按钮</li><li>模块划分：settings / ship / bullet / alien / scoreboard 等</li><li>本地用 python alien_invasion.py 启动</li></ul>
       </article>
       <article data-sec="try"><div class="section-display" aria-hidden="true"><span class="display-inner">EXPLORE IT</span></div>
         <h2>怎么试</h2>
-        <ul><li>安装 Python 3 与 pygame</li><li>在仓库目录运行：python alien_invasion.py</li><li>方向键移动，空格射击，P 开始，Q 退出</li></ul>
+        <ul><li>安装 Python 3 与 pygame</li><li>在仓库目录运行：python alien_invasion.py</li><li>方向键移动，空格射击，P 开始，P / Esc 暂停，Q 退出</li></ul>
       </article>
       <article data-sec="next"><div class="section-display" aria-hidden="true"><span class="display-inner">WHAT’S NEXT</span></div>
         <h2>下一步</h2>

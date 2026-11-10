@@ -4,7 +4,9 @@
 
 人工智能专业大一。Python 的 class（类）与基础仍在巩固，尚未完成。这个仓库是公开作品集的静态站点。
 
-当前版本为 `1.1.0`，已由本人于 2026-11-10 确认同步到 GitHub。以提交 `643740a76b210917c961261b202cbf314d09d93b` 为基准，保留「做 AI 产品，也做工作流。」的定位、五项精选和明确的演示/原型说明，结合 Motion Design 的开场、模块 reveal 与交互反馈。公开作品集：[jjh-python667.github.io](https://jjh-python667.github.io/)。改动与验收范围见 [REVIEW-NOTES.md](REVIEW-NOTES.md)。
+当前版本为 `1.2.0`，已由本人于 2026-11-10 确认同步到 GitHub。以提交 `643740a76b210917c961261b202cbf314d09d93b` 为基准，保留「做 AI 产品，也做工作流。」的定位、六项精选和明确的演示/原型说明，结合 Motion Design 的开场、模块 reveal 与交互反馈。公开作品集：[jjh-python667.github.io](https://jjh-python667.github.io/)。改动与验收范围见 [REVIEW-NOTES.md](REVIEW-NOTES.md)。
+
+本轮新增全球羊毛情报中心的项目卡片、详情页、真实本机截图与公开源码入口，并同步 Pygame 练习的修复进展。优惠站线上基础版与新版截图分开说明，新增内容自动翻译仍待上线验证。
 
 ![资讯台本地预览，使用固定演示数据](docs/assets/img/screenshots/newsdesk-desktop.png)
 
@@ -63,6 +65,7 @@ npm run preview
 
 | 项目 | 是什么 | 仓库 | 作品页 |
 | --- | --- | --- | --- |
+| 全球羊毛情报中心 | 公开优惠情报站，基础版已上线、新版待部署 | [dealhunter](https://github.com/jjh-python667/dealhunter) | [介绍](https://jjh-python667.github.io/projects/dealhunter.html) |
 | 案头 ANTOU | 本地办公助手 | [antou-office-agent](https://github.com/jjh-python667/antou-office-agent) | [介绍](https://jjh-python667.github.io/projects/antou-office-agent.html) |
 | 学习搭子 | 个人学习 Agent，v0.4.0 | [personal-learning-agent](https://github.com/jjh-python667/personal-learning-agent) | [介绍](https://jjh-python667.github.io/projects/personal-learning-agent.html) |
 | 资讯台 Newsdesk | Cloudflare Workers + D1 的个人资讯台 | [newsdesk](https://github.com/jjh-python667/newsdesk) | [介绍](https://jjh-python667.github.io/projects/newsdesk.html) |

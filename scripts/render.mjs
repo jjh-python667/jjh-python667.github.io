@@ -5,7 +5,7 @@ export function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 const date = value => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date(value));
-const names = { 'newsdesk': '资讯台 Newsdesk', 'antou-office-agent': '案头 ANTOU', 'personal-learning-agent': '学习搭子', 'yujiang-deepseek': '大肥鱼·雨酱',
+const names = { 'dealhunter': '全球羊毛情报中心', 'newsdesk': '资讯台 Newsdesk', 'antou-office-agent': '案头 ANTOU', 'personal-learning-agent': '学习搭子', 'yujiang-deepseek': '大肥鱼·雨酱',
   'grokbot-workflow-notes': 'AI 工具工作流笔记', 'star-wars-mini': '星球大战 mini', 'python-learning': 'Python 学习记录' };
 
 export async function renderSite(directory, { requireIcp = false } = {}) {

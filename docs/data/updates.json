@@ -1,57 +1,41 @@
 {
-  "synced_at": "2026-11-09T12:44:31.537Z",
+  "synced_at": "2026-11-10T13:30:22.624Z",
   "source": "github_api",
   "github_user": "jjh-python667",
   "items": [
     {
-      "name": "newsdesk",
-      "description": "资讯台：Cloudflare Workers + D1 的个人 AI、科技与商业资讯阅读工具，支持 RSS 聚合、搜索、收藏与已读同步。",
-      "language": "HTML",
-      "pushed_at": "2026-11-09T12:44:07Z",
-      "html_url": "https://github.com/jjh-python667/newsdesk",
-      "topics": [
-        "cloudflare-d1",
-        "cloudflare-workers",
-        "news-aggregator",
-        "personal-project",
-        "rss",
-        "vanilla-javascript"
-      ]
+      "name": "dealhunter",
+      "description": "全球羊毛情报中心：Cloudflare Workers + D1 公开优惠情报站，含中文导读、原文对照、筛选与收藏。",
+      "language": "TypeScript",
+      "pushed_at": "2026-11-10T13:26:30Z",
+      "html_url": "https://github.com/jjh-python667/dealhunter",
+      "topics": []
     },
     {
-      "name": "antou-office-agent",
-      "description": "案头 ANTOU v3.2：本地办公 Agent，支持流式正文、Excel/Word 交付、任务取消与本机会话历史。",
+      "name": "star-wars-mini",
+      "description": "Python / Pygame 入门练习：参考《Python 编程：从入门到实践》的外星人入侵项目制作的射击小游戏。",
       "language": "Python",
-      "pushed_at": "2026-11-09T09:24:43Z",
-      "html_url": "https://github.com/jjh-python667/antou-office-agent",
+      "pushed_at": "2026-11-10T10:41:23Z",
+      "html_url": "https://github.com/jjh-python667/star-wars-mini",
       "topics": [
-        "ai-agent",
-        "deepseek",
-        "gsap",
-        "local-first",
-        "office-automation",
-        "python",
-        "qwen",
-        "sqlite"
-      ]
-    },
-    {
-      "name": "personal-learning-agent",
-      "description": "v0.3.0 · 个人学习 Agent｜课程与会话、QQ 分条回复、连学与资料检索缓存",
-      "language": "Python",
-      "pushed_at": "2026-11-05T13:50:43Z",
-      "html_url": "https://github.com/jjh-python667/personal-learning-agent",
-      "topics": [
-        "deepseek",
-        "document-search",
-        "fastapi",
+        "beginner-project",
+        "game",
         "learning",
-        "multi-turn-conversation",
-        "personal-agent",
+        "pygame",
+        "python"
+      ]
+    },
+    {
+      "name": "python-learning",
+      "description": "Python 自学记录：从 hello.py 开始，逐步积累基础练习与学习笔记。",
+      "language": "Python",
+      "pushed_at": "2026-11-10T05:15:27Z",
+      "html_url": "https://github.com/jjh-python667/python-learning",
+      "topics": [
+        "beginner",
+        "learning",
         "python",
-        "qq-bot",
-        "sqlite",
-        "student-project"
+        "study-notes"
       ]
     }
   ]
