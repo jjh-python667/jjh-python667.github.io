@@ -14,7 +14,8 @@ export async function optimizeStatic(directory) {
       if (relative.startsWith('..') || path.isAbsolute(relative) || !relative.startsWith('assets' + path.sep)) throw new Error('Bundle input must stay in assets');
       return (await readFile(source, 'utf8')).replace(/\/\/[#@] sourceMappingURL=.*$/gm, '');
     }));
-    const body = contents.join(type === 'js' ? '\n;\n' : '\n');
+    // Stable bundle fingerprints across Windows and Linux checkouts.
+    const body = contents.join(type === 'js' ? '\n;\n' : '\n').replace(/\r\n/g, '\n').replace(/[ \t]+$/gm, '').trimEnd() + '\n';
     const digest = createHash('sha256').update(body).digest('hex').slice(0, 12);
     const relative = 'assets/' + (type === 'js' ? 'js/' : 'css/') + label + '-' + digest + '.' + type;
     if (!written.has(relative)) { await mkdir(path.dirname(path.join(directory, relative)), { recursive: true }); await writeFile(path.join(directory, relative), body); written.set(relative, Buffer.byteLength(body)); }
@@ -35,7 +36,7 @@ export async function optimizeStatic(directory) {
     if (vendors.length) urls.push(await combine(filename, vendors, 'js', 'vendor-gsap'));
     if (application.length) urls.push(await combine(filename, application, 'js', 'portfolio'));
     for (const [index, tag] of scripts.entries()) html = html.replace(tag, index === 0 ? urls.map(url => '<script src="' + url + '" defer></script>').join('\n') : '');
-    await writeFile(filename, html);
+    await writeFile(filename, html.replace(/\r\n/g, '\n').replace(/[ \t]+$/gm, ''));
   }
   // Keep source assets for diagnostics and the independent learning workspace.
   // Precompressed files are also directly usable by Nginx gzip_static.

@@ -9,6 +9,9 @@
   var context = null, opening = null, openingPlayed = false, entryObserver = null;
   var timelines = new Map(), visited = new Set(), registry = [];
   var hoverFrame = 0, glowTarget = null, glowX = 50, glowY = 0;
+  // Premium: decisive starts, long quiet landings, no overshoot. Keep theatrical
+  // reveals separate from the 160/480/800ms interaction duration palette.
+  var motion = { ease: "power3.out", reveal: 1.16, card: .8, beat: .12 };
   function enabled() { return root.dataset.motion === "running"; }
   function mark(node, state) { node.dataset.moduleState = state; }
   function clear(node) {
@@ -64,7 +67,8 @@
   if (!gsap || !ScrollTrigger) { settle(); return; }
   gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.config({ ignoreMobileResize: true });
-  var diagnostic = { version: gsap.version, openingDuration: 0, modules: registry.length, sectionTitles: document.querySelectorAll(".section-display").length };
+  var diagnostic = { version: gsap.version, personality: "premium", openingDuration: 0, modules: registry.length,
+    sectionTitles: document.querySelectorAll(".section-display").length, durationPalette: [160, 480, 800], maxStagger: 480 };
   Object.defineProperty(window, "jjhMotionDiagnostics", { value: diagnostic, configurable: true });
   function complete(node) { mark(node, "entered"); visited.add(node); clear(node); }
   function finishInside(node) {
@@ -87,21 +91,29 @@
     var isHeader = node.matches(".section-head, .detail-hero, .section-display");
     var siblings = Array.from(node.parentElement.children).filter(function (item) { return registry.includes(item); });
     var staggerIndex = Math.max(0, siblings.indexOf(node));
-    var tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" }, onStart: function () { mark(node, "playing"); }, onComplete: function () {
+    var tl = gsap.timeline({ paused: true, defaults: { ease: motion.ease }, onStart: function () { mark(node, "playing"); }, onComplete: function () {
       complete(node);
       if (inner) clear(inner);
       Array.from(node.children).forEach(function (child) { if (!child.classList.contains("surface-glow")) clear(child); });
     } });
     timelines.set(node, tl);
     if (inner) {
-      tl.fromTo(inner, { yPercent: 110, xPercent: mobile.matches ? -8 : -15, scaleX: .8, rotation: -3, transformOrigin: "left bottom" },
-        { yPercent: 0, xPercent: 0, scaleX: 1, rotation: 0, duration: mobile.matches ? 1.15 : 1.5, immediateRender: true }, 0);
+      // Pixel-bounded travel avoids translating a wide English line by >1/3 screen.
+      tl.fromTo(inner, { yPercent: 105, x: -Math.min(64, innerWidth * .08), scaleX: .9, transformOrigin: "left bottom" },
+        { yPercent: 0, x: 0, scaleX: 1, duration: mobile.matches ? .9 : motion.reveal, immediateRender: true }, 0);
       var rest = Array.from(node.children).filter(function (child) { return !child.matches(".section-display, .surface-glow"); });
-      if (rest.length) tl.fromTo(rest, { y: mobile.matches ? 30 : 54, clipPath: "inset(0 0 100% 0)" },
-        { y: 0, clipPath: "inset(0 0 0% 0)", stagger: .1, duration: 1.1, immediateRender: true }, .45);
+      if (rest.length) tl.fromTo(rest, { y: mobile.matches ? 16 : 28, opacity: 0 },
+        { y: 0, opacity: 1, stagger: { amount: Math.min(.24, (rest.length - 1) * .08) }, duration: .48, immediateRender: true }, mobile.matches ? .32 : .46);
     } else {
-      tl.fromTo(node, { y: mobile.matches ? 42 : 78, scale: .965, rotationX: mobile.matches ? 0 : 5, clipPath: "inset(0 0 100% 0 round 24px)", transformOrigin: "center bottom" },
-        { y: 0, scale: 1, rotationX: 0, clipPath: "inset(0 0 0% 0 round 24px)", duration: mobile.matches ? .95 : 1.25, immediateRender: false }, Math.min(staggerIndex, 3) * .13);
+      var isCard = node.matches(".card, .panel, .preview-project, .detail-shot, .detail-sections > article");
+      var delay = Math.min(staggerIndex, 3) * (mobile.matches ? .08 : motion.beat);
+      tl.fromTo(node, { y: mobile.matches ? 28 : 48, scale: isCard ? .985 : 1,
+        clipPath: "inset(0 0 100% 0 round 24px)", transformOrigin: "center bottom" },
+        { y: 0, scale: 1, clipPath: "inset(0 0 0% 0 round 24px)",
+          duration: mobile.matches ? .64 : motion.card, immediateRender: false }, delay);
+      var picture = node.querySelector(".detail-shot img, :scope > img");
+      if (picture && !picture.closest(".cover-shot")) tl.fromTo(picture,
+        { scale: 1.035 }, { scale: 1, duration: mobile.matches ? .64 : .8 }, delay + .12);
     }
     mark(node, "pending");
     function playEntry() {
@@ -109,7 +121,7 @@
       var section = node.closest("section");
       var lead = section && section.querySelector(":scope > .section-head");
       if (!lead && !node.matches(".detail-hero")) lead = document.querySelector(".detail-hero");
-      if (lead && lead !== node && lead.dataset.moduleState === "playing") tl.delay(.42);
+      if (lead && lead !== node && lead.dataset.moduleState === "playing") tl.delay(mobile.matches ? .32 : .48);
       tl.play(0);
     }
     mark(node, "playing");
@@ -122,18 +134,32 @@
     root.dataset.opening = "running";
     var heroModules = registry.filter(function (node) { return node.matches(".hero-copy, .creative-stage, .hero-showcase .workbench-desktop, .preview-project"); });
     heroModules.forEach(function (node) { mark(node, "playing"); });
-    opening = gsap.timeline({ defaults: { ease: "power4.inOut" }, onComplete: function () {
+    // CSS provides the initial concealed states. Initialize each tween at its
+    // own cue rather than measuring every supporting element during startup.
+    opening = gsap.timeline({ defaults: { ease: motion.ease, immediateRender: false }, onComplete: function () {
       root.dataset.opening = "complete";
       heroModules.forEach(complete);
-      gsap.set(".hero-line-inner, .hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote, .opening-signature", { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+      gsap.set(".hero-line-inner, .hero-kicker, .hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote, .opening-signature, .stage-ticket, .stage-caption", { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+      gsap.set(".stage-core", { clearProps: "opacity,clipPath" });
+      clear(document.querySelector(".stage-core strong"));
     } });
-    opening.fromTo(".opening-signature", { y: 34, scaleX: .7, opacity: 0 }, { y: 0, scaleX: 1, opacity: 1, duration: .6, ease: "power3.out" }, 0)
-      .fromTo(".opening-shutter", { clipPath: "inset(0 0 0% 0 round 0px)" }, { clipPath: "inset(0 0 100% 0 round 0px)", duration: 1.2 }, .32)
-      .fromTo(".hero-line-inner", { yPercent: 118, scaleX: .74, scaleY: 1.17, rotation: -3, transformOrigin: "left bottom" }, { yPercent: 0, scaleX: 1, scaleY: 1, rotation: 0, duration: 1.65, stagger: .18, ease: "expo.out" }, .6)
-      .fromTo(".hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote", { y: 34, clipPath: "inset(0 0 100% 0)" }, { y: 0, clipPath: "inset(0 0 0% 0)", duration: 1.1, stagger: .12, ease: "power3.out" }, .92)
-      .fromTo(".creative-stage", { y: 80, scale: .88, rotation: 4, clipPath: "inset(0 0 100% 0 round 32px)" }, { y: 0, scale: 1, rotation: 0, clipPath: "inset(0 0 0% 0 round 32px)", duration: 1.4, ease: "power3.out" }, .98)
-      .fromTo(".hero-showcase .workbench-desktop, .preview-project", { y: 55, clipPath: "inset(0 0 100% 0 round 20px)" }, { y: 0, clipPath: "inset(0 0 0% 0 round 20px)", duration: 1.05, stagger: .1, ease: "power3.out" }, 1.5);
-    if (mobile.matches) opening.timeScale(1.35);
+    opening.fromTo(".opening-signature", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .4 }, 0)
+      .fromTo(".opening-shutter", { clipPath: "inset(0 0 0% 0)" }, { clipPath: "inset(0 0 100% 0)", duration: .92, ease: "power3.inOut" }, .18)
+      .fromTo(".hero-line-inner", { yPercent: 108, scaleX: .88, transformOrigin: "left bottom" },
+        { yPercent: 0, scaleX: 1, opacity: 1, duration: 1.16, stagger: .14 }, .42)
+      .fromTo(".hero-kicker, .hero-intro", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .48, stagger: .08 }, .9)
+      .fromTo(".hero-copy .lead, .hero-actions, .hero-footnote", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .48, stagger: .16 }, 1.08)
+      .fromTo(".creative-stage", { y: 48, scale: .97, clipPath: "inset(0 0 100% 0 round 32px)" },
+        { y: 0, scale: 1, opacity: 1, clipPath: "inset(0 0 0% 0 round 32px)", duration: .8 }, 1.05)
+      .fromTo(".stage-core", { opacity: 0 }, { opacity: 1, duration: .64 }, 1.26)
+      .fromTo(".stage-core strong", { y: 16, scale: .98 }, { y: 0, scale: 1, duration: .64 }, 1.26)
+      .fromTo(".stage-ticket", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .6, stagger: .12 }, 1.5)
+      .fromTo(".stage-caption", { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: .48 }, 1.94)
+      .fromTo(".hero-showcase .workbench-desktop", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .55 }, 1.96)
+      .fromTo(".preview-project", { y: 28, clipPath: "inset(0 0 100% 0 round 20px)" },
+        { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0 round 20px)", duration: .48, stagger: .08 }, 2.18);
+    // Same story, smaller motion budget on touch-sized screens.
+    if (mobile.matches) opening.timeScale(1.25);
     diagnostic.openingDuration = opening.duration() / opening.timeScale();
     heroModules.forEach(function (node) { timelines.set(node, opening); });
   }

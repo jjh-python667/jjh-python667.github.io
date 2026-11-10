@@ -1,0 +1,80 @@
+/* Motion Design / Premium: setup → title → workshop → supporting detail.
+   The large reveals are deliberate exceptions to the short UI duration palette. */
+:root {
+  --motion-quick: 160ms;
+  --motion-standard: 480ms;
+  --motion-slow: 800ms;
+  --motion-entrance: cubic-bezier(.22, 1, .36, 1);
+  --motion-ambient: cubic-bezier(.37, 0, .63, 1);
+}
+
+/* Give the opening one focal point. Ambient layers start after it resolves. */
+[data-opening="running"] :is(.hero-line-inner, .hero-kicker, .hero-intro,
+  .hero-copy .lead, .hero-actions, .hero-footnote, .creative-stage, .stage-core,
+  .stage-ticket, .stage-caption, .hero-showcase .workbench-desktop, .preview-project) { opacity: 0; }
+[data-opening="running"] .ambient-orb,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-float,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-ticket-body,
+[data-opening="running"] .creative-stage.is-stage-visible .orbit-beacon,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-route,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-status-tick,
+[data-opening="running"] .creative-stage.is-stage-visible::before {
+  animation-play-state: paused;
+}
+.orbit-beacon { animation-timing-function: var(--motion-ambient); }
+.stage-float { animation-duration: 9.6s; animation-timing-function: var(--motion-ambient); }
+.creative-stage::before { animation-duration: 9.6s; animation-timing-function: var(--motion-ambient); }
+/* Stable project tickets make the central object the primary ambient motion. */
+.stage-ticket-body { animation: none; }
+.stage-status-tick { animation: none; }
+.creative-stage:focus-within .stage-float,
+.creative-stage:focus-within .orbit-beacon,
+.creative-stage:focus-within::before { animation-play-state: paused !important; }
+.stage-ticket .ticket-arrow { transition: translate var(--motion-quick) var(--motion-entrance); }
+.stage-ticket:hover .ticket-arrow, .stage-ticket:focus-visible .ticket-arrow { translate: 2px -2px; }
+
+/* Response begins immediately; the quiet return takes slightly longer. */
+.btn, .icon-btn, .motion-toggle, .motion-toggle-header, .filter-chip, .filter-toggle {
+  transition: background-color 180ms var(--motion-entrance), color 180ms var(--motion-entrance),
+    border-color 180ms var(--motion-entrance), box-shadow 180ms var(--motion-entrance);
+}
+.btn > span[aria-hidden="true"], .preview-arrow, .card-arrow {
+  display: inline-block;
+  transition: translate 220ms var(--motion-entrance);
+}
+.btn:hover > span[aria-hidden="true"], .btn:focus-visible > span[aria-hidden="true"],
+.preview-project:hover .preview-arrow, .preview-project:focus-visible .preview-arrow,
+.card:hover .card-arrow { translate: 3px -2px; transition-duration: 90ms; }
+.btn:active, .filter-chip:active, .icon-btn:active { opacity: .88; }
+.surface-glow { transition: opacity 220ms var(--motion-entrance); }
+.glow-surface:hover > .surface-glow { transition-duration: 90ms; }
+.flow-panel { transition: none; }
+.flow-feedback.ok::before { content: "✓"; margin-right: .4em; font-weight: 700; }
+.flow-feedback.bad::before { content: "?"; margin-right: .4em; font-weight: 700; }
+
+@media (min-width: 860px) {
+  .site-nav a { position: relative; }
+  .site-nav a::after {
+    content: "";
+    position: absolute;
+    left: 14px; right: 14px; bottom: 3px;
+    height: 2px; border-radius: 2px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 220ms var(--motion-entrance);
+    pointer-events: none;
+  }
+  .site-nav a:hover::after, .site-nav a:focus-visible::after,
+  .site-nav a[aria-current]::after { transform: scaleX(1); }
+}
+@media (pointer: coarse) {
+  .stage-float { --float-range: 4px; animation-duration: 10.8s; }
+}
+/* Saved pause and system reduced motion stop both the scene and micro motion. */
+[data-motion="paused"] .btn > span[aria-hidden="true"],
+[data-motion="paused"] .preview-arrow, [data-motion="paused"] .card-arrow,
+[data-motion="paused"] .ticket-arrow { translate: none !important; transition: none; }
+[data-motion="paused"] .site-nav a::after { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .btn > span[aria-hidden="true"], .preview-arrow, .card-arrow, .ticket-arrow { translate: none !important; }
+  .site-nav a::after { transition: none; }
+}

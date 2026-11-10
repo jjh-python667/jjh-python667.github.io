@@ -1,0 +1,81 @@
+{
+  "repository": "https://github.com/jjh-python667/jjh-python667.github.io",
+  "commit": "643740a76b210917c961261b202cbf314d09d93b",
+  "remoteHeadVerified": true,
+  "headline": "做 AI 产品，也做工作流。",
+  "featuredProjects": [
+    "newsdesk",
+    "antou-office-agent",
+    "personal-learning-agent",
+    "star-wars-mini",
+    "grokbot-workflow-notes"
+  ],
+  "reviewPackets": {
+    "antou-office-agent-pr1.md": {
+      "sha256": "d9a818f009ca045ebc7a94e7badc309cf184f57cfc2b4527506057ec53563127",
+      "head": "c0d74f662792c335505a32825edbcec63852b2d9"
+    },
+    "grokbot-workflow-notes-pr1.md": {
+      "sha256": "010bcb191a2b6ae91b4f26084f190b68ced0d4a4fb3ae4000bc3831d127cf17f",
+      "head": "e9ded306055949135e337760c4c6b0043b3fcd62"
+    },
+    "INDEX.md": {
+      "sha256": "dc6bdb3c016a55fd3336ae0410345d548c4a4888513c26905c2440c1af735777",
+      "head": null
+    },
+    "jjh-python667-pr1.md": {
+      "sha256": "0faf4a81bc687acd0b8ad4061dbac1e995caab858df5d5c206a732a1902686d3",
+      "head": "1bad8e8046f86199193b0f54bc225890f244c4cd"
+    },
+    "newsdesk-pr1.md": {
+      "sha256": "100bd1e91a77900b2b9ee3042f4ebe8c638fe17bb8d659db70c4dd6955447a03",
+      "head": "7b0bb01aa9d23b3ee9a7b36af3e9bbaf6d1853a9"
+    },
+    "personal-learning-agent-pr2.md": {
+      "sha256": "d926d2aea3368953888bb141590024df8d6dc6d24349b323365d8b226f437ca1",
+      "head": "2ead5ba01616145075b94a2658c28aec62f3f294"
+    },
+    "python-learning-pr1.md": {
+      "sha256": "73a915e66a275b4ef1f46d8321af1d829a0ab6df29b4f91530028b6a36f1e895",
+      "head": "b178648e0561d0b3a73f8e0b2b552e75d8d3c6ad"
+    },
+    "star-wars-mini-pr1.md": {
+      "sha256": "4173bfde2b2384375a1c23541e61bd6fcb8074b8548ef1383853df1b868f43bc",
+      "head": "942df4acc9a8a0a8383732e55e8233416419fa92"
+    }
+  },
+  "mediaHashes": {
+    "site/assets/img/apple-touch-icon.png": "fc9b3e2d7d018222cd0df4ea6e2d9ffcd02f51d396aab8aacf93956ee07fcc04",
+    "site/assets/img/avatar-64.png": "8ffe53de6a56a5b3d4d8f9928b7e789df23af434abb1c95d39b6af3f13de4b10",
+    "site/assets/img/avatar.png": "710ab1fe29ba2534033091b4ba7787af54c89aeed3ba3fcfe58864002fb99c59",
+    "site/assets/img/covers/gwn.png": "20f0a4b2ef4a3845cee3474ea4de2d9a543c8bf60c74db042cab43ff1348b56d",
+    "site/assets/img/covers/pla.png": "5cd381e078df776d154012b87df41dd83a1428e4136a5fa0b917b2e144052d43",
+    "site/assets/img/covers/swm.png": "a984c5fca50dcd48563698814cf1b842316b454a0e1623ee7931478255d41c47",
+    "site/assets/img/covers/yujiang.png": "20f0a4b2ef4a3845cee3474ea4de2d9a543c8bf60c74db042cab43ff1348b56d",
+    "site/assets/img/favicon-32.png": "7999b610d726880fd5920c6a89b57403f40742bb4305cac54ce94852901582ee",
+    "site/assets/img/og.png": "0745a84ada9c1129cbb954c4adc4ed80e681095c2eefaa1362fe99f613ce658e",
+    "site/assets/img/optimized/avatar-64.webp": "ed1ae71549237fda7333edfbe083cf5eaf354016fe1473fe588ce21d54b2c402",
+    "site/assets/img/optimized/grain.webp": "36bb002aad3c8a5922b48469c2347eccc41262d556e5025f4bf07c705d30a3a8",
+    "site/assets/img/optimized/pla-v020-1440.webp": "e779fffa430b961e432efa5d9d74167c5873084d02c1a5fe15bcdf84cbda85b7",
+    "site/assets/img/optimized/pla-v020-160.webp": "3eb56d0412729adf5683d02326d94fe51ace871dc718dd1b4029328561b186f7",
+    "site/assets/img/optimized/pla-v020-320.webp": "0a84078aefbf1967962f29b9b00fe371e9b1d15d373e02f19bc1e92191a4d85e",
+    "site/assets/img/optimized/swm-run-160.webp": "42f4a3af3452bc7d15d80640dc5c8c593d7fa33df71286031868473ea08244cb",
+    "site/assets/img/optimized/swm-run-320.webp": "c464b71081005b394650c90af9b390f5d70d3d755b98711116b41617e6948d17",
+    "site/assets/img/optimized/swm-run-960.webp": "76d4212d049409fd8d5360a1d2f238a3ed1c7377f820ebb32f0a3b4f33a62424",
+    "site/assets/img/screenshots/antou-home.png": "5ff067136e2cd66cbd45bdb364d79d6b87924145318566e04b9e2f34ffc1cbe8",
+    "site/assets/img/screenshots/antou-v32.jpg": "afaa03850f5a3b6de94317d460ac0027bb4f438a0aadc64d129803c71baa5312",
+    "site/assets/img/screenshots/newsdesk-desktop.png": "612d621f0042860efed973677044a2eccda81e5ed28c808a1ba1ec86dde66455",
+    "site/assets/img/screenshots/newsdesk-mobile.png": "7ff8880dd11df51a131aad4ad82c931cf92916ac21f7a73fbc1d1ded46043a57",
+    "site/assets/img/screenshots/pla-v020.png": "363c95d0acb2a254ecd64d4e93d303e1528d2a342e5a71d4da1c370025644473",
+    "site/assets/img/screenshots/swm-run.png": "4aacd339cf7c3d86ad5c5e11b5c1f75b31be99ea2096d1097380094c00434bf7"
+  },
+  "unchangedDataHashes": {
+    "site/data/flow-demo.json": "8caa89aebc8ba89534e86512c381a5c046628b6e04e830ffe69a93983e3c9793",
+    "site/data/site.json": "dc2250e726ed5247a67551bb82061f04c07dae0585fb4eeb2fa7983e454fdc23",
+    "site/data/updates.json": "e76db57a5a0c1bc7ba2fc00aec7f58410b073ec47a843d8cf12d0bf4d06d1e72"
+  },
+  "reviewPacketOrigin": "User-provided PR review packets, 2026-11-10",
+  "approval": "approved-for-publication",
+  "approvedDate": "2026-11-10",
+  "releaseVersion": "1.1.0"
+}

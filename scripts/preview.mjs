@@ -13,7 +13,7 @@ if (agentOrigin.protocol !== 'http:' || !['127.0.0.1', 'localhost', '[::1]'].inc
   throw new Error('The preview proxy requires a local HTTP learning service');
 }
 const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript',
-  '.json': 'application/json', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.xml': 'application/xml' };
+  '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.xml': 'application/xml' };
 const staticCache = new Map();
 function accepts(header, encoding) {
   const value = String(header || '').split(',').find(item => item.trim().split(';')[0] === encoding);

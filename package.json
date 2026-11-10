@@ -1,12 +1,13 @@
 {
   "name": "jjhbuilds-portfolio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
     "preview": "node scripts/preview.mjs",
-    "sync": "node scripts/sync-github.mjs"
+    "sync": "node scripts/sync-github.mjs",
+    "prepare:pages": "node scripts/prepare-pages.mjs"
   },
   "engines": {
     "node": ">=20"

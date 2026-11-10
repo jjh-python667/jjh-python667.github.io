@@ -2,7 +2,9 @@
 
 做 AI 产品与工作流的设计型开发者。
 
-人工智能专业大一。Python 课仍在巩固，没有学完。这个仓库是公开作品集的静态站点。
+人工智能专业大一。Python 的 class（类）与基础仍在巩固，尚未完成。这个仓库是公开作品集的静态站点。
+
+当前版本为 `1.1.0`，已由本人于 2026-11-10 确认同步到 GitHub。以提交 `643740a76b210917c961261b202cbf314d09d93b` 为基准，保留「做 AI 产品，也做工作流。」的定位、五项精选和明确的演示/原型说明，结合 Motion Design 的开场、模块 reveal 与交互反馈。公开作品集：[jjh-python667.github.io](https://jjh-python667.github.io/)。改动与验收范围见 [REVIEW-NOTES.md](REVIEW-NOTES.md)。
 
 ![资讯台本地预览，使用固定演示数据](docs/assets/img/screenshots/newsdesk-desktop.png)
 
@@ -33,7 +35,9 @@ npm run preview
 
 默认地址是 http://127.0.0.1:4176/ 。换端口可以运行 `node scripts/preview.mjs --port 4178`。
 
-源文件在 `site/`，构建脚本在 `scripts/`。改完页面后执行 `npm run build`，再把 `dist/` 同步到 `docs/` 并提交。`npm run sync` 会重新读取公开 GitHub 仓库动态；失败时保留上一次成功的快照。它会改页面里的动态内容，日常改样式时不必运行。
+源文件在 `site/`，构建脚本在 `scripts/`。改完页面后执行 `npm run build` 本机预览；`npm run prepare:pages` 会构建并将产物同步到 `docs/`、保留 `.nojekyll`，不会提交、推送或部署。`npm run sync` 会重新读取公开 GitHub 仓库动态；失败时保留上一次成功的快照。它会改页面里的动态内容，日常改样式时不必运行。
+
+小预览已随源码保存，日常构建无需 Python。维护缩略图时可安装 Pillow 后运行 `node scripts/optimize-featured.mjs`；通过 `FEATURED_PYTHON` 指定 Python 可执行文件。原始产品截图保持不变。
 
 ## 现在做到哪一步
 

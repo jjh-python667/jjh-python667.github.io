@@ -1,0 +1,17 @@
+/* Final integration: the published editorial type, with a quieter workshop. */
+[hidden] { display: none !important; }
+.ambient-field::before { opacity: .022; }
+.portfolio-home .hero-shell .lead { max-width: 32em; }
+.portfolio-home .hero-footnote { gap: 8px 16px; }
+.project-preview-strip .preview-project { min-height: 88px; }
+.project-preview-strip .preview-project small { line-height: 1.6; }
+.card.large.glow-surface > .surface-glow { opacity: .34; }
+.card[data-project="newsdesk"].glow-surface > .surface-glow { opacity: .56; }
+.card.glow-surface:hover > .surface-glow, .card.glow-surface:focus-within > .surface-glow { opacity: 1; }
+.portfolio-home .section-head p { color: var(--text-muted); }
+@media (max-width: 640px) {
+  .ambient-field::before { opacity: .014; }
+  .project-preview-strip .preview-project { min-height: 82px; }
+  .portfolio-home .hero-footnote { max-width: 31em; line-height: 1.7; }
+  .portfolio-home .hero-shell .lead { font-size: 14px; line-height: 1.85; }
+}

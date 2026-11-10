@@ -147,8 +147,8 @@
   animation-play-state: paused;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
-.ticket-game .stage-ticket-body { animation-delay: -2.2s; animation-duration: 7.2s; }
-.ticket-notes .stage-ticket-body { animation-delay: -4.4s; animation-duration: 6.8s; }
+.ticket-reading .stage-ticket-body { animation-delay: -2.2s; animation-duration: 7.2s; }
+.ticket-learning .stage-ticket-body { animation-delay: -4.4s; animation-duration: 6.8s; }
 .stage-ticket:focus-visible { border-radius: 18px; outline: 2px solid var(--accent); outline-offset: 4px; }
 [data-theme="dark"] .stage-ticket-body { border-color: #3b4a68; box-shadow: 0 8px 25px rgba(0, 0, 0, .15); }
 [data-theme="dark"] .creative-stage .stage-ticket { border: 0; box-shadow: none; }
@@ -196,9 +196,9 @@
 [data-motion="paused"] .btn-cta-strong.is-magnetic { transform: none !important; }
 [data-motion="paused"] .stage-ticket:hover, [data-motion="paused"] .preview-project:hover,
 [data-motion="paused"] .portfolio-home .card-interactive:hover { transform: none; }
-[data-motion="paused"] .ticket-agent:hover { transform: rotate(-5deg); }
-[data-motion="paused"] .ticket-game:hover { transform: rotate(6deg); }
-[data-motion="paused"] .ticket-notes:hover { transform: rotate(-3deg); }
+[data-motion="paused"] .ticket-office:hover { transform: rotate(-5deg); }
+[data-motion="paused"] .ticket-reading:hover { transform: rotate(6deg); }
+[data-motion="paused"] .ticket-learning:hover { transform: rotate(-3deg); }
 [data-motion="paused"] .card .cover-shot img, [data-motion="paused"] .preview-project > img,
 [data-motion="paused"] .preview-note, [data-motion="paused"] .card .notes-sheet,
 [data-motion="paused"] .card .workspace-mark { transition: none; }
@@ -214,12 +214,12 @@
   .stage-float { width: 150px; height: 175px; top: 46%; }
   .stage-mode-label { top: 18px; left: 16px; font-size: 7px; letter-spacing: .08em; }
   .motion-toggle { top: 4px; right: 7px; padding-inline: 8px; font-size: 10px; }
-  .ticket-agent { top: 48px; }
+  .ticket-office { top: 48px; }
   .stage-ticket-body { grid-template-columns: 25px minmax(0, 1fr); column-gap: 7px; min-height: 48px; padding: 9px 11px; border-radius: 14px; }
 }
 @media (max-width: 359px) {
   .stage-float { width: 135px; height: 158px; }
-  .ticket-agent { top: 46px; }
+  .ticket-office { top: 46px; }
   .stage-mode-label { left: 13px; font-size: 6px; }
   .stage-ticket-body { padding-inline: 9px; }
 }
@@ -238,7 +238,7 @@
   .card .cover-shot img, .preview-project > img, .preview-note,
   .card .notes-sheet, .card .workspace-mark { transition: none; }
   .stage-ticket:hover, .preview-project:hover, .portfolio-home .card-interactive:hover { transform: none; }
-  .ticket-agent:hover { transform: rotate(-5deg); }
-  .ticket-game:hover { transform: rotate(6deg); }
-  .ticket-notes:hover { transform: rotate(-3deg); }
+  .ticket-office:hover { transform: rotate(-5deg); }
+  .ticket-reading:hover { transform: rotate(6deg); }
+  .ticket-learning:hover { transform: rotate(-3deg); }
 }

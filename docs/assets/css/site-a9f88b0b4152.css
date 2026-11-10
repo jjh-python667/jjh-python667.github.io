@@ -2960,9 +2960,9 @@ body { text-rendering: optimizeLegibility; }
 .stage-ticket strong { grid-column: 2; grid-row: 1; }
 .stage-ticket small { grid-column: 2; grid-row: 2; }
 .ticket-arrow { position: absolute; right: 9px; top: 7px; font: 10px/1 var(--mono); color: var(--accent); }
-.ticket-agent { width: 174px; top: 42px; left: 21px; transform: rotate(-5deg); }
-.ticket-game { width: 184px; top: 189px; right: 18px; transform: rotate(6deg); }
-.ticket-notes { width: 180px; bottom: 51px; left: 33px; transform: rotate(-3deg); }
+.ticket-office { width: 174px; top: 42px; left: 21px; transform: rotate(-5deg); }
+.ticket-reading { width: 184px; top: 189px; right: 18px; transform: rotate(6deg); }
+.ticket-learning { width: 180px; bottom: 51px; left: 33px; transform: rotate(-3deg); }
 .stage-caption { position: absolute; bottom: 17px; left: 23px; right: 23px; color: var(--text-muted); font: 9px/1.6 var(--mono); letter-spacing: .035em; }
 .hero-showcase .workbench-desktop { display: none; }
 .hero-showcase .workshop-card.workbench { padding: 14px 18px; min-height: 0; gap: 15px; border-radius: 18px; background: color-mix(in srgb, var(--bg-elevated) 72%, transparent); box-shadow: none; }
@@ -3029,9 +3029,9 @@ body { text-rendering: optimizeLegibility; }
   .portfolio-home .hero { gap: 30px; }
   .portfolio-home .hero-copy h1 { font-size: 56px; }
   .stage-ticket { padding-inline: 11px; }
-  .ticket-agent { left: 16px; width: 157px; }
-  .ticket-game { right: 12px; width: 144px; }
-  .ticket-notes { left: 20px; width: 146px; }
+  .ticket-office { left: 16px; width: 157px; }
+  .ticket-reading { right: 12px; width: 144px; }
+  .ticket-learning { left: 20px; width: 146px; }
   .preview-project { grid-template-columns: 54px minmax(0, 1fr) auto; gap: 10px; }
   .preview-number { display: none; }
   .preview-project > img, .preview-project .notes-icon { width: 54px; height: 46px; }
@@ -3044,9 +3044,9 @@ body { text-rendering: optimizeLegibility; }
   .hero-showcase { max-width: 620px; justify-self: center; }
   .creative-stage { height: 330px; }
   .stage-core { left: 54%; }
-  .ticket-agent { left: 8%; }
-  .ticket-game { right: 6%; top: 167px; }
-  .ticket-notes { left: 12%; }
+  .ticket-office { left: 8%; }
+  .ticket-reading { right: 6%; top: 167px; }
+  .ticket-learning { left: 12%; }
   .project-preview-strip { gap: 10px; margin-bottom: 20px; }
   .preview-project { grid-template-columns: 48px minmax(0, 1fr); gap: 9px; padding: 12px; }
   .preview-number, .preview-arrow { display: none; }
@@ -3075,9 +3075,9 @@ body { text-rendering: optimizeLegibility; }
   .stage-ticket small { display: none; }
   .stage-ticket-icon, .stage-ticket strong { grid-row: 1; }
   .stage-ticket { min-height: 48px; }
-  .ticket-agent { top: 30px; left: 14px; width: 134px; }
-  .ticket-game { top: 162px; right: 13px; width: 124px; }
-  .ticket-notes { bottom: 46px; left: 21px; width: 126px; }
+  .ticket-office { top: 30px; left: 14px; width: 134px; }
+  .ticket-reading { top: 162px; right: 13px; width: 124px; }
+  .ticket-learning { bottom: 46px; left: 21px; width: 126px; }
   .stage-caption { left: 18px; right: 18px; bottom: 14px; font-size: 8px; }
   .project-preview-strip { gap: 8px; margin-top: 0; margin-bottom: 15px; }
   .preview-project { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px; border-radius: 15px; }
@@ -3099,9 +3099,9 @@ body { text-rendering: optimizeLegibility; }
   .creative-stage { height: 275px; }
   .stage-core { left: 54%; width: 135px; height: 158px; }
   .stage-core strong { font-size: 80px; }
-  .ticket-agent { width: 121px; left: 10px; top: 25px; }
-  .ticket-game { width: 117px; right: 9px; top: 150px; }
-  .ticket-notes { width: 119px; left: 13px; bottom: 43px; }
+  .ticket-office { width: 121px; left: 10px; top: 25px; }
+  .ticket-reading { width: 117px; right: 9px; top: 150px; }
+  .ticket-learning { width: 119px; left: 13px; bottom: 43px; }
   .stage-ticket { padding: 8px 9px; }
   .preview-project { padding: 8px; }
   .preview-project strong { font-size: 10px; }
@@ -3281,8 +3281,8 @@ body { text-rendering: optimizeLegibility; }
   animation-play-state: paused;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
-.ticket-game .stage-ticket-body { animation-delay: -2.2s; animation-duration: 7.2s; }
-.ticket-notes .stage-ticket-body { animation-delay: -4.4s; animation-duration: 6.8s; }
+.ticket-reading .stage-ticket-body { animation-delay: -2.2s; animation-duration: 7.2s; }
+.ticket-learning .stage-ticket-body { animation-delay: -4.4s; animation-duration: 6.8s; }
 .stage-ticket:focus-visible { border-radius: 18px; outline: 2px solid var(--accent); outline-offset: 4px; }
 [data-theme="dark"] .stage-ticket-body { border-color: #3b4a68; box-shadow: 0 8px 25px rgba(0, 0, 0, .15); }
 [data-theme="dark"] .creative-stage .stage-ticket { border: 0; box-shadow: none; }
@@ -3330,9 +3330,9 @@ body { text-rendering: optimizeLegibility; }
 [data-motion="paused"] .btn-cta-strong.is-magnetic { transform: none !important; }
 [data-motion="paused"] .stage-ticket:hover, [data-motion="paused"] .preview-project:hover,
 [data-motion="paused"] .portfolio-home .card-interactive:hover { transform: none; }
-[data-motion="paused"] .ticket-agent:hover { transform: rotate(-5deg); }
-[data-motion="paused"] .ticket-game:hover { transform: rotate(6deg); }
-[data-motion="paused"] .ticket-notes:hover { transform: rotate(-3deg); }
+[data-motion="paused"] .ticket-office:hover { transform: rotate(-5deg); }
+[data-motion="paused"] .ticket-reading:hover { transform: rotate(6deg); }
+[data-motion="paused"] .ticket-learning:hover { transform: rotate(-3deg); }
 [data-motion="paused"] .card .cover-shot img, [data-motion="paused"] .preview-project > img,
 [data-motion="paused"] .preview-note, [data-motion="paused"] .card .notes-sheet,
 [data-motion="paused"] .card .workspace-mark { transition: none; }
@@ -3348,12 +3348,12 @@ body { text-rendering: optimizeLegibility; }
   .stage-float { width: 150px; height: 175px; top: 46%; }
   .stage-mode-label { top: 18px; left: 16px; font-size: 7px; letter-spacing: .08em; }
   .motion-toggle { top: 4px; right: 7px; padding-inline: 8px; font-size: 10px; }
-  .ticket-agent { top: 48px; }
+  .ticket-office { top: 48px; }
   .stage-ticket-body { grid-template-columns: 25px minmax(0, 1fr); column-gap: 7px; min-height: 48px; padding: 9px 11px; border-radius: 14px; }
 }
 @media (max-width: 359px) {
   .stage-float { width: 135px; height: 158px; }
-  .ticket-agent { top: 46px; }
+  .ticket-office { top: 46px; }
   .stage-mode-label { left: 13px; font-size: 6px; }
   .stage-ticket-body { padding-inline: 9px; }
 }
@@ -3372,9 +3372,9 @@ body { text-rendering: optimizeLegibility; }
   .card .cover-shot img, .preview-project > img, .preview-note,
   .card .notes-sheet, .card .workspace-mark { transition: none; }
   .stage-ticket:hover, .preview-project:hover, .portfolio-home .card-interactive:hover { transform: none; }
-  .ticket-agent:hover { transform: rotate(-5deg); }
-  .ticket-game:hover { transform: rotate(6deg); }
-  .ticket-notes:hover { transform: rotate(-3deg); }
+  .ticket-office:hover { transform: rotate(-5deg); }
+  .ticket-reading:hover { transform: rotate(6deg); }
+  .ticket-learning:hover { transform: rotate(-3deg); }
 }
 
 /* Creative-workshop direction: sequenced typography, grain light and luminous rims. */
@@ -3762,32 +3762,6 @@ body::before, body::after { display: none; }
 }
 @media(prefers-reduced-motion:reduce) { .ambient-orb { animation:none!important; } }
 
-.agent-start-grid { display:grid; grid-template-columns:1.15fr 1fr; gap:24px; margin:24px 0 56px; }
-.agent-launch-card,.agent-feature-list,.demo-companion,.agent-progress-card { border:1px solid var(--border); border-radius:24px; background:var(--bg-elevated); padding:30px; }
-.agent-eyebrow { font:11px var(--mono); color:var(--accent); letter-spacing:.1em; }
-.agent-launch-card h2 { font-size:26px; font-weight:650; line-height:1.5; margin:14px 0 10px; }
-.agent-launch-card p,.demo-companion p,.agent-feature-list p { font-size:14px; line-height:1.85; color:var(--text-muted); }
-.service-state { display:flex; align-items:center; gap:8px; margin-top:24px; font-size:13px; font-weight:600; }
-.service-dot { width:8px; height:8px; border-radius:50%; background:var(--text-muted); }
-[data-connected="true"] .service-dot { background:var(--ok); box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 10%,transparent); }
-.agent-feature-list { display:grid; gap:20px; }
-.agent-feature-list > div { display:grid; grid-template-columns:28px 1fr; gap:2px 14px; }
-.agent-feature-list > div > span { grid-row:1/3; font:12px var(--mono); color:var(--accent); padding-top:6px; }
-.agent-feature-list h3 { font-size:16px; margin:0; font-weight:600; }
-.agent-feature-list p { margin:4px 0 0; }
-.agent-demo-section { margin:0 0 56px; scroll-margin-top:90px; }
-.agent-demo-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:24px; }
-.agent-demo-grid > .cover-flow { border:1px solid var(--border); border-radius:24px; min-width:0; }
-.demo-companion h3 { font-size:22px; font-weight:600; margin:12px 0; }
-.demo-shortcut { width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px; margin-top:12px; border:1px solid var(--border); border-radius:14px; background:var(--bg); color:var(--text); font:inherit; text-align:left; cursor:pointer; }
-.demo-shortcut:hover { border-color:var(--accent); }
-.agent-progress-card h2 { margin-top:0; font-size:20px; font-weight:600; }
-.agent-progress-card p { font-size:14px; line-height:1.9; }
-.agent-progress-card { scroll-margin-top:90px; }
-button:disabled { cursor:wait; opacity:.65; }
-@media(max-width:800px) { .agent-start-grid,.agent-demo-grid { grid-template-columns:1fr; } .agent-start-grid { margin-bottom:36px; } }
-@media(max-width:480px) { .agent-launch-card,.agent-feature-list,.demo-companion,.agent-progress-card { padding:22px; } .agent-launch-card h2 { font-size:22px; } .agent-demo-grid { gap:18px; } }
-
 @media(max-width:640px){.motion-toggle.motion-toggle-header{font-size:0;white-space:nowrap;min-width:40px;max-width:40px;padding:0;gap:0}.motion-toggle.motion-toggle-header::before{font-size:12px}}
 
 /* Calmer type and even project cards. Themes, motion, and controls stay as they are. */
@@ -3864,4 +3838,103 @@ button:disabled { cursor:wait; opacity:.65; }
   .portfolio-home .section-head p { grid-column: 1 / -1; }
   .card-body { padding: 22px; }
   .card h3, .featured-grid.multi > .card:not(.large) .card-body h3 { font-size: 20px; }
+}
+
+/* Motion Design / Premium: setup → title → workshop → supporting detail.
+   The large reveals are deliberate exceptions to the short UI duration palette. */
+:root {
+  --motion-quick: 160ms;
+  --motion-standard: 480ms;
+  --motion-slow: 800ms;
+  --motion-entrance: cubic-bezier(.22, 1, .36, 1);
+  --motion-ambient: cubic-bezier(.37, 0, .63, 1);
+}
+
+/* Give the opening one focal point. Ambient layers start after it resolves. */
+[data-opening="running"] :is(.hero-line-inner, .hero-kicker, .hero-intro,
+  .hero-copy .lead, .hero-actions, .hero-footnote, .creative-stage, .stage-core,
+  .stage-ticket, .stage-caption, .hero-showcase .workbench-desktop, .preview-project) { opacity: 0; }
+[data-opening="running"] .ambient-orb,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-float,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-ticket-body,
+[data-opening="running"] .creative-stage.is-stage-visible .orbit-beacon,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-route,
+[data-opening="running"] .creative-stage.is-stage-visible .stage-status-tick,
+[data-opening="running"] .creative-stage.is-stage-visible::before {
+  animation-play-state: paused;
+}
+.orbit-beacon { animation-timing-function: var(--motion-ambient); }
+.stage-float { animation-duration: 9.6s; animation-timing-function: var(--motion-ambient); }
+.creative-stage::before { animation-duration: 9.6s; animation-timing-function: var(--motion-ambient); }
+/* Stable project tickets make the central object the primary ambient motion. */
+.stage-ticket-body { animation: none; }
+.stage-status-tick { animation: none; }
+.creative-stage:focus-within .stage-float,
+.creative-stage:focus-within .orbit-beacon,
+.creative-stage:focus-within::before { animation-play-state: paused !important; }
+.stage-ticket .ticket-arrow { transition: translate var(--motion-quick) var(--motion-entrance); }
+.stage-ticket:hover .ticket-arrow, .stage-ticket:focus-visible .ticket-arrow { translate: 2px -2px; }
+
+/* Response begins immediately; the quiet return takes slightly longer. */
+.btn, .icon-btn, .motion-toggle, .motion-toggle-header, .filter-chip, .filter-toggle {
+  transition: background-color 180ms var(--motion-entrance), color 180ms var(--motion-entrance),
+    border-color 180ms var(--motion-entrance), box-shadow 180ms var(--motion-entrance);
+}
+.btn > span[aria-hidden="true"], .preview-arrow, .card-arrow {
+  display: inline-block;
+  transition: translate 220ms var(--motion-entrance);
+}
+.btn:hover > span[aria-hidden="true"], .btn:focus-visible > span[aria-hidden="true"],
+.preview-project:hover .preview-arrow, .preview-project:focus-visible .preview-arrow,
+.card:hover .card-arrow { translate: 3px -2px; transition-duration: 90ms; }
+.btn:active, .filter-chip:active, .icon-btn:active { opacity: .88; }
+.surface-glow { transition: opacity 220ms var(--motion-entrance); }
+.glow-surface:hover > .surface-glow { transition-duration: 90ms; }
+.flow-panel { transition: none; }
+.flow-feedback.ok::before { content: "✓"; margin-right: .4em; font-weight: 700; }
+.flow-feedback.bad::before { content: "?"; margin-right: .4em; font-weight: 700; }
+
+@media (min-width: 860px) {
+  .site-nav a { position: relative; }
+  .site-nav a::after {
+    content: "";
+    position: absolute;
+    left: 14px; right: 14px; bottom: 3px;
+    height: 2px; border-radius: 2px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 220ms var(--motion-entrance);
+    pointer-events: none;
+  }
+  .site-nav a:hover::after, .site-nav a:focus-visible::after,
+  .site-nav a[aria-current]::after { transform: scaleX(1); }
+}
+@media (pointer: coarse) {
+  .stage-float { --float-range: 4px; animation-duration: 10.8s; }
+}
+/* Saved pause and system reduced motion stop both the scene and micro motion. */
+[data-motion="paused"] .btn > span[aria-hidden="true"],
+[data-motion="paused"] .preview-arrow, [data-motion="paused"] .card-arrow,
+[data-motion="paused"] .ticket-arrow { translate: none !important; transition: none; }
+[data-motion="paused"] .site-nav a::after { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .btn > span[aria-hidden="true"], .preview-arrow, .card-arrow, .ticket-arrow { translate: none !important; }
+  .site-nav a::after { transition: none; }
+}
+
+/* Final integration: the published editorial type, with a quieter workshop. */
+[hidden] { display: none !important; }
+.ambient-field::before { opacity: .022; }
+.portfolio-home .hero-shell .lead { max-width: 32em; }
+.portfolio-home .hero-footnote { gap: 8px 16px; }
+.project-preview-strip .preview-project { min-height: 88px; }
+.project-preview-strip .preview-project small { line-height: 1.6; }
+.card.large.glow-surface > .surface-glow { opacity: .34; }
+.card[data-project="newsdesk"].glow-surface > .surface-glow { opacity: .56; }
+.card.glow-surface:hover > .surface-glow, .card.glow-surface:focus-within > .surface-glow { opacity: 1; }
+.portfolio-home .section-head p { color: var(--text-muted); }
+@media (max-width: 640px) {
+  .ambient-field::before { opacity: .014; }
+  .project-preview-strip .preview-project { min-height: 82px; }
+  .portfolio-home .hero-footnote { max-width: 31em; line-height: 1.7; }
+  .portfolio-home .hero-shell .lead { font-size: 14px; line-height: 1.85; }
 }

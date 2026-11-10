@@ -1,4 +1,36 @@
 (function () {
+  // One Premium motion vocabulary for feedback. Decorative scenes use GSAP;
+  // short interactions use cancellable native animations, without a new ticker.
+  var motionSpec = Object.freeze({ quick: 160, standard: 480, slow: 800,
+    entrance: "cubic-bezier(.22,1,.36,1)", exit: "cubic-bezier(.3,0,1,1)" });
+  window.jjhMotionSpec = motionSpec;
+  var feedbackAnimations = new Map();
+  function motionFeedback(node, frames, options) {
+    if (!node) return null;
+    var previous = feedbackAnimations.get(node);
+    if (previous) previous.cancel();
+    if (!node.animate || document.documentElement.dataset.motion === "paused" ||
+        matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+    var animation = node.animate(frames, Object.assign({ duration: motionSpec.standard,
+      easing: motionSpec.entrance, fill: "both" }, options));
+    feedbackAnimations.set(node, animation);
+    function release() {
+      if (feedbackAnimations.get(node) === animation) feedbackAnimations.delete(node);
+    }
+    animation.oncancel = release;
+    animation.onfinish = function () { release(); animation.cancel(); };
+    return animation;
+  }
+  function stopFeedback(node) {
+    var animation = feedbackAnimations.get(node);
+    if (animation) animation.cancel();
+  }
+  document.addEventListener("jjh:motionchange", function (event) {
+    if (event.detail.reduced) feedbackAnimations.forEach(function (animation) { animation.finish(); });
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) feedbackAnimations.forEach(function (animation) { animation.finish(); });
+  });
   /* ---------- nav (R6: inert + focus trap when open) ---------- */
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.getElementById("site-nav");
@@ -24,7 +56,15 @@
       nav.removeAttribute("inert");
       var items = navFocusables();
       if (items[0]) items[0].focus();
+      if (matchMedia("(max-width: 859px)").matches) {
+        motionFeedback(nav, [{ opacity: 0, transform: "translateY(-12px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 360 });
+        items.forEach(function (item, index) {
+          motionFeedback(item, [{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300, delay: Math.min(index, 4) * 35 });
+        });
+      }
     } else {
+      stopFeedback(nav);
+      nav.querySelectorAll("a").forEach(stopFeedback);
       if (window.matchMedia("(max-width: 859px)").matches) {
         nav.setAttribute("inert", "");
       } else {
@@ -175,8 +215,7 @@
     var picked = null;
     var answeredCorrect = false;
     var currentKey = "explain";
-    var renderTimer = null;
-    var enterTimer = null;
+    var renderGeneration = 0;
     var params = new URLSearchParams(window.location.search);
     var demoMode = params.get("demo");
     var STEP_ORDER = (FLOW.steps || []).map(function (s) {
@@ -231,22 +270,20 @@
     }
 
     function crossfade(renderFn) {
-      window.clearTimeout(renderTimer);
-      window.clearTimeout(enterTimer);
+      var generation = ++renderGeneration;
+      stopFeedback(panel);
       panel.classList.remove("is-exit", "is-enter");
-      if (reduceMotion) {
+      function commit() {
+        if (generation !== renderGeneration) return;
         renderFn();
-        return;
+        motionFeedback(panel, [{ opacity: 0, transform: "translateY(10px)" },
+          { opacity: 1, transform: "translateY(0)" }], { duration: 320 });
       }
-      panel.classList.add("is-exit");
-      renderTimer = window.setTimeout(function () {
-        renderFn();
-        panel.classList.remove("is-exit");
-        panel.classList.add("is-enter");
-        enterTimer = window.setTimeout(function () {
-          panel.classList.remove("is-enter");
-        }, 180);
-      }, 90);
+      if (reduceMotion) { renderFn(); return; }
+      var exit = motionFeedback(panel, [{ opacity: 1, transform: "translateY(0)" },
+        { opacity: 0, transform: "translateY(-6px)" }], { duration: 110, easing: motionSpec.exit });
+      if (exit) exit.finished.then(commit, commit);
+      else commit();
     }
 
     function renderAnswer() {
@@ -334,6 +371,8 @@
           })[0];
           answeredCorrect = !!(choice && choice.correct);
           renderAnswer();
+          motionFeedback(panel.querySelector(".flow-feedback"),
+            [{ opacity: 0, transform: "translateY(5px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 280 });
           if (answeredCorrect) {
             var cont = actions && actions.querySelector("[data-flow-next]");
             if (cont) cont.focus();
@@ -511,14 +550,7 @@
     activate(initial);
     reduceMotion = prevReduce;
   });
-})();
-
-
-/* ===== R6 P0 modules ===== */
-(function () {
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  try { reduceMotion = reduceMotion || localStorage.getItem("jjh-motion") === "off"; } catch (error) {}
-  document.addEventListener("jjh:motionchange", function (event) { reduceMotion = event.detail.reduced; });
+  /* Theme, filtering and command palette share the same cancellable feedback. */
   var THEME_KEY = "jjh-theme";
 
   function currentTheme() {
@@ -686,6 +718,8 @@
       } else {
         filterChips.hidden = false;
         filterChips.removeAttribute("hidden");
+        motionFeedback(filterChips, [{ opacity: 0, transform: "translateY(-8px)" },
+          { opacity: 1, transform: "translateY(0)" }], { duration: 320 });
       }
     }
     function updateFilterCurrent(tag, label) {
@@ -745,7 +779,7 @@
           filterAnimations.set(card, card.animate([
             { opacity: before ? 1 : 0, transform: "translate(" + dx + "px," + dy + "px)" },
             { opacity: 1, transform: "translate(0,0)" }
-          ], { duration: 260, easing: "cubic-bezier(.2,.7,.2,1)" }));
+          ], { duration: 360, easing: motionSpec.entrance }));
         });
       }
     }
@@ -819,8 +853,16 @@
     backdrop.removeAttribute("hidden");
     document.body.classList.add("cmdk-open");
     setCmdkSelected(0);
+    motionFeedback(dialog, [{ opacity: 0, transform: "translateY(-16px) scale(.98)" },
+      { opacity: 1, transform: "translateY(0) scale(1)" }], { duration: 400 });
+    cmdkItems().forEach(function (item, index) {
+      motionFeedback(item, [{ opacity: 0, transform: "translateY(8px)" },
+        { opacity: 1, transform: "translateY(0)" }], { duration: 300, delay: 50 + index * 30 });
+    });
   }
   function closeCmdk() {
+    stopFeedback(dialog);
+    cmdkItems().forEach(stopFeedback);
     if (backdrop) {
       backdrop.classList.remove("is-open");
       backdrop.hidden = true;
@@ -828,11 +870,10 @@
     }
     document.body.classList.remove("cmdk-open");
     clearOverlayResidue();
-    if (cmdkReturnFocus && typeof cmdkReturnFocus.focus === "function") {
-      cmdkReturnFocus.focus();
-    } else if (cmdkTrigger) {
-      cmdkTrigger.focus();
-    }
+    var returnTarget = cmdkReturnFocus;
+    if (!returnTarget || returnTarget === document.body || !returnTarget.isConnected ||
+        dialog.contains(returnTarget) || !returnTarget.getClientRects().length) returnTarget = cmdkTrigger;
+    if (returnTarget && typeof returnTarget.focus === "function") returnTarget.focus({ preventScroll: true });
   }
   function runCmdk(btn) {
     if (!btn) return;
