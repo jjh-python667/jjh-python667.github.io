@@ -1,28 +1,67 @@
 # 工匠的 GitHub 工坊
 
-公开作品集：[jjh-python667.github.io](https://jjh-python667.github.io/)
+做 AI 产品与工作流的设计型开发者。
 
-这是现有 JJH Builds 作品集的 GitHub Pages 静态展示版本，保留原有明暗主题、GSAP 开场、滚动编排、作品搜索和筛选。已收录 [资讯台 Newsdesk](https://github.com/jjh-python667/newsdesk)、[案头 ANTOU v3.2](https://github.com/jjh-python667/antou-office-agent) 等项目的介绍、演示截图与成长记录。
+人工智能专业大一。Python 课仍在巩固，没有学完。这个仓库是公开作品集的静态站点。
 
-## 构建与预览
+![资讯台本地预览，使用固定演示数据](docs/assets/img/screenshots/newsdesk-desktop.png)
 
-需要 Node.js 20 或更新版本，无需安装前端依赖：
+## 这个站点做什么
+
+- 明暗主题，可随系统或手动切换
+- 本地 GSAP 开场和滚动编排，并尊重「减少动态效果」
+- 作品搜索和按标签筛选
+- 项目介绍页，以及学习空间里的固定交互示例
+- 构建后由 GitHub Pages 提供 `docs/` 目录
+
+## 技术
+
+| 部分 | 选择 |
+| --- | --- |
+| 页面 | 手写 HTML、CSS、JavaScript |
+| 构建 | Node.js 20 或更新版本，没有 npm 依赖 |
+| 动效 | 仓库内的 GSAP 3.15.1 与 ScrollTrigger |
+| 发布 | GitHub Pages，静态目录 `docs/` |
+| 资讯台 | 独立仓库，Cloudflare Workers + D1 |
+
+## 怎么在本地打开
 
 ```sh
 npm run build
 npm run preview
 ```
 
-默认本地预览端口 4176，也可以运行 `node scripts/preview.mjs --port 4178`。输出在 `dist/`，GitHub Pages 使用提交后的 `docs/` 静态产物。
+默认地址是 http://127.0.0.1:4176/ 。换端口可以运行 `node scripts/preview.mjs --port 4178`。
 
-源文件位于 `site/`，构建脚本位于 `scripts/`。修改后执行 `npm run build`，再将 `dist/` 内容同步到 `docs/` 后提交。`npm run sync` 可重新读取公开 GitHub 仓库动态；失败时保留上一次成功快照。
+源文件在 `site/`，构建脚本在 `scripts/`。改完页面后执行 `npm run build`，再把 `dist/` 同步到 `docs/` 并提交。`npm run sync` 会重新读取公开 GitHub 仓库动态；失败时保留上一次成功的快照。它会改页面里的动态内容，日常改样式时不必运行。
 
-## 展示范围
+## 现在做到哪一步
 
-- 案头是本地单用户办公助手，提供源码下载，没有公网 Agent 后端；截图使用真实本地演示数据，不冒充真实云端联调。
-- 学习空间保留项目说明和固定交互示例，真实学习后台、账户、邀请配置与运行数据库不包含在本仓库。
-- 项目开发与展示页面在 AI 助手辅助下完成，详细验证范围见各项目说明。
+| 已核对 | 还没有 |
+| --- | --- |
+| 本仓库只发布静态展示页 | 不是线上产品后台 |
+| 案头是本地单用户办公助手，截图来自真实本地演示，没有公网 Agent 后端 | 真实云端联调和 Office 应用内验收 |
+| 学习搭子公开版本为 v0.4.0；本站学习空间是说明和固定示例 | 真实学习后台、账户和数据库不在本仓库 |
+| 资讯台使用 Cloudflare Workers + D1；作品页展示介绍和本地演示截图 | 私人实例需要本人登录，没有对外开放的阅读账户 |
+| Python 课仍在巩固 | 课程还没有学完 |
 
-本仓库仅发布静态展示页。`jjhbuilds.com` 的现有源码、备案进度、域名解析和服务端部署配置不因这次 GitHub Pages 发布而改动。
+项目页会标明参考来源和 AI 辅助开发的范围。
 
-GSAP 和 ScrollTrigger 以本地资源使用，来源与许可记录见 `site/assets/vendor/gsap/`。
+`jjhbuilds.com` 的现有源码、备案进度、域名解析和服务端部署配置，不因这次 GitHub Pages 发布而改动。GSAP 与 ScrollTrigger 的来源和许可见 `site/assets/vendor/gsap/`。
+
+## 下一步
+
+- 继续巩固 Python
+- 学习 C、C++、算法和 NumPy
+- 等备案和域名准备好之后，再考虑把作品集放到 jjhbuilds.com
+
+## 相关项目
+
+| 项目 | 是什么 | 仓库 | 作品页 |
+| --- | --- | --- | --- |
+| 案头 ANTOU | 本地办公助手 | [antou-office-agent](https://github.com/jjh-python667/antou-office-agent) | [介绍](https://jjh-python667.github.io/projects/antou-office-agent.html) |
+| 学习搭子 | 个人学习 Agent，v0.4.0 | [personal-learning-agent](https://github.com/jjh-python667/personal-learning-agent) | [介绍](https://jjh-python667.github.io/projects/personal-learning-agent.html) |
+| 资讯台 Newsdesk | Cloudflare Workers + D1 的个人资讯台 | [newsdesk](https://github.com/jjh-python667/newsdesk) | [介绍](https://jjh-python667.github.io/projects/newsdesk.html) |
+| AI 工具工作流笔记 | 概念笔记，不是产品源码 | [grokbot-workflow-notes](https://github.com/jjh-python667/grokbot-workflow-notes) | [介绍](https://jjh-python667.github.io/projects/grokbot-workflow-notes.html) |
+| 星球大战 mini | Python / Pygame 入门练习 | [star-wars-mini](https://github.com/jjh-python667/star-wars-mini) | [介绍](https://jjh-python667.github.io/projects/star-wars-mini.html) |
+| 作品集 | 本仓库 | [jjh-python667.github.io](https://github.com/jjh-python667/jjh-python667.github.io) | [线上站点](https://jjh-python667.github.io/) |
