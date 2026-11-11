@@ -8,7 +8,7 @@ const target = path.join(root, 'site/data/updates.json');
 const config = JSON.parse(await readFile(path.join(root, 'site/data/site.json'), 'utf8'));
 const temporary = target + '.' + randomUUID() + '.tmp';
 try {
-  const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'jjhbuilds-portfolio' };
+  const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'jjh-portfolio' };
   if (process.env.GITHUB_TOKEN) headers.Authorization = 'Bearer ' + process.env.GITHUB_TOKEN;
   const repos = [];
   for (let page = 1; ; page++) {
