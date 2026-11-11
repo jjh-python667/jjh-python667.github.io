@@ -27,8 +27,7 @@ await cp(source, target, { recursive: true });
 for (const file of previous) {
   const relative = path.relative(target, file);
   if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) throw new Error('Refusing cleanup outside Pages output');
-  // patrol-sample.md is a committed dry-run report, not build output.
-  if (relative !== '.nojekyll' && relative !== 'patrol-sample.md' && !incoming.has(relative)) await unlink(file);
+  if (relative !== '.nojekyll' && !incoming.has(relative)) await unlink(file);
 }
 await writeFile(path.join(target, '.nojekyll'), '');
 console.log('Prepared docs/ from dist/ locally. No commit, push or deployment performed.');

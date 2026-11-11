@@ -51,7 +51,7 @@ npm run preview
 
 浏览器打开 http://127.0.0.1:4176/ 。换端口：`node scripts/preview.mjs --port 4178`。
 
-`npm run prepare:pages` 会把 `dist/` 同步到 `docs/`，保留 `.nojekyll` 和 `docs/patrol-sample.md`。它不会提交、推送或部署。
+`npm run prepare:pages` 会把 `dist/` 同步到 `docs/`，保留 `.nojekyll`。它不会提交、推送或部署。
 
 `npm run sync` 会重新读取公开 GitHub 仓库动态；失败时保留上一次成功的快照。它会改页面里的动态内容，改样式时不必运行。
 
@@ -64,13 +64,13 @@ Node.js 20 or newer. The site build has no npm dependencies. `npm run build` wri
 ```text
 site/          页面源文件：HTML、CSS、JS、data、图片、robots.txt、sitemap.xml
 scripts/       build、render、preview、prepare-pages、sync、optimize、patrol
-docs/          GitHub Pages 目录。patrol-sample.md 是巡检样例，不是页面栏目
-.github/       巡检 workflow 和首页哈希基线
+docs/          GitHub Pages 目录，只放站点构建结果
+.github/       巡检 workflow、首页哈希基线和样例报告 .github/patrol/sample.md
 ```
 
 GitHub Pages 使用 `docs/`。不要在这个仓库里改 Cloudflare Worker。
 
-`docs/` is the GitHub Pages directory. Do not treat `docs/patrol-sample.md` as a site section. Worker code is not in this repository.
+`docs/` is the GitHub Pages directory and stays limited to the built site. The patrol sample is `.github/patrol/sample.md`. Worker code is not in this repository.
 
 ## 巡检
 
