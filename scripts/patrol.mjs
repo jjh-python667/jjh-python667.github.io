@@ -787,62 +787,93 @@ async function github(pathname, { method = 'GET', body } = {}) {
   return { status: response.status, data, link };
 }
 
-async function syncIssue(repo, report, hasProblems) {
-  if (!process.env.GITHUB_TOKEN) return { summary: '未同步 issue：没有 GITHUB_TOKEN。', error: true, needed: hasProblems };
-  const label = await github(`/repos/${repo}/labels`, {
-    method: 'POST',
-    body: { name: ISSUE_LABEL, color: 'b60205', description: '站点巡检跟踪。同一时间只更新一条开启的 issue。' },
-  });
-  if (![200, 201, 422].includes(label.status)) {
-    return { summary: `未能确认标签 ${ISSUE_LABEL}（HTTP ${label.status}）。`, error: true, needed: hasProblems };
+function conclusionIn(text) {
+  const match = String(text || '').match(/结论：\*\*(通过|有警告|未通过)\*\*/);
+  return match ? match[1] : '';
+}
+
+function issuePlan(current, conclusion) {
+  const open = Boolean(current && current.state === 'open');
+  const recorded = conclusionIn(current && current.body);
+  if (conclusion === '未通过') {
+    if (!current) return { action: 'create', comment: true };
+    if (open && recorded === '未通过') return { action: 'update', comment: false };
+    return { action: 'reopen', comment: true };
+  }
+  if (conclusion === '通过' && open) return { action: 'close', comment: true };
+  return { action: 'none', comment: false };
+}
+
+function clipReport(report) {
+  if (report.length <= 60000) return report;
+  return report.slice(0, 59000) + '\n\n（报告过长，已截断。完整文本见本次 workflow artifact。）\n';
+}
+
+async function syncIssue(repo, report, conclusion) {
+  if (!process.env.GITHUB_TOKEN) {
+    return { summary: '未同步 issue：没有 GITHUB_TOKEN。', error: true, needed: conclusion === '未通过', refreshBody: false };
   }
   const issues = [];
   for (let page = 1; page <= 5; page += 1) {
     const listed = await github(`/repos/${repo}/issues?state=all&per_page=100&page=${page}`);
     if (listed.status !== 200 || !Array.isArray(listed.data)) {
-      return { summary: `读取 issue 列表失败（HTTP ${listed.status}）。`, error: true, needed: hasProblems };
+      return { summary: `读取 issue 列表失败（HTTP ${listed.status}）。`, error: true, needed: conclusion === '未通过', refreshBody: false };
     }
     issues.push(...listed.data);
     if (!listed.link.includes('rel="next"') || listed.data.length < 100) break;
   }
   const matches = issues.filter(item => !item.pull_request && (item.title === ISSUE_TITLE || (item.labels || []).some(itemLabel => itemLabel.name === ISSUE_LABEL)));
-  matches.sort((a, b) => Number(a.state === 'open') - Number(b.state === 'open') || a.number - b.number);
   const current = matches.find(item => item.state === 'open') || matches[0];
-  const body = report.length > 60000 ? report.slice(0, 59000) + '\n\n（报告过长，已截断。完整文本见本次 workflow artifact。）\n' : report;
-  if (hasProblems) {
-    if (current) {
-      const labels = [...new Set([...(current.labels || []).map(itemLabel => itemLabel.name), ISSUE_LABEL])];
-      const updated = await github(`/repos/${repo}/issues/${current.number}`, {
-        method: 'PATCH',
-        body: { title: ISSUE_TITLE, body, state: 'open', labels },
-      });
-      if (updated.status !== 200) return { summary: `更新 issue #${current.number} 失败（HTTP ${updated.status}）。`, error: true, needed: true };
-      await github(`/repos/${repo}/issues/${current.number}/comments`, {
-        method: 'POST',
-        body: { body: `自动巡检更新了这条跟踪 issue。结论仍见正文。` },
-      });
-      return { summary: `已更新 issue #${current.number}。`, error: false, needed: true, number: current.number };
+  const plan = issuePlan(current, conclusion);
+  if (plan.action === 'none') {
+    return { summary: '本次不改跟踪 issue。警告只留在 job summary。', error: false, needed: false, refreshBody: false };
+  }
+  const body = clipReport(report);
+  if (plan.action === 'close') {
+    const closed = await github(`/repos/${repo}/issues/${current.number}`, {
+      method: 'PATCH',
+      body: { state: 'closed' },
+    });
+    if (closed.status !== 200) {
+      return { summary: `关闭 issue #${current.number} 失败（HTTP ${closed.status}）。`, error: false, needed: false, refreshBody: false };
     }
+    await github(`/repos/${repo}/issues/${current.number}/comments`, {
+      method: 'POST',
+      body: { body: '结论已回到「通过」，关闭这条跟踪 issue。' },
+    });
+    return { summary: `结论回到通过，已关闭 issue #${current.number}。`, error: false, needed: false, number: current.number, refreshBody: false };
+  }
+  const label = await github(`/repos/${repo}/labels`, {
+    method: 'POST',
+    body: { name: ISSUE_LABEL, color: 'b60205', description: '站点巡检未通过时的跟踪 issue。' },
+  });
+  if (![200, 201, 422].includes(label.status)) {
+    return { summary: `未能确认标签 ${ISSUE_LABEL}（HTTP ${label.status}）。`, error: true, needed: true, refreshBody: false };
+  }
+  let number = current && current.number;
+  if (plan.action === 'create') {
     const created = await github(`/repos/${repo}/issues`, {
       method: 'POST',
       body: { title: ISSUE_TITLE, body, labels: [ISSUE_LABEL] },
     });
-    if (created.status !== 201) return { summary: `创建跟踪 issue 失败（HTTP ${created.status}）。`, error: true, needed: true };
-    return { summary: `已创建 issue #${created.data.number}。`, error: false, needed: true, number: created.data.number };
-  }
-  if (current && current.state === 'open') {
-    const closed = await github(`/repos/${repo}/issues/${current.number}`, {
+    if (created.status !== 201) return { summary: `创建跟踪 issue 失败（HTTP ${created.status}）。`, error: true, needed: true, refreshBody: false };
+    number = created.data.number;
+  } else {
+    const labels = [...new Set([...(current.labels || []).map(itemLabel => itemLabel.name), ISSUE_LABEL])];
+    const updated = await github(`/repos/${repo}/issues/${number}`, {
       method: 'PATCH',
-      body: { state: 'closed', body },
+      body: { title: ISSUE_TITLE, body, state: 'open', labels },
     });
-    if (closed.status !== 200) return { summary: `关闭 issue #${current.number} 失败（HTTP ${closed.status}）。站点检查本身没有未通过项。`, error: false, needed: false };
-    await github(`/repos/${repo}/issues/${current.number}/comments`, {
-      method: 'POST',
-      body: { body: '最近一次自动巡检没有待处理问题，已关闭这条跟踪 issue。' },
-    });
-    return { summary: `没有待处理问题，已关闭 issue #${current.number}。`, error: false, needed: false, number: current.number };
+    if (updated.status !== 200) return { summary: `更新 issue #${number} 失败（HTTP ${updated.status}）。`, error: true, needed: true, refreshBody: false };
   }
-  return { summary: '没有待处理问题，也没有已开启的跟踪 issue。', error: false, needed: false };
+  if (plan.comment) {
+    await github(`/repos/${repo}/issues/${number}/comments`, {
+      method: 'POST',
+      body: { body: '结论变为「未通过」。' },
+    });
+  }
+  const summary = plan.comment ? `结论变为未通过，已写入 issue #${number}。` : `结论仍是未通过，已更新 issue #${number} 的正文，没有新增评论。`;
+  return { summary, error: false, needed: true, number, refreshBody: true };
 }
 
 async function writeOutput(file, contents) {
@@ -879,6 +910,24 @@ function runSelfCheck() {
   if (scoreLevel('performance', 40, false) !== 'warn') throw new Error('optional perf');
   if (!grounded('首页 HTTP 200，性能 80。', '{"status":200,"performance":80}')) throw new Error('grounded should accept');
   if (grounded('建议 24 小时内处理。', '{"status":200}')) throw new Error('grounded should reject invented numbers');
+  const openFail = { state: 'open', body: '结论：**未通过**' };
+  const plans = [
+    [null, '未通过', 'create', true],
+    [openFail, '未通过', 'update', false],
+    [{ state: 'closed', body: '结论：**未通过**' }, '未通过', 'reopen', true],
+    [openFail, '通过', 'close', true],
+    [openFail, '有警告', 'none', false],
+    [null, '有警告', 'none', false],
+    [null, '通过', 'none', false],
+    [{ state: 'closed', body: '结论：**通过**' }, '通过', 'none', false],
+  ];
+  for (const [current, conclusion, action, comment] of plans) {
+    const plan = issuePlan(current, conclusion);
+    if (plan.action !== action || plan.comment !== comment) {
+      throw new Error(`issuePlan ${conclusion} => ${plan.action}/${plan.comment}, expected ${action}/${comment}`);
+    }
+  }
+  if (conclusionIn('结论：**有警告**') !== '有警告') throw new Error('conclusion parse');
   console.log('self-check ok');
 }
 
@@ -1023,19 +1072,19 @@ async function main() {
   if (syncIssues) {
     const repo = process.env.GITHUB_REPOSITORY || '';
     if (!repo) {
-      state.issue = { summary: '未同步 issue：没有 GITHUB_REPOSITORY。', error: true, needed: hasProblems };
-      issueFailed = hasProblems;
+      state.issue = { summary: '未同步 issue：没有 GITHUB_REPOSITORY。', error: true, needed: conclusion === '未通过', refreshBody: false };
+      issueFailed = conclusion === '未通过';
     } else {
       try {
-        state.issue = await syncIssue(repo, report, hasProblems);
+        state.issue = await syncIssue(repo, report, conclusion);
         issueFailed = Boolean(state.issue.error && state.issue.needed);
       } catch (error) {
-        state.issue = { summary: '同步 issue 失败：' + (error.name || 'Error'), error: true, needed: hasProblems };
-        issueFailed = hasProblems;
+        state.issue = { summary: '同步 issue 失败：' + (error.name || 'Error'), error: true, needed: conclusion === '未通过', refreshBody: false };
+        issueFailed = conclusion === '未通过';
       }
     }
     report = buildReport({ ...state, notices });
-    if (state.issue.number && process.env.GITHUB_REPOSITORY) {
+    if (state.issue.refreshBody && state.issue.number && process.env.GITHUB_REPOSITORY) {
       const refreshed = report.length > 60000 ? report.slice(0, 59000) + '\n\n（报告过长，已截断。完整文本见本次 workflow artifact。）\n' : report;
       await github(`/repos/${process.env.GITHUB_REPOSITORY}/issues/${state.issue.number}`, {
         method: 'PATCH',
