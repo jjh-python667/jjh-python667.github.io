@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Bilingual README for the static GitHub Pages portfolio: what the site is, the sections that are actually on the homepage and in the sitemap, how to build and preview locally, and the repository layout.
-- MIT License at the repository root. The vendored GSAP license in `site/assets/vendor/gsap/LICENSE` is unchanged.
+- Vendored GSAP files in `site/assets/vendor/gsap/` are unchanged.
 - GitHub Actions workflow `.github/workflows/site-patrol.yml`. It runs daily and on manual dispatch, checks the public portfolio and treats the Deal Hunter worker as optional, checks linked URLs, runs free Lighthouse performance and accessibility audits, and compares a SHA-256 of the homepage HTML with `.github/patrol/baseline.json`.
 - `npm run patrol` for a local dry-run that does not open issues and does not call GitHub Models.
 - Sample report `docs/patrol-sample.md`, produced by that dry-run against the live URLs.

@@ -4,9 +4,9 @@
 
 公开地址：[https://jjh-python667.github.io/](https://jjh-python667.github.io/)
 
-这个仓库只发布静态展示页。案头、学习搭子、资讯台和优惠情报站的后端都不在这里。仓库版本 `1.2.1` 增加的是说明、许可证和巡检，没有改页面外观或文案。页面内容沿用 `1.2.0`（2026-11-10）。主人把合并提交 `643740a` 记为当时的线上基准；之后 `main` 上的 `docs/` 又发布了优惠情报站等内容，线上首页能看到这些内容。
+这个仓库只发布静态展示页。案头、学习搭子、资讯台和优惠情报站的后端都不在这里。仓库版本 `1.2.1` 增加的是说明和巡检，没有改页面外观或文案。页面内容沿用 `1.2.0`（2026-11-10）。主人把合并提交 `643740a` 记为当时的线上基准；之后 `main` 上的 `docs/` 又发布了优惠情报站等内容，线上首页能看到这些内容。
 
-Public static portfolio for a first-year AI undergraduate. The headline is “做 AI 产品，也做工作流。” The live site is [https://jjh-python667.github.io/](https://jjh-python667.github.io/). This repository publishes the static pages only. Repository version `1.2.1` adds docs, the license, and the patrol workflow. It does not change the page design or copy. The owner marked merge `643740a` as the live baseline at that time; later commits on `main` also updated `docs/`, including Deal Hunter, and that content is what the public homepage shows.
+Public static portfolio for a first-year AI undergraduate. The headline is “做 AI 产品，也做工作流。” The live site is [https://jjh-python667.github.io/](https://jjh-python667.github.io/). This repository publishes the static pages only. Repository version `1.2.1` adds docs and the patrol workflow. It does not change the page design or copy. The owner marked merge `643740a` as the live baseline at that time; later commits on `main` also updated `docs/`, including Deal Hunter, and that content is what the public homepage shows.
 
 ## 页面上有什么
 
@@ -93,8 +93,8 @@ GitHub Actions 工作流 `.github/workflows/site-patrol.yml`：
 
 `npm run patrol` is a local dry-run. The workflow checks the portfolio, treats Deal Hunter as optional, checks links with a rate limit, runs Lighthouse, and compares the homepage hash with the committed baseline. The Chinese report is rule-based and falls back to those rules when GitHub Models is unavailable. One tracking issue is opened or updated only from the daily run or a manual dispatch.
 
-## 许可
+## 第三方素材
 
-本仓库使用 [MIT License](LICENSE)。`site/assets/vendor/gsap/LICENSE` 是 GSAP 自己的许可，不要把它换成 MIT。
+GSAP 与 ScrollTrigger 的来源和许可见 `site/assets/vendor/gsap/`。星球大战 mini 的画面在项目页里说明，素材不放进本仓库的根目录。
 
-This repository is MIT. The vendored GSAP license stays where it is.
+GSAP and ScrollTrigger keep the terms shipped in `site/assets/vendor/gsap/`. The Star Wars mini page explains its own artwork.
