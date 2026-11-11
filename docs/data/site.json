@@ -4,8 +4,6 @@
   "icp_number": "",
   "exclude_repositories": [
     "jjh-python667",
-    "jjhbuilds",
-    "jjhbuilds.com",
     "jjh-python667.github.io"
   ],
   "project_descriptions": {
@@ -14,6 +12,5 @@
     "newsdesk": "资讯台：Cloudflare RSS 聚合、搜索、收藏与已读同步；私人实例需本人登录。",
     "dealhunter": "公开优惠情报站：中文导读、原文对照、筛选、收藏与分页；基础版已上线，新版待部署。",
     "star-wars-mini": "Pygame 入门射击练习：数量与生命修复、暂停与失焦保护，30 项测试通过。"
-  },
-  "planned_domain": "jjhbuilds.com"
+  }
 }
