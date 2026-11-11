@@ -206,15 +206,43 @@ function hostnameOf(url) {
   return new URL(url).hostname;
 }
 
+function accessLoginLocation(value) {
+  try {
+    const url = new URL(value);
+    if (url.hostname === 'cloudflareaccess.com' || url.hostname.endsWith('.cloudflareaccess.com')) {
+      url.search = '';
+      url.hash = '';
+      return url.href;
+    }
+  } catch {}
+  return value;
+}
+
+function isAccessLogin(result) {
+  const finalUrl = String(result?.finalUrl || '');
+  try {
+    const url = new URL(finalUrl);
+    if (url.hostname === 'cloudflareaccess.com' || url.hostname.endsWith('.cloudflareaccess.com')) return true;
+    if (url.pathname.includes('/cdn-cgi/access/')) return true;
+  } catch {}
+  if (/cloudflare-access/i.test(result?.wwwAuthenticate || '')) return true;
+  if (result?.accessDomain) return true;
+  return /<title>[^<]*Cloudflare Access/i.test(result?.body || '');
+}
+
 function classify(record) {
   const reachable = record.status > 0 && !record.error;
-  if (record.optional) {
+  if (record.protected) {
+    if (reachable && record.status >= 200 && record.status < 400) return 'protected';
+    return 'warn';
+  }
+  // External targets, including archive downloads, are optional: a 5xx or other miss is a warning.
+  if (record.optional || !record.sameOrigin) {
     if (!reachable || record.status >= 400) return 'warn';
     return 'ok';
   }
   if (!reachable) return 'hard';
   if (record.status >= 200 && record.status < 400) return 'ok';
-  if ((record.status === 401 || record.status === 403) && !record.sameOrigin) return 'warn';
   if (record.status === 429) return 'warn';
   if (record.status >= 400) return 'hard';
   return 'warn';
@@ -255,9 +283,11 @@ async function requestOnce(url, { method, read }) {
   });
   const contentType = response.headers.get('content-type') || '';
   const lastModified = response.headers.get('last-modified') || '';
+  const wwwAuthenticate = response.headers.get('www-authenticate') || '';
+  const accessDomain = response.headers.get('cf-access-domain') || '';
   if (!read) {
     await response.body?.cancel();
-    return { status: response.status, finalUrl: response.url || url, contentType, lastModified, body: '', bytes: 0, sha256: '', truncated: false };
+    return { status: response.status, finalUrl: response.url || url, contentType, lastModified, wwwAuthenticate, accessDomain, body: '', bytes: 0, sha256: '', truncated: false };
   }
   const chunks = [];
   let received = 0;
@@ -288,6 +318,8 @@ async function requestOnce(url, { method, read }) {
     bytes: buffer.length,
     sha256: createHash('sha256').update(buffer).digest('hex'),
     truncated,
+    wwwAuthenticate,
+    accessDomain,
   };
 }
 
@@ -398,6 +430,7 @@ async function crawl(args) {
         record.sha256 = result.sha256;
         record.truncated = result.truncated;
         record.body = result.body;
+        record.protected = isAccessLogin(result);
       } catch (error) {
         const code = error?.cause?.code || error?.name || 'Error';
         record.error = code === 'TimeoutError' ? 'timeout' : String(code);
@@ -413,8 +446,8 @@ async function crawl(args) {
   while (queue.length) {
     const item = queue.shift();
     const record = await check(item);
-    process.stderr.write(`checked ${record.status || record.error} ${record.url}\n`);
-    if (record.role === 'optional') {
+    process.stderr.write(`checked ${record.status || record.error}${record.protected ? ' access' : ''} ${record.url}\n`);
+    if (record.protected || record.role === 'optional') {
       record.body = '';
       continue;
     }
@@ -468,6 +501,7 @@ function findingText(record) {
 function levelLabel(level) {
   if (level === 'hard') return '未通过';
   if (level === 'warn') return '警告';
+  if (level === 'protected') return '受 Access 保护，只检查可达';
   return '通过';
 }
 
@@ -684,9 +718,10 @@ function buildReport(state) {
   lines.push('');
   lines.push('## 链接');
   lines.push('');
-  lines.push(`共检查 ${state.counts.checked} 个 URL（站内 ${state.counts.internal}，站外 ${state.counts.external}）。限速：并发 ${CONCURRENCY}，相邻请求至少间隔 ${START_INTERVAL_MS} ms，单次超时 ${REQUEST_TIMEOUT_MS / 1000} 秒；HTTP 429/502/503/504 和网络错误重试 1 次。HEAD 遇到 400、403、404、405、501 时改用 GET。`);
+  lines.push(`共检查 ${state.counts.checked} 个 URL（站内 ${state.counts.internal}，站外 ${state.counts.external}）。限速：并发 ${CONCURRENCY}，相邻请求至少间隔 ${START_INTERVAL_MS} ms，单次超时 ${REQUEST_TIMEOUT_MS / 1000} 秒；HTTP 429/502/503/504 和网络错误重试 1 次。HEAD 遇到 400、403、404、405、501 时改用 GET。站外链接失败只记警告。Cloudflare Access 登录页（HTTP 302 或随后的 200）只确认可达，不把登录页当成站点正文。`);
   lines.push('');
   lines.push(`- 通过：${state.counts.ok}`);
+  lines.push(`- 受 Access 保护，只检查可达：${state.counts.protected || 0}`);
   lines.push(`- 警告：${state.counts.warn}`);
   lines.push(`- 未通过：${state.counts.hard}`);
   if (state.truncatedQueue) lines.push('- 通知：待检查 URL 超过上限，后面的链接没有继续加入。');
@@ -699,6 +734,10 @@ function buildReport(state) {
   lines.push('### 警告');
   lines.push('');
   lines.push(state.linkWarnings.length ? state.linkWarnings.map(findingText).join('\n') : '无。');
+  lines.push('');
+  lines.push('### 受 Access 保护，只检查可达');
+  lines.push('');
+  lines.push(state.protected.length ? state.protected.map(record => `- ${record.url} — HTTP ${record.status} — 最终 URL：${accessLoginLocation(record.finalUrl || record.url)}。这是 Cloudflare Access 登录页，只确认可达，未核对该站点正文。`).join('\n') : '无。');
   lines.push('');
   lines.push('## Lighthouse');
   lines.push('');
@@ -900,6 +939,10 @@ function runSelfCheck() {
     [{ status: 403, error: '', optional: false, sameOrigin: true }, 'hard'],
     [{ status: 429, error: '', optional: false, sameOrigin: false }, 'warn'],
     [{ status: 200, error: '', optional: false, sameOrigin: true }, 'ok'],
+    [{ status: 500, error: '', optional: false, sameOrigin: false }, 'warn'],
+    [{ status: 200, error: '', optional: false, sameOrigin: false, protected: true }, 'protected'],
+    [{ status: 302, error: '', optional: false, sameOrigin: false, protected: true }, 'protected'],
+    [{ status: 0, error: 'timeout', optional: false, sameOrigin: false, protected: true }, 'warn'],
   ];
   for (const [record, expected] of cases) {
     const actual = classify(record);
@@ -928,6 +971,9 @@ function runSelfCheck() {
     }
   }
   if (conclusionIn('结论：**有警告**') !== '有警告') throw new Error('conclusion parse');
+  if (!isAccessLogin({ finalUrl: 'https://gongjiang667.cloudflareaccess.com/cdn-cgi/access/login/newsdesk.gongjiang667.workers.dev' })) throw new Error('access host');
+  if (isAccessLogin({ finalUrl: 'https://newsdesk.gongjiang667.workers.dev/', status: 200 })) throw new Error('workers host is not itself an access login');
+  if (levelLabel('protected') !== '受 Access 保护，只检查可达') throw new Error('protected label');
   console.log('self-check ok');
 }
 
@@ -948,6 +994,7 @@ async function main() {
   for (const record of checked) record.level = classify(record);
   const hard = checked.filter(record => record.level === 'hard');
   const linkWarnings = checked.filter(record => record.level === 'warn');
+  const protectedLinks = checked.filter(record => record.level === 'protected');
 
   let baseline = null;
   try {
@@ -1034,6 +1081,7 @@ async function main() {
   const counts = {
     checked: checked.length,
     ok: checked.filter(record => record.level === 'ok').length,
+    protected: protectedLinks.length,
     warn: linkWarnings.length,
     hard: hard.length,
     internal: checked.filter(record => record.sameOrigin).length,
@@ -1054,6 +1102,7 @@ async function main() {
     checked,
     hard,
     linkWarnings,
+    protected: protectedLinks,
     counts,
     hashComparison,
     baselinePath: args.baseline,

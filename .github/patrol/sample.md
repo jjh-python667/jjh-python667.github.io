@@ -1,6 +1,6 @@
 # 站点巡检报告
 
-- 时间：2026-11-11 17:55:02 +08:00（2026-11-11T09:55:02.863Z）
+- 时间：2026-11-11 23:43:02 +08:00（2026-11-11T15:43:02.793Z）
 - 模式：本地 dry-run
 - 结论：**通过**
 - 报告来源：规则。未调用 GitHub Models（本地 dry-run 不读取令牌）。
@@ -9,8 +9,8 @@
 
 | 目标 | 角色 | 结果 | 最终 URL | 耗时 | Last-Modified |
 | --- | --- | --- | --- | --- | --- |
-| 作品集 | 必须 | HTTP 200 | https://jjh-python667.github.io/ | 138 ms | Tue, 10 Nov 2026 13:37:52 GMT |
-| Deal Hunter | 可选，失败不令任务失败 | HTTP 200 | https://dealhunter.gongjiang667.workers.dev/ | 430 ms |  |
+| 作品集 | 必须 | HTTP 200 | https://jjh-python667.github.io/ | 119 ms | Tue, 10 Nov 2026 13:37:59 GMT |
+| Deal Hunter | 可选，失败不令任务失败 | HTTP 200 | https://dealhunter.gongjiang667.workers.dev/ | 835 ms |  |
 
 ## 首页内容哈希
 
@@ -23,9 +23,10 @@
 
 ## 链接
 
-共检查 56 个 URL（站内 34，站外 22）。限速：并发 2，相邻请求至少间隔 400 ms，单次超时 20 秒；HTTP 429/502/503/504 和网络错误重试 1 次。HEAD 遇到 400、403、404、405、501 时改用 GET。
+共检查 56 个 URL（站内 34，站外 22）。限速：并发 2，相邻请求至少间隔 400 ms，单次超时 20 秒；HTTP 429/502/503/504 和网络错误重试 1 次。HEAD 遇到 400、403、404、405、501 时改用 GET。站外链接失败只记警告。Cloudflare Access 登录页（HTTP 302 或随后的 200）只确认可达，不把登录页当成站点正文。
 
-- 通过：56
+- 通过：55
+- 受 Access 保护，只检查可达：1
 - 警告：0
 - 未通过：0
 
@@ -36,6 +37,10 @@
 ### 警告
 
 无。
+
+### 受 Access 保护，只检查可达
+
+- https://newsdesk.gongjiang667.workers.dev/ — HTTP 200 — 最终 URL：https://gongjiang667.cloudflareaccess.com/cdn-cgi/access/login/newsdesk.gongjiang667.workers.dev。这是 Cloudflare Access 登录页，只确认可达，未核对该站点正文。
 
 ## Lighthouse
 
@@ -48,9 +53,9 @@
 - URL：https://jjh-python667.github.io/
 - 结果：通过
 - 版本：13.6.0；形态：mobile
-- 性能：97
+- 性能：100
 - 无障碍：100
-- 实验指标：FCP 1.3 s；LCP 1.3 s；TBT 200 ms；CLS 0
+- 实验指标：FCP 1.3 s；LCP 1.3 s；TBT 0 ms；CLS 0
 - 计入分数且低于 0.9 的审计：无。
 
 ### Deal Hunter（可选）
@@ -60,7 +65,7 @@
 - 版本：13.6.0；形态：mobile
 - 性能：100
 - 无障碍：100
-- 实验指标：FCP 1.3 s；LCP 1.3 s；TBT 0 ms；CLS 0
+- 实验指标：FCP 1.1 s；LCP 1.1 s；TBT 60 ms；CLS 0
 - 计入分数且低于 0.9 的审计：无。
 
 ## 其他通知
@@ -130,4 +135,4 @@ dry-run 不同步 GitHub issue。
 | 通过 | 200 | internal | https://jjh-python667.github.io/projects/star-wars-mini.html |
 | 通过 | 200 | robots | https://jjh-python667.github.io/robots.txt |
 | 通过 | 200 | sitemap | https://jjh-python667.github.io/sitemap.xml |
-| 通过 | 200 | external | https://newsdesk.gongjiang667.workers.dev/ |
+| 受 Access 保护，只检查可达 | 200 | external | https://newsdesk.gongjiang667.workers.dev/ |

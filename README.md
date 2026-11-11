@@ -82,12 +82,12 @@ GitHub Actions 工作流 `.github/workflows/site-patrol.yml`：
 - 打开指向 `main` 的 pull request 时只运行 `node --check` 和 `node scripts/patrol.mjs --self-check`，不访问线上站点，也不创建或修改 issue
 - 定时和手动巡检必须检查 [https://jjh-python667.github.io/](https://jjh-python667.github.io/)
 - [https://dealhunter.gongjiang667.workers.dev/](https://dealhunter.gongjiang667.workers.dev/) 是可选项。打不开或返回错误只记警告，不让任务失败
-- 检查站内和站外链接。并发 2，相邻请求至少间隔 400 ms
+- 检查站内和站外链接。并发 2，相邻请求至少间隔 400 ms。站外链接（含源码压缩包）失败只记警告。Cloudflare Access 登录页（HTTP 302，或跳到登录页后的 200）只记为「受 Access 保护，只检查可达」，不把登录页当成站点正文
 - 用免费的 Lighthouse CLI（`lighthouse@13.6.0`，需要 Node.js 22.19+）测性能和无障碍。性能低于 50 或无障碍低于 90 记警告；性能低于 25 或无障碍低于 80 记未通过
 - 用首页 HTML 的 SHA-256 和 `.github/patrol/baseline.json` 比较。内容变化只写进报告，不单独当作失败
 - 中文报告写到 job summary，并上传 artifact `site-patrol-report`
 - 规则生成报告。`schedule` 和 `workflow_dispatch` 用内置 `GITHUB_TOKEN` 和该 job 的 `models: read` 调用 GitHub Models 补一段摘要；`pull_request` 不调用。Models 不可用时回退到规则报告
-- 只有结论是「未通过」时，才创建或更新一条标题为「站点巡检：待处理问题」、标签为 `site-patrol` 的 issue。链接返回 403 或 429、Deal Hunter 超时，以及 Lighthouse 警告，只写进 job summary。结论没变时不追加评论；结论回到「通过」时关闭这条 issue，并留一条恢复说明
+- 只有结论是「未通过」时，才创建或更新一条标题为「站点巡检：待处理问题」、标签为 `site-patrol` 的 issue。链接返回 403 或 429、站外链接的 5xx、Deal Hunter 超时，以及 Lighthouse 警告，只写进 job summary。结论没变时不追加评论；结论回到「通过」时关闭这条 issue，并留一条恢复说明
 
 不需要新增 secret，也不使用付费服务。Models 不可用时，定时和手动巡检仍给出规则报告。
 
