@@ -4,9 +4,9 @@
 
 公开地址：[https://jjh-python667.github.io/](https://jjh-python667.github.io/)
 
-这个仓库只发布静态展示页。案头、学习搭子、资讯台和优惠情报站的后端都不在这里。仓库版本 `1.2.1` 增加的是说明和巡检，没有改页面外观或文案。页面内容沿用 `1.2.0`（2026-11-10）。主人把合并提交 `643740a` 记为当时的线上基准；之后 `main` 上的 `docs/` 又发布了优惠情报站等内容，线上首页能看到这些内容。
+这个仓库只发布静态展示页。案头、学习搭子、资讯台和优惠情报站的后端都不在这里。仓库版本 `1.2.1` 增加的是说明和巡检，没有改页面外观或文案。页面内容沿用 `1.2.0`（2026-11-10）。合并提交 `643740a` 是当时的线上基准；之后 `main` 上的 `docs/` 又发布了优惠情报站等内容，线上首页能看到这些内容。
 
-Public static portfolio for a first-year AI undergraduate. The headline is “做 AI 产品，也做工作流。” The live site is [https://jjh-python667.github.io/](https://jjh-python667.github.io/). This repository publishes the static pages only. Repository version `1.2.1` adds docs and the patrol workflow. It does not change the page design or copy. The owner marked merge `643740a` as the live baseline at that time; later commits on `main` also updated `docs/`, including Deal Hunter, and that content is what the public homepage shows.
+Public static portfolio for a first-year AI undergraduate. The headline is “做 AI 产品，也做工作流。” The live site is [https://jjh-python667.github.io/](https://jjh-python667.github.io/). This repository publishes the static pages only. Repository version `1.2.1` adds docs and the patrol workflow. It does not change the page design or copy. Merge `643740a` was the live baseline at that time; later commits on `main` also updated `docs/`, including Deal Hunter, and that content is what the public homepage shows.
 
 ## 页面上有什么
 
