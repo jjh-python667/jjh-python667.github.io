@@ -1,0 +1,65 @@
+name: 站点巡检
+
+on:
+  schedule:
+    # 02:00 UTC every day. GitHub may start the run later.
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+  models: read
+
+concurrency:
+  group: site-patrol-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  patrol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+
+      - name: Locate Chrome
+        run: |
+          set -euo pipefail
+          for candidate in /usr/bin/google-chrome /usr/bin/google-chrome-stable /usr/bin/chromium /usr/bin/chromium-browser; do
+            if [ -x "$candidate" ]; then
+              echo "CHROME_PATH=$candidate" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+          echo "Chrome was not found. The patrol records that and continues."
+
+      - name: Run patrol
+        env:
+          PATROL_USE_MODELS: '1'
+          PATROL_SYNC_ISSUES: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '1' || '0' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p patrol-out
+          node scripts/patrol.mjs \
+            --out patrol-out/report.md \
+            --json patrol-out/result.json \
+            --summary "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload patrol report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-patrol-report
+          path: patrol-out/
+          if-no-files-found: warn
+          retention-days: 14

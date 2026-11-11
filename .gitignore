@@ -9,3 +9,10 @@ node_modules/
 *.log
 
 outputs/
+.patrol/
+.lighthouseci/
+*.report.html
+*.report.json
+.DS_Store
+Thumbs.db
+*.tmp

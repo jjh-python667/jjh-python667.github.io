@@ -1,0 +1,8 @@
+{
+  "url": "https://jjh-python667.github.io/",
+  "algorithm": "sha256",
+  "hash": "6600470ce93862949d5c35022c5b92e55359dea3618de1eeaea303b2298d8d87",
+  "bytes": 36033,
+  "capturedAt": "2026-11-11T09:40:54.995Z",
+  "note": "首页 HTML 响应正文的 SHA-256。GitHub Actions 只比较，不改写这个文件。"
+}
