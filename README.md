@@ -78,9 +78,9 @@ GitHub Pages 使用 `docs/`。不要在这个仓库里改 Cloudflare Worker。
 
 GitHub Actions 工作流 `.github/workflows/site-patrol.yml`：
 
-- 每天 02:00 UTC 运行，也可以手动 `workflow_dispatch`
-- 打开指向 `main` 的 pull request 时也会跑检查并上传 artifact，但不会创建或修改 issue
-- 必须检查 [https://jjh-python667.github.io/](https://jjh-python667.github.io/)
+- 每天 02:00 UTC 运行，也可以手动 `workflow_dispatch`。这两种才会巡检线上站点
+- 打开指向 `main` 的 pull request 时只运行 `node --check` 和 `node scripts/patrol.mjs --self-check`，不访问线上站点，也不创建或修改 issue
+- 定时和手动巡检必须检查 [https://jjh-python667.github.io/](https://jjh-python667.github.io/)
 - [https://dealhunter.gongjiang667.workers.dev/](https://dealhunter.gongjiang667.workers.dev/) 是可选项。打不开或返回错误只记警告，不让任务失败
 - 检查站内和站外链接。并发 2，相邻请求至少间隔 400 ms
 - 用免费的 Lighthouse CLI（`lighthouse@13.6.0`，需要 Node.js 22.19+）测性能和无障碍。性能低于 50 或无障碍低于 90 记警告；性能低于 25 或无障碍低于 80 记未通过
@@ -91,7 +91,7 @@ GitHub Actions 工作流 `.github/workflows/site-patrol.yml`：
 
 不需要新增 secret，也不使用付费服务。2026-07-30 起 GitHub Models 已停用，所以现在预期走规则回退。
 
-`npm run patrol` is a local dry-run. The workflow checks the portfolio, treats Deal Hunter as optional, checks links with a rate limit, runs Lighthouse, and compares the homepage hash with the committed baseline. The Chinese report is rule-based. The workflow sets `PATROL_USE_MODELS` to `'0'`, so no model is called unless the owner changes it to `'1'`. If that call fails, the report falls back to the rules. The daily run and a manual dispatch open or update one issue only when the conclusion is 未通过. Warnings stay in the job summary. A comment is posted only when that conclusion changes, and a later pass closes the issue with one recovered comment.
+`npm run patrol` is a local dry-run. A pull request only runs the offline self-check. The scheduled run and a manual dispatch check the portfolio, treat Deal Hunter as optional, check links with a rate limit, run Lighthouse, and compare the homepage hash with the committed baseline. The Chinese report is rule-based. The workflow sets `PATROL_USE_MODELS` to `'0'`, so no model is called unless the owner changes it to `'1'`. If that call fails, the report falls back to the rules. The daily run and a manual dispatch open or update one issue only when the conclusion is 未通过. Warnings stay in the job summary. A comment is posted only when that conclusion changes, and a later pass closes the issue with one recovered comment.
 
 ## 第三方素材
 

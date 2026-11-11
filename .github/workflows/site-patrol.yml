@@ -17,7 +17,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  self-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+
+      - name: Static checks
+        run: |
+          set -euo pipefail
+          node --check scripts/patrol.mjs
+          node scripts/patrol.mjs --self-check
+
   patrol:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -47,7 +67,7 @@ jobs:
       - name: Run patrol
         env:
           PATROL_USE_MODELS: '0'
-          PATROL_SYNC_ISSUES: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '1' || '0' }}
+          PATROL_SYNC_ISSUES: '1'
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
