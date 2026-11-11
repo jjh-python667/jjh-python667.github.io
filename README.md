@@ -98,3 +98,9 @@ GitHub Actions 工作流 `.github/workflows/site-patrol.yml`：
 GSAP 与 ScrollTrigger 的来源和许可见 `site/assets/vendor/gsap/`。星球大战 mini 的画面在项目页里说明，素材不放进本仓库的根目录。
 
 GSAP and ScrollTrigger keep the terms shipped in `site/assets/vendor/gsap/`. The Star Wars mini page explains its own artwork.
+
+## 许可
+
+本仓库使用 [MIT License](LICENSE)。
+
+This repository is MIT.
