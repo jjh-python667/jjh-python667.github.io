@@ -86,12 +86,12 @@ GitHub Actions 工作流 `.github/workflows/site-patrol.yml`：
 - 用免费的 Lighthouse CLI（`lighthouse@13.6.0`，需要 Node.js 22.19+）测性能和无障碍。性能低于 50 或无障碍低于 90 记警告；性能低于 25 或无障碍低于 80 记未通过
 - 用首页 HTML 的 SHA-256 和 `.github/patrol/baseline.json` 比较。内容变化只写进报告，不单独当作失败
 - 中文报告写到 job summary，并上传 artifact `site-patrol-report`
-- 规则生成报告。若设置了 `PATROL_USE_MODELS=1`，会用内置 `GITHUB_TOKEN` 和 `models: read` 调用 GitHub Models；失败或服务不可用时回退到规则报告
+- 规则生成报告。工作流里 `PATROL_USE_MODELS` 默认为 `'0'`，不会调用模型。把它改成 `'1'` 由仓库主人决定；打开后才用内置 `GITHUB_TOKEN` 和该 job 的 `models: read`，调用失败或服务不可用时仍回退到规则报告
 - 只有结论是「未通过」时，才创建或更新一条标题为「站点巡检：待处理问题」、标签为 `site-patrol` 的 issue。链接返回 403 或 429、Deal Hunter 超时，以及 Lighthouse 警告，只写进 job summary。结论没变时不追加评论；结论回到「通过」时关闭这条 issue，并留一条恢复说明
 
 不需要新增 secret，也不使用付费服务。2026-07-30 起 GitHub Models 已停用，所以现在预期走规则回退。
 
-`npm run patrol` is a local dry-run. The workflow checks the portfolio, treats Deal Hunter as optional, checks links with a rate limit, runs Lighthouse, and compares the homepage hash with the committed baseline. The Chinese report is rule-based and falls back to those rules when GitHub Models is unavailable. The daily run and a manual dispatch open or update one issue only when the conclusion is 未通过. Warnings stay in the job summary. A comment is posted only when that conclusion changes, and a later pass closes the issue with one recovered comment.
+`npm run patrol` is a local dry-run. The workflow checks the portfolio, treats Deal Hunter as optional, checks links with a rate limit, runs Lighthouse, and compares the homepage hash with the committed baseline. The Chinese report is rule-based. The workflow sets `PATROL_USE_MODELS` to `'0'`, so no model is called unless the owner changes it to `'1'`. If that call fails, the report falls back to the rules. The daily run and a manual dispatch open or update one issue only when the conclusion is 未通过. Warnings stay in the job summary. A comment is posted only when that conclusion changes, and a later pass closes the issue with one recovered comment.
 
 ## 第三方素材
 

@@ -11,8 +11,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
-  models: read
 
 concurrency:
   group: site-patrol-${{ github.workflow }}-${{ github.ref }}
@@ -22,6 +20,10 @@ jobs:
   patrol:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+      models: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,7 +46,7 @@ jobs:
 
       - name: Run patrol
         env:
-          PATROL_USE_MODELS: '1'
+          PATROL_USE_MODELS: '0'
           PATROL_SYNC_ISSUES: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '1' || '0' }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
