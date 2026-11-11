@@ -1,6 +1,6 @@
 # 站点巡检报告
 
-- 时间：2026-11-11 17:40:54 +08:00（2026-11-11T09:40:54.995Z）
+- 时间：2026-11-11 17:55:02 +08:00（2026-11-11T09:55:02.863Z）
 - 模式：本地 dry-run
 - 结论：**通过**
 - 报告来源：规则。未调用 GitHub Models（本地 dry-run 不读取令牌）。
@@ -9,8 +9,8 @@
 
 | 目标 | 角色 | 结果 | 最终 URL | 耗时 | Last-Modified |
 | --- | --- | --- | --- | --- | --- |
-| 作品集 | 必须 | HTTP 200 | https://jjh-python667.github.io/ | 50 ms | Tue, 10 Nov 2026 13:37:59 GMT |
-| Deal Hunter | 可选，失败不令任务失败 | HTTP 200 | https://dealhunter.gongjiang667.workers.dev/ | 487 ms |  |
+| 作品集 | 必须 | HTTP 200 | https://jjh-python667.github.io/ | 138 ms | Tue, 10 Nov 2026 13:37:52 GMT |
+| Deal Hunter | 可选，失败不令任务失败 | HTTP 200 | https://dealhunter.gongjiang667.workers.dev/ | 430 ms |  |
 
 ## 首页内容哈希
 
@@ -48,9 +48,9 @@
 - URL：https://jjh-python667.github.io/
 - 结果：通过
 - 版本：13.6.0；形态：mobile
-- 性能：98
+- 性能：97
 - 无障碍：100
-- 实验指标：FCP 1.3 s；LCP 1.3 s；TBT 140 ms；CLS 0
+- 实验指标：FCP 1.3 s；LCP 1.3 s；TBT 200 ms；CLS 0
 - 计入分数且低于 0.9 的审计：无。
 
 ### Deal Hunter（可选）
@@ -60,12 +60,12 @@
 - 版本：13.6.0；形态：mobile
 - 性能：100
 - 无障碍：100
-- 实验指标：FCP 1.0 s；LCP 1.0 s；TBT 60 ms；CLS 0
+- 实验指标：FCP 1.3 s；LCP 1.3 s；TBT 0 ms；CLS 0
 - 计入分数且低于 0.9 的审计：无。
 
 ## 其他通知
 
-- 已写入基线 .github/patrol/baseline.json。
+无。
 
 ## 跟踪 issue
 
