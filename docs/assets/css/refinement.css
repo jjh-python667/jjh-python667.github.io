@@ -25,14 +25,21 @@ body { text-rendering: optimizeLegibility; }
 .site-header {
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   border-bottom-color: transparent;
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   transition: background .22s ease, border-color .22s ease, box-shadow .22s ease;
 }
 .site-header.is-scrolled {
   background: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
   border-bottom-color: var(--border);
   box-shadow: 0 5px 22px rgba(29, 45, 78, .04);
+}
+@media (pointer: coarse) {
+  .site-header, .site-header.is-scrolled {
+    background: var(--bg-elevated);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 .site-nav a { font-size: 13px; font-weight: 550; padding-inline: 14px; }
 .brand-sub { font-size: 11px; letter-spacing: .02em; }
