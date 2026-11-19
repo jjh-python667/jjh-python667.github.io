@@ -1079,6 +1079,7 @@
   var entranceEase = "cubic-bezier(.22, 1, .36, 1)";
   var maxEntrances = 3;
   function enabled() { return root.dataset.motion === "running"; }
+  function present(selector) { return document.querySelector(selector) !== null; }
   function mark(node, state) { node.dataset.moduleState = state; }
   function clear(node) {
     if (gsap && node) gsap.set(node, { clearProps: "transform,opacity,visibility,clipPath,willChange" });
@@ -1179,24 +1180,30 @@
     opening = gsap.timeline({ defaults: { ease: "power3.out", immediateRender: false }, onComplete: function () {
       root.dataset.opening = "complete";
       heroModules.forEach(clear);
-      gsap.set(".hero-line-inner, .hero-kicker, .hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote, .opening-shutter, .opening-signature, .stage-ticket, .stage-caption", { clearProps: "transform,opacity,visibility,clipPath,willChange" });
-      gsap.set(".stage-core", { clearProps: "opacity,clipPath" });
+      [".hero-line-inner", ".hero-kicker", ".hero-intro", ".hero-copy .lead", ".hero-actions", ".hero-footnote", ".opening-shutter", ".opening-signature", ".stage-ticket", ".stage-caption", ".hero-showcase .workbench-desktop"].forEach(function (selector) {
+        if (present(selector)) gsap.set(selector, { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+      });
+      if (present(".stage-core")) gsap.set(".stage-core", { clearProps: "opacity,clipPath" });
       clear(document.querySelector(".stage-core strong"));
       opening = null;
     } });
-    opening.fromTo(".opening-signature", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .24 }, 0)
-      .fromTo(".opening-shutter", { clipPath: "inset(0% 0% 0% 0%)" },
-        { clipPath: "inset(0% 0% 100% 0%)", duration: .62, ease: "power3.inOut" }, .12)
-      .fromTo(".hero-line-inner", { yPercent: 100, scaleX: .95 },
-        { yPercent: 0, scaleX: 1, opacity: 1, duration: .7, stagger: .09 }, .22)
-      .fromTo(".hero-kicker, .hero-intro", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .04 }, .46)
-      .fromTo(".hero-copy .lead, .hero-actions, .hero-footnote", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .34, stagger: .07 }, .56)
-      .fromTo(".creative-stage", { y: 20, scale: .99, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .52 }, .52)
-      .fromTo(".stage-core", { opacity: 0 }, { opacity: 1, duration: .38 }, .66)
-      .fromTo(".stage-ticket", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .38, stagger: .06 }, .75)
-      .fromTo(".stage-caption, .hero-showcase .workbench-desktop", { y: 8, opacity: 0 },
-        { y: 0, opacity: 1, duration: .34, stagger: .05 }, .95)
-      .fromTo(".preview-project", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .05 }, 1.05);
+    function cue(selector, fromVars, toVars, at) {
+      var parts = selector.split(",").map(function (part) { return part.trim(); }).filter(present);
+      if (parts.length) opening.fromTo(parts.join(", "), fromVars, toVars, at);
+    }
+    cue(".opening-signature", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .24 }, 0);
+    cue(".opening-shutter", { clipPath: "inset(0% 0% 0% 0%)" },
+      { clipPath: "inset(0% 0% 100% 0%)", duration: .62, ease: "power3.inOut" }, .12);
+    cue(".hero-line-inner", { yPercent: 100, scaleX: .95 },
+      { yPercent: 0, scaleX: 1, opacity: 1, duration: .7, stagger: .09 }, .22);
+    cue(".hero-kicker, .hero-intro", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .04 }, .46);
+    cue(".hero-copy .lead, .hero-actions, .hero-footnote", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .34, stagger: .07 }, .56);
+    cue(".creative-stage", { y: 20, scale: .99, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .52 }, .52);
+    cue(".stage-core", { opacity: 0 }, { opacity: 1, duration: .38 }, .66);
+    cue(".stage-ticket", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .38, stagger: .06 }, .75);
+    cue(".stage-caption, .hero-showcase .workbench-desktop", { y: 8, opacity: 0 },
+      { y: 0, opacity: 1, duration: .34, stagger: .05 }, .95);
+    cue(".preview-project", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .05 }, 1.05);
     if (mobile.matches) opening.timeScale(1.25);
     diagnostic.openingDuration = opening.duration() / opening.timeScale();
   }
