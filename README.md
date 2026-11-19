@@ -1,24 +1,24 @@
 # 工匠的 GitHub 工坊
 
-人工智能专业大一的公开静态作品集。页面标题是「做 AI 产品，也做工作流。」
+人工智能专业大一的公开静态作品集。文档标题是「JJH Builds · 工匠的个人主页与作品集」，首屏标题是「把学习与办公的想法，做成能跑的工具。」
 
 公开地址：[https://jjhbuilds.com/](https://jjhbuilds.com/)
 
-这个仓库只发布静态展示页。案头、学习搭子、资讯台和优惠情报站的后端都不在这里。仓库版本 `1.2.1` 增加的是说明和巡检，没有改页面外观或文案。页面内容沿用 `1.2.0`（2026-11-10）。合并提交 `643740a` 是当时的线上基准；之后 `main` 上的 `docs/` 又发布了优惠情报站等内容，线上首页能看到这些内容。
+这个仓库只发布静态展示页。案头、学习搭子、资讯台和优惠情报站的后端都不在这里。当前 `docs/` 是候选产物：已批准的改版文案和动态，加上 `main` 上原有的全球羊毛情报中心页面与滚动修复。它和已经部署到 jjhbuilds.com 的 159 项静态包不是同一版。
 
-Public static portfolio for a first-year AI undergraduate. The headline is “做 AI 产品，也做工作流。” The live site is [https://jjhbuilds.com/](https://jjhbuilds.com/). This repository publishes the static pages only. Repository version `1.2.1` adds docs and the patrol workflow. It does not change the page design or copy. Merge `643740a` was the live baseline at that time; later commits on `main` also updated `docs/`, including Deal Hunter, and that content is what the public homepage shows.
+Public static portfolio for a first-year AI undergraduate. The document title is “JJH Builds · 工匠的个人主页与作品集”. The hero says “把学习与办公的想法，做成能跑的工具。” The public entry is [https://jjhbuilds.com/](https://jjhbuilds.com/). This repository publishes static pages only. The current `docs/` tree is a candidate: the approved redesign copy and updates, plus the Deal Hunter page and scroll fix already on `main`. It is a different build from the 159-file package deployed at jjhbuilds.com.
 
 ## 页面上有什么
 
-首页导航：作品、动态、成长记录、学习空间、GitHub。
+首页导航：最近动态、精选作品、成长记录、学习空间、GitHub。
 
 | 位置 | 内容 |
 | --- | --- |
-| 首屏 | 标题、工坊舞台（案头、资讯台、学习搭子）、工作台 |
+| 首屏 | 文档标题、首屏标题，以及 2026-11-19「作品集正式域名上线并通过 HTTPS 验收」 |
 | 预览条 | 资讯台、案头、学习搭子 |
-| `#works` 精选作品 | 搜索、按标签筛选，以及下面 6 个项目 |
-| `#updates` 最近在做什么 | 由 `site/data/updates.json` 在构建时写入，最多 3 个公开仓库 |
-| `#growth` 成长记录 | 「我正在做」和「已完成」，数据在 `site/data/growth.json` |
+| `#works` 精选作品 | 搜索、按标签筛选；第一项是全球羊毛情报中心，其后是原来的项目 |
+| `#updates` 最近在做什么 | `site/data/updates.json` 的策展里程碑。主高亮是「继续打磨案头办公助手的实际交付」，完整列表在 `updates.html` |
+| `#growth` 成长记录 | 「我正在做」和「已完成」，数据在 `site/data/growth.json`。当前条目是「作品集已接入独立域名并启用 HTTPS」；2026-11-10 仍保留「独立域名仍在准备」 |
 | `#about` 简介 | 页脚前的一段自我介绍 |
 | `agent.html` | 学习空间：固定讲解 / 答题示例。邀请试用写的是准备中 |
 | `404.html` | 未找到页面 |
@@ -38,7 +38,7 @@ Public static portfolio for a first-year AI undergraduate. The headline is “�
 
 站点地图里的地址是首页、学习空间，以及上表 6 个项目页。页面还有主题切换、命令板和本地 GSAP 3.15.1 动效。GSAP 的来源和许可见 `site/assets/vendor/gsap/`。
 
-The header links to works, updates, the growth log, the learning page, and GitHub. Featured work is the six projects in the table above. Search and tag filters sit on `#works`. `#updates` and `#growth` are filled from `site/data/` at build time. `agent.html` is a fixed learning demo; the page says the invited trial is not open. `yujiang-deepseek.html` is still in the repo but is not linked from the homepage and is not in the sitemap.
+The header links to recent updates, featured work, the growth log, the learning page, and GitHub. Featured work starts with Deal Hunter and then the projects in the table above. Search and tag filters sit on `#works`. `#updates` is the curated milestone list, with the office-agent item highlighted; `#growth` keeps the approved order, including the 2026-11-10 note that the independent domain was still being prepared. `agent.html` is a fixed learning demo; the invited trial is not open, and the page does not say the ICP filing is still in progress. `yujiang-deepseek.html` is still in the repo but is not linked from the homepage and is not in the sitemap.
 
 ## 本地构建和预览
 

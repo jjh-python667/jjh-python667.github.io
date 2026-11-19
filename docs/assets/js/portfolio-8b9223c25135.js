@@ -631,40 +631,37 @@
 
   /* ---------- scroll progress + section aria-current ---------- */
   var progress = document.querySelector("[data-scroll-progress]");
-  var sectionIds = ["works", "updates", "growth"];
   var siteHeader = document.querySelector(".site-header");
-  function updateHeader() { if (siteHeader) siteHeader.classList.toggle("is-scrolled", window.scrollY > 24); }
-  function updateProgress() {
-    if (!progress) return;
+  var sectionLinks = document.querySelectorAll(".site-nav a[data-nav-section]");
+  var sections = ["works", "updates", "growth"].map(function (id) {
+    return document.getElementById(id);
+  }).filter(Boolean);
+  var currentSection;
+  function updateScrollUI() {
     var el = document.documentElement;
-    var max = Math.max(0, el.scrollHeight - el.clientHeight);
-    var top = el.scrollTop || document.body.scrollTop || 0;
-    var pct = max > 0 ? (top / max) * 100 : 0;
-    pct = Math.min(100, Math.max(0, pct));
-    progress.style.width = pct + "%";
-    progress.setAttribute("data-progress", String(Math.round(pct)));
-  }
-  function updateSectionNav() {
-    var links = document.querySelectorAll(".site-nav a[data-nav-section]");
-    if (!links.length) return;
-    var header = document.querySelector(".site-header");
-    var offset = header ? header.getBoundingClientRect().bottom + 8 : 72;
-    var active = null;
-    sectionIds.forEach(function (id) {
-      var sec = document.getElementById(id);
-      if (!sec) return;
-      var top = sec.getBoundingClientRect().top;
-      if (top <= offset) active = id;
+    var top = window.scrollY;
+    var max = progress ? el.scrollHeight - el.clientHeight : 0;
+    var ratio = max > 0 ? Math.min(1, Math.max(0, top / max)) : 0;
+    var offset = siteHeader && sections.length ? siteHeader.getBoundingClientRect().bottom + 8 : 72;
+    var active = "";
+    sections.forEach(function (section) {
+      if (section.getBoundingClientRect().top <= offset) active = section.id;
     });
-    links.forEach(function (a) {
-      var key = a.getAttribute("data-nav-section");
-      if (active && key === active) {
-        a.setAttribute("aria-current", "true");
-      } else if (a.getAttribute("aria-current") === "page") {
-        /* keep page-level current on detail pages */
-      } else {
-        a.removeAttribute("aria-current");
-      }
+    if (progress) {
+      progress.style.transform = "scaleX(" + ratio + ")";
+      var pct = String(Math.round(ratio * 100));
+      if (progress.dataset.progress !== pct) progress.dataset.progress = pct;
+    }
+    if (siteHeader) {
+      var scrolled = siteHeader.classList.contains("is-scrolled");
+      siteHeader.classList.toggle("is-scrolled", top > (scrolled ? 16 : 32));
+    }
+    if (active === currentSection) return;
+    currentSection = active;
+    sectionLinks.forEach(function (link) {
+      if (link.getAttribute("aria-current") === "page") return;
+      if (active && link.dataset.navSection === active) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
     });
   }
   var ticking = false;
@@ -672,19 +669,14 @@
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(function () {
-      updateHeader();
-      updateProgress();
-      updateSectionNav();
+      updateScrollUI();
       ticking = false;
     });
   }
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("hashchange", function () {
-    updateSectionNav();
-  });
-  updateProgress();
-  updateSectionNav();
-  updateHeader();
+  window.addEventListener("hashchange", onScroll);
+  window.addEventListener("resize", onScroll, { passive: true });
+  updateScrollUI();
 
   /* ---------- tag filter (R10 P0-1: mobile collapse) ---------- */
   var filterRoot = document.querySelector("[data-works-filter]");
@@ -983,4 +975,321 @@
       });
     });
   }
+})();
+
+;
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+  var header = document.querySelector(".site-header");
+  var stage = document.querySelector("[data-stage]");
+  var controls = document.querySelectorAll("[data-motion-toggle]");
+  var preference = "on";
+  try { preference = localStorage.getItem("jjh-motion") === "off" ? "off" : "on"; } catch (error) {}
+  var active = new Set();
+  var stageVisible = false;
+  var pending = false;
+  var frame = 0, x = 0, y = 0;
+  function enabled() { return !reduced.matches && preference !== "off"; }
+  function resetStage() {
+    if (!stage) return;
+    cancelAnimationFrame(frame); frame = 0;
+    stage.style.setProperty("--stage-x", "0deg");
+    stage.style.setProperty("--stage-y", "0deg");
+  }
+  function syncStageVisibility() {
+    root.dataset.pageVisible = String(!document.hidden);
+    if (stage) stage.classList.toggle("is-stage-visible", stageVisible && !document.hidden);
+  }
+  function syncMotion() {
+    var running = enabled();
+    root.dataset.motion = running ? "running" : "paused";
+    if (!running) {
+      resetStage();
+      active.forEach(function (animation) { animation.cancel(); });
+      active.clear();
+    }
+    controls.forEach(function (control) {
+      control.hidden = false;
+      control.disabled = reduced.matches;
+      control.textContent = reduced.matches ? "静态显示" : running ? "暂停动效" : "播放动效";
+      control.setAttribute("aria-pressed", String(running));
+      control.setAttribute("aria-label", reduced.matches ? "系统已开启减少动态，当前为静态显示" : running ? "暂停页面装饰动效" : "播放页面装饰动效");
+    });
+    syncStageVisibility();
+    document.dispatchEvent(new CustomEvent("jjh:motionchange", { detail: { reduced: !running } }));
+  }
+  controls.forEach(function (control) { control.addEventListener("click", function () {
+    preference = enabled() ? "off" : "on";
+    try { localStorage.setItem("jjh-motion", preference); } catch (error) {}
+    syncMotion();
+  }); });
+  reduced.addEventListener("change", syncMotion);
+  window.addEventListener("storage", function (event) {
+    if (event.key !== "jjh-motion") return;
+    preference = event.newValue === "off" ? "off" : "on";
+    syncMotion();
+  });
+  document.addEventListener("visibilitychange", syncStageVisibility);
+  syncMotion();
+  function animate(element, frames, options) {
+    if (!element || !enabled() || !element.animate) return;
+    var animation = element.animate(frames, options);
+    active.add(animation);
+    animation.onfinish = animation.oncancel = function () { active.delete(animation); };
+  }
+  if (stage && "IntersectionObserver" in window) {
+    var stageObserver = new IntersectionObserver(function (entries) {
+      stageVisible = entries[0].isIntersecting;
+      syncStageVisibility();
+    }, { threshold: 0.03 });
+    stageObserver.observe(stage);
+  } else if (stage) { stageVisible = true; syncStageVisibility(); }
+  if (stage) {
+    stage.addEventListener("pointermove", function (event) {
+      if (!enabled() || !fine.matches || event.pointerType === "touch") return;
+      var rect = stage.getBoundingClientRect();
+      x = Math.max(-3, Math.min(3, ((event.clientY - rect.top) / rect.height - .5) * -6));
+      y = Math.max(-4, Math.min(4, ((event.clientX - rect.left) / rect.width - .5) * 8));
+      if (!frame) frame = requestAnimationFrame(function () {
+        stage.style.setProperty("--stage-x", x.toFixed(2) + "deg");
+        stage.style.setProperty("--stage-y", y.toFixed(2) + "deg");
+        frame = 0;
+      });
+    });
+    stage.addEventListener("pointerleave", resetStage);
+  }
+})();
+
+;
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var main = document.querySelector("main");
+  if (!main) return;
+  var gsap = window.gsap;
+  var fine = matchMedia("(hover: hover) and (pointer: fine)");
+  var mobile = matchMedia("(max-width: 640px)");
+  var opening = null, openingPlayed = false, entryObserver = null;
+  var entriesInMotion = new Map(), visited = new Set(), registry = [];
+  var previousScroll = window.scrollY, previousScrollAt = performance.now(), fastUntil = 0;
+  var hoverFrame = 0, glowTarget = null, glowX = 50, glowY = 0;
+  var entranceEase = "cubic-bezier(.22, 1, .36, 1)";
+  var maxEntrances = 3;
+  function enabled() { return root.dataset.motion === "running"; }
+  function mark(node, state) { node.dataset.moduleState = state; }
+  function clear(node) {
+    if (gsap && node) gsap.set(node, { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+  }
+  // Register leaf modules; a card's controls never receive separate arrival transforms.
+  var selectors = [
+    ".hero-copy", ".creative-stage", ".workbench-desktop", ".workbench-mobile", ".preview-project",
+    ".section-head", ".project-search-row", "[data-works-filter]", ".card[data-project]",
+    ".update-item", ".sync-bar", ".growth-grid > .panel:first-child", ".growth-grid > .panel:last-child > h3", ".timeline-item",
+    ".about > .section-display", ".about > p", ".detail-hero", ".agent-launch-card", ".agent-feature-list",
+    ".agent-demo-grid > .cover-flow", ".demo-companion", ".agent-progress-card", ".detail-shot",
+    ".detail-lead-card", ".detail-lead > figure", ".detail-sections > article"
+  ];
+  if (!main.classList.contains("detail-page") && !document.body.classList.contains("portfolio-home")) selectors.push("main.wrap.section");
+  document.querySelectorAll(selectors.join(",")).forEach(function (node, index) {
+    if (registry.some(function (parent) { return parent.contains(node); })) return;
+    node.dataset.cinematicModule = "module-" + index;
+    mark(node, "entered");
+    registry.push(node);
+  });
+  // Glow surfaces are independent, non-interactive border masks.
+  document.querySelectorAll(".card[data-project], .creative-stage, .workshop-card, .preview-project, .updates, .panel, .agent-launch-card, .agent-feature-list, .demo-companion, .agent-progress-card, .detail-shot, .detail-lead-card, .detail-sections > article, .agent-demo-grid > .cover-flow").forEach(function (node) {
+    node.classList.add("glow-surface");
+    var glow = document.createElement("span");
+    glow.className = "surface-glow";
+    glow.setAttribute("aria-hidden", "true");
+    node.appendChild(glow);
+    node.addEventListener("pointermove", function (event) {
+      if (!enabled() || !fine.matches || event.pointerType === "touch") return;
+      var rect = node.getBoundingClientRect();
+      glowTarget = node;
+      glowX = Math.max(0, Math.min(100, (event.clientX - rect.left) / rect.width * 100));
+      glowY = Math.max(0, Math.min(100, (event.clientY - rect.top) / rect.height * 100));
+      if (!hoverFrame) hoverFrame = requestAnimationFrame(function () {
+        glowTarget.style.setProperty("--glow-x", glowX.toFixed(2) + "%");
+        glowTarget.style.setProperty("--glow-y", glowY.toFixed(2) + "%");
+        hoverFrame = 0;
+      });
+    });
+    node.addEventListener("pointerleave", function () {
+      if (hoverFrame && glowTarget === node) { cancelAnimationFrame(hoverFrame); hoverFrame = 0; }
+      node.style.setProperty("--glow-x", "50%");
+      node.style.setProperty("--glow-y", "0%");
+    });
+  });
+  var diagnostic = { version: gsap && gsap.version, personality: "premium", openingDuration: 0,
+    modules: registry.length, sectionTitles: document.querySelectorAll(".section-display").length,
+    entryStrategy: "intersection-once", maxConcurrentEntries: maxEntrances };
+  Object.defineProperty(window, "jjhMotionDiagnostics", { value: diagnostic, configurable: true });
+
+  function finishOpening() {
+    if (opening) opening.progress(1);
+  }
+
+  document.addEventListener("focusin", function (event) {
+    finishOpening();
+    registry.forEach(function (node) {
+      if (!node.contains(event.target)) return;
+      visited.add(node);
+      if (entryObserver) entryObserver.unobserve(node);
+      var animation = entriesInMotion.get(node);
+      if (animation) animation.cancel();
+    });
+  });
+
+  function playEntry(entry) {
+    var node = entry.target;
+    if (!entry.isIntersecting || visited.has(node)) return;
+    entryObserver.unobserve(node);
+    visited.add(node);
+    if (!enabled() || document.hidden || opening || performance.now() < fastUntil ||
+        entriesInMotion.size >= maxEntrances || node.offsetParent === null) return;
+
+    // Start just ahead of the viewport. Scrolling back to existing content stays still.
+    if (entry.boundingClientRect.top < innerHeight - 18) return;
+    var target = node.querySelector(".section-display > .display-inner, :scope > .card-body") || node;
+    var distance = mobile.matches ? 10 : 16;
+    var animation = target.animate([
+      { translate: "0 " + distance + "px", opacity: .9 },
+      { translate: "0 0", opacity: 1 }
+    ], { duration: mobile.matches ? 320 : 420, easing: entranceEase });
+    entriesInMotion.set(node, animation);
+    mark(node, "playing");
+    animation.onfinish = animation.oncancel = function () {
+      entriesInMotion.delete(node);
+      mark(node, "entered");
+    };
+  }
+  function createOpening() {
+    var shell = document.querySelector(".opening-scene");
+    if (!gsap || !shell || openingPlayed || location.hash || scrollY > 40) return;
+    openingPlayed = true;
+    root.dataset.opening = "running";
+    var heroModules = registry.filter(function (node) { return node.matches(".hero-copy, .creative-stage, .hero-showcase .workbench-desktop, .preview-project"); });
+    heroModules.forEach(function (node) { visited.add(node); });
+    // CSS provides the initial concealed states. Initialize each tween at its
+    // own cue rather than measuring every supporting element during startup.
+    opening = gsap.timeline({ defaults: { ease: "power3.out", immediateRender: false }, onComplete: function () {
+      root.dataset.opening = "complete";
+      heroModules.forEach(clear);
+      gsap.set(".hero-line-inner, .hero-kicker, .hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote, .opening-shutter, .opening-signature, .stage-ticket, .stage-caption", { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+      gsap.set(".stage-core", { clearProps: "opacity,clipPath" });
+      clear(document.querySelector(".stage-core strong"));
+      opening = null;
+    } });
+    opening.fromTo(".opening-signature", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .24 }, 0)
+      .fromTo(".opening-shutter", { clipPath: "inset(0% 0% 0% 0%)" },
+        { clipPath: "inset(0% 0% 100% 0%)", duration: .62, ease: "power3.inOut" }, .12)
+      .fromTo(".hero-line-inner", { yPercent: 100, scaleX: .95 },
+        { yPercent: 0, scaleX: 1, opacity: 1, duration: .7, stagger: .09 }, .22)
+      .fromTo(".hero-kicker, .hero-intro", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .04 }, .46)
+      .fromTo(".hero-copy .lead, .hero-actions, .hero-footnote", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .34, stagger: .07 }, .56)
+      .fromTo(".creative-stage", { y: 20, scale: .99, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .52 }, .52)
+      .fromTo(".stage-core", { opacity: 0 }, { opacity: 1, duration: .38 }, .66)
+      .fromTo(".stage-ticket", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .38, stagger: .06 }, .75)
+      .fromTo(".stage-caption, .hero-showcase .workbench-desktop", { y: 8, opacity: 0 },
+        { y: 0, opacity: 1, duration: .34, stagger: .05 }, .95)
+      .fromTo(".preview-project", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .05 }, 1.05);
+    if (mobile.matches) opening.timeScale(1.25);
+    diagnostic.openingDuration = opening.duration() / opening.timeScale();
+  }
+
+  function teardown() {
+    if (entryObserver) { entryObserver.disconnect(); entryObserver = null; }
+    finishOpening();
+    entriesInMotion.forEach(function (animation, node) {
+      animation.cancel();
+      mark(node, "entered");
+    });
+    entriesInMotion.clear();
+    root.dataset.opening = "complete";
+  }
+  function build() {
+    teardown();
+    if (!enabled() || document.hidden) return;
+    createOpening();
+    if ("IntersectionObserver" in window && Element.prototype.animate) {
+      entryObserver = new IntersectionObserver(function (entries, observer) {
+        if (entryObserver === observer) entries.forEach(playEntry);
+      }, { rootMargin: "40px 0px 64px 0px" });
+      registry.forEach(function (node) {
+        if (!visited.has(node)) entryObserver.observe(node);
+      });
+    }
+  }
+  window.addEventListener("scroll", function () {
+    var now = performance.now(), top = window.scrollY;
+    var distance = Math.abs(top - previousScroll), elapsed = now - previousScrollAt;
+    if (distance >= 120 || (distance >= 28 && elapsed < 80 && distance / Math.max(elapsed, 8) > 2)) {
+      fastUntil = now + 150;
+    }
+    previousScroll = top;
+    previousScrollAt = now;
+    if (opening && top > 96) finishOpening();
+  }, { passive: true });
+  document.addEventListener("jjh:motionchange", build);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) teardown();
+    else build();
+  });
+  window.addEventListener("pagehide", teardown);
+  window.addEventListener("pageshow", function (event) { if (event.persisted) build(); });
+  build();
+})();
+
+;
+(function () {
+  var host = document.querySelector("[data-agent-service]");
+  if (!host) return;
+  var label = host.querySelector("[data-service-label]");
+  var detail = host.querySelector("[data-service-detail]");
+  var entry = host.querySelector("[data-workspace-link]");
+  var retry = host.querySelector("[data-service-retry]");
+  async function checkService() {
+    retry.disabled = true;
+    label.textContent = "正在检测学习服务…";
+    try {
+      var response = await fetch("/api/state", { credentials: "same-origin", signal: AbortSignal.timeout(5000), cache: "no-store" });
+      if (!response.ok && response.status !== 401) throw new Error("service unavailable");
+      host.dataset.connected = "true";
+      entry.href = "/learning/";
+      entry.textContent = response.status === 401 ? "登录学习工作台" : "打开学习工作台";
+      if (response.status === 401) {
+        label.textContent = "学习服务已连接";
+        detail.textContent = "登录自己的账户，继续课程、资料和对话。";
+      } else {
+        var state = await response.json();
+        label.textContent = state.configured ? "本机已连接 · 真实模型可用" : "本机已连接 · 模型待配置";
+        detail.textContent = state.configured ? "可以上传资料、提问和继续学习。当前为本机联调，公网邀请试用仍在准备。" : "课程和资料管理已可使用，配置模型后即可生成真实回复。";
+      }
+    } catch (error) {
+      host.dataset.connected = "false";
+      label.textContent = "等待学习服务连接";
+      detail.textContent = "可以先体验下方示例，并在开放进度里查看公网试用状态。";
+      entry.href = "#trial-status";
+      entry.textContent = "查看开放进度";
+    } finally { retry.disabled = false; }
+  }
+  retry.addEventListener("click", checkService);
+  document.querySelectorAll("[data-demo-step]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var target = document.querySelector('[data-flow-step="' + button.dataset.demoStep + '"]');
+      if (target) { target.click(); target.focus({ preventScroll: true }); }
+    });
+  });
+  if (document.querySelector('meta[name="deployment-mode"][content="static-portfolio"]')) {
+    host.dataset.connected = "false";
+    label.textContent = "GitHub Pages 作品展示";
+    detail.textContent = "这里提供项目说明和固定示例；真实学习后台尚未在公网部署，不会在此索取账户或模型 Key。";
+    entry.href = "#trial-status";
+    entry.textContent = "查看开放进度";
+    retry.hidden = true;
+  } else checkService();
 })();
