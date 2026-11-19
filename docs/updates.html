@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{var k='jjh-theme',t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}catch(e){}})();</script>
+  <title>全部动态 · JJH Builds</title>
+  <meta name="description" content="工匠（@jjh-python667）在 JJH Builds 的全部公开动态与阶段进展。">
+  <link rel="canonical" href="https://jjhbuilds.com/updates.html">
+  <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/css/site-562396c3d57e.css">
+
+
+
+
+
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">JJH</span>
+        <span class="brand-text">JJH Builds</span>
+        <span class="brand-sub">工匠 · 全部动态</span>
+      </a>
+      <div class="header-tools">
+        <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-label="切换浅色或深色主题">
+          <span class="theme-icon-light" aria-hidden="true">🌙</span>
+          <span class="theme-icon-dark" aria-hidden="true">☀️</span>
+        </button>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="打开导航">
+          <span aria-hidden="true">☰</span>
+        </button>
+      </div>
+      <nav class="site-nav" id="site-nav" aria-label="主导航">
+        <ul>
+          <li><a href="index.html">返回首页</a></li>
+          <li><a href="index.html#works">精选作品</a></li>
+          <li><a href="agent.html">学习空间</a></li>
+          <li><a class="ext" href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="archive-hero">
+      <a class="update-link" href="index.html">← 返回首页</a>
+      <h1>全部动态与进展记录</h1>
+      <p style="color:var(--text-muted,#556070);max-width:56ch;">按时间顺序记录我正在做的事和已经完成的里程碑。每条都对应可核实的页面、演示或公开源码（数据文件：<code>site/data/updates.json</code> · <span data-updates-total>共 9 条记录</span>）。</p>
+    </section>
+
+    <div class="updates-archive" data-updates-archive><ol class="archive-timeline"><li class="archive-item"><article class="update-card is-spotlight"><div class="update-card-top"><span class="upd-badge is-wip">进行中</span><span class="status-wip-date">持续推进中</span><span class="upd-tag">办公助手</span></div><h3>继续打磨案头办公助手的实际交付</h3><p>在本地原型基础上补充真实模型联调与 Office 文档版式检查，让长文档生成和表格整理更稳妥，同时保证原始资料与密钥不进公开仓库。</p><div class="update-links"><a class="update-link" href="projects/antou-office-agent.html">查看项目详情 →</a><a class="update-link is-ext" href="https://github.com/jjh-python667/antou-office-agent" target="_blank" rel="noopener noreferrer">GitHub 源码 ↗</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge is-milestone">里程碑</span><time datetime="2026-11-19">2026-11-19</time><span class="upd-tag">网站上线</span></div><h3>作品集正式域名上线并通过 HTTPS 验收</h3><p>个人作品集正式接入 jjhbuilds.com 独立域名并完成 HTTPS 与备案配置，首页与最近动态会持续同步我的真实项目进展。</p><div class="update-links"><a class="update-link" href="#works">看看精选作品 →</a><a class="update-link is-ext" href="https://jjhbuilds.com/" target="_blank" rel="noopener noreferrer">访问正式域名 ↗</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-09">2026-11-09</time><span class="upd-tag">阅读工具</span></div><h3>完成私人资讯台与新版阅读界面</h3><p>接通 Cloudflare Workers、D1 与个人 Access 登录，采集回报 24/25 来源成功，公开源码并整理了性能边界。</p><div class="update-links"><a class="update-link" href="projects/newsdesk.html">查看项目详情 →</a><a class="update-link is-ext" href="https://github.com/jjh-python667/newsdesk" target="_blank" rel="noopener noreferrer">GitHub 源码 ↗</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-09">2026-11-09</time><span class="upd-tag">办公助手</span></div><h3>发布案头 ANTOU v3.2 办公助手</h3><p>补齐流式正文、参数适配、上下文预算、本机会话与任务历史，47 项本地测试通过，适合作为桌面办公工作流原型。</p><div class="update-links"><a class="update-link" href="projects/antou-office-agent.html">查看项目详情 →</a><a class="update-link is-ext" href="https://github.com/jjh-python667/antou-office-agent" target="_blank" rel="noopener noreferrer">GitHub 源码 ↗</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-07">2026-11-07</time><span class="upd-tag">学习空间</span></div><h3>让「学习搭子」在作品集里真正运行</h3><p>接通本机真实模型、资料上传与学习对话，补齐课程、会话与邀请隔离检查，可在网站内直接体验交互流程。</p><div class="update-links"><a class="update-link" href="agent.html">体验学习示例 →</a><a class="update-link" href="projects/personal-learning-agent.html">查看项目详情 →</a><a class="update-link is-ext" href="https://github.com/jjh-python667/personal-learning-agent" target="_blank" rel="noopener noreferrer">GitHub 源码 ↗</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-05">2026-11-05</time><span class="upd-tag">学习空间</span></div><h3>学习搭子 v0.4.0 合入 main</h3><p>新增邀请登录与多用户数据隔离。项目记录本地 51 项测试与核心验收通过。</p><div class="update-links"><a class="update-link" href="projects/personal-learning-agent.html">查看项目详情 →</a><a class="update-link is-ext" href="https://github.com/jjh-python667/personal-learning-agent" target="_blank" rel="noopener noreferrer">GitHub 源码 ↗</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-05">2026-11-05</time><span class="upd-tag">网站建设</span></div><h3>把作品和学习进度整理成个人网站</h3><p>完成手机、平板和桌面浏览器的页面适配与基础检查，搭建 JJH Builds 个人展示框架。</p><div class="update-links"><a class="update-link" href="#works">看看精选作品 →</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-04">2026-11-04</time><span class="upd-tag">学习空间</span></div><h3>学习搭子更新到 v0.3.0</h3><p>加入课程与会话管理，让不同学科资料的学习过程可以分开保存和继续。</p><div class="update-links"><a class="update-link" href="projects/personal-learning-agent.html">查看项目详情 →</a></div></article></li><li class="archive-item"><article class="update-card"><div class="update-card-top"><span class="upd-badge">已完成</span><time datetime="2026-11-02">2026-11-02</time><span class="upd-tag">学习空间</span></div><h3>公开「学习搭子」第一版</h3><p>发布可运行的学习原型，围绕「讲解 → 出题 → 答题 → 继续」开始记录改进过程。</p><div class="update-links"><a class="update-link" href="projects/personal-learning-agent.html">查看项目详情 →</a></div></article></li></ol></div><!-- /updates-archive -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap row">
+      <div>
+        <p>JJH Builds · 工匠（@jjh-python667）</p>
+        <p class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2026061792号-1</a></p>
+      </div>
+      <p><a href="https://github.com/jjh-python667" rel="noopener noreferrer" target="_blank">@jjh-python667</a></p>
+    </div>
+  </footer>
+  <script src="/assets/js/portfolio-5da64b4fe569.js" defer></script>
+</body>
+</html>
