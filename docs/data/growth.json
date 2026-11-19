@@ -1,31 +1,19 @@
 {
   "doing": [
     {
-      "title": "优化优惠门户的推荐与响应速度",
-      "description": "门户已上线。推荐榜在 GitHub 审阅中，下一步验证首页缓存与采集耗时。"
-    },
-    {
       "title": "继续验证办公 Agent 的实际交付",
       "description": "下一步补真实服务商联调与 Microsoft Office 内版式检查；保持原始资料与密钥不进入公开仓库。"
+    },
+    {
+      "title": "作品集已接入独立域名并启用 HTTPS",
+      "description": "jjhbuilds.com 已完成备案接入与公网 HTTPS 配置，首页与项目页可通过正式域名持续访问。"
     }
   ],
   "done": [
     {
       "date": "2026-11-10",
-      "title": "公开优惠情报站与新版中文前端",
-      "description": "整理公开优惠来源，补齐当前 28 条记录的中文简介、筛选、收藏与分页；本机 44 项测试、24 项浏览器验收通过，新版尚待部署。",
-      "href": "projects/dealhunter.html"
-    },
-    {
-      "date": "2026-11-10",
-      "title": "给 Pygame 练习补上可靠的边界与测试",
-      "description": "修复子弹、生命、计分和越界问题，加入暂停、失焦保护与图片缓存；30 项回归测试及四组云端检查通过。",
-      "href": "projects/star-wars-mini.html"
-    },
-    {
-      "date": "2026-11-10",
       "title": "核对公开作品集上线",
-      "description": "在 GitHub Pages 展示 AI 产品、工作流与学习记录；继续补充可复核的项目素材。",
+      "description": "在 GitHub Pages 展示 AI 产品、工作流与学习记录；继续补充可复核的项目素材，独立域名仍在准备。",
       "href": "#works"
     },
     {

@@ -1,0 +1,372 @@
+/* JJH Builds — Personal Editorial & Dynamic Updates Redesign */
+
+/* 1. Ensure immediate first-paint legibility (no hidden GSAP shutter or delayed hero text) */
+.opening-shutter {
+  display: none !important;
+}
+.hero-copy,
+.hero-copy .hero-line-inner,
+.hero-copy .lead,
+.hero-copy .hero-actions,
+.hero-copy .hero-footnote,
+.hero-showcase,
+.hero-now-card {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+/* 2. Refined Header & Brand */
+.site-header .brand {
+  gap: 10px;
+}
+.site-header .brand-mark {
+  width: auto;
+  min-width: 34px;
+  padding: 0 9px;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+}
+.site-header .brand-text {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* 3. Hero Split Layout: Clear 1-Sentence Intro + Right "Now" Card */
+.portfolio-home .hero-shell {
+  padding-top: clamp(24px, 4vw, 44px);
+  padding-bottom: clamp(28px, 4.5vw, 48px);
+}
+.portfolio-home .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: center;
+}
+.portfolio-home .hero-copy .hero-intro,
+.portfolio-home .hero-copy .hero-intro span,
+.portfolio-home .hero-copy .hero-intro small {
+  color: #f4f6fb !important;
+}
+.portfolio-home .hero-copy .hero-intro small {
+  color: rgba(244, 246, 251, 0.72) !important;
+}
+.portfolio-home .hero-copy .lead {
+  font-size: clamp(1.02rem, 1.35vw, 1.16rem);
+  line-height: 1.72;
+  max-width: 44ch;
+  color: rgba(244, 246, 251, 0.88);
+}
+.portfolio-home .hero-actions {
+  margin-top: 22px;
+  gap: 10px;
+}
+.portfolio-home .hero-footnote {
+  margin-top: 20px;
+  color: rgba(226, 232, 245, 0.72);
+}
+
+/* Hero Now Card */
+.hero-now-card {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  padding: 20px 22px;
+  color: #f4f6fb;
+  box-shadow: 0 18px 42px rgba(6, 10, 20, 0.34);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.now-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.now-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffb18b;
+}
+.now-all-link {
+  font-size: 0.82rem;
+  color: rgba(244, 246, 251, 0.78);
+  text-decoration: none;
+  font-weight: 600;
+}
+.now-all-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+.now-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.now-item.is-secondary {
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.14);
+}
+.now-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: rgba(244, 246, 251, 0.72);
+}
+.now-item strong {
+  font-size: 1.02rem;
+  line-height: 1.4;
+  color: #ffffff;
+}
+.now-item p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(235, 240, 250, 0.8);
+}
+.hero-now-card .update-links {
+  margin-top: 4px;
+}
+.hero-now-card .update-link {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+.hero-now-card .update-link:hover {
+  background: rgba(255, 140, 90, 0.24);
+  border-color: rgba(255, 140, 90, 0.55);
+}
+
+/* 4. Prominent "最近在做什么" Section (Light editorial card system + Dark theme support) */
+.updates-section-redesign,
+#updates.updates-section-redesign {
+  --text: #141923;
+  --text-muted: #4b5563;
+  --surface: #ffffff;
+  --surface-2: #faf8f4;
+  --border: #e2ddd4;
+  background: #ffffff !important;
+  color: #141923 !important;
+  border: 1px solid #e2ddd4;
+  border-radius: 22px;
+  padding: clamp(22px, 3.6vw, 38px);
+  margin-top: clamp(20px, 3vw, 34px);
+  box-shadow: 0 10px 30px rgba(20, 25, 35, 0.05);
+}
+.updates-section-redesign .section-head {
+  margin-bottom: 22px;
+}
+.updates-section-redesign .section-head h2 {
+  color: #141923 !important;
+}
+.updates-section-redesign .section-head p {
+  color: #4b5563 !important;
+  font-size: 0.96rem;
+}
+.updates-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.updates-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.update-card {
+  background: var(--surface-2, #faf8f4);
+  border: 1px solid var(--border, #e4dfd6);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.update-card:hover {
+  transform: translateY(-2px);
+  border-color: #d95f34;
+  box-shadow: 0 8px 22px rgba(217, 95, 52, 0.08);
+}
+.update-card.is-spotlight {
+  background: linear-gradient(135deg, #fff8f3 0%, #ffffff 100%);
+  border-color: rgba(217, 95, 52, 0.38);
+  padding: 22px 24px;
+}
+[data-theme="dark"] .updates-section-redesign,
+[data-theme="dark"] #updates.updates-section-redesign {
+  --text: #f1f5f9;
+  --text-muted: #cbd5e1;
+  --surface: #141b28;
+  --surface-2: #1a2232;
+  --border: rgba(255, 255, 255, 0.12);
+  background: #141b28 !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+[data-theme="dark"] .updates-section-redesign .section-head h2 {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .updates-section-redesign .section-head p {
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] .update-card {
+  background: #1a2232;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] .update-card.is-spotlight {
+  background: linear-gradient(135deg, rgba(217, 95, 52, 0.16), #1a2232);
+  border-color: rgba(255, 140, 90, 0.45);
+}
+.update-card-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted, #5c6676);
+}
+.upd-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: #e6f4ec;
+  color: #136b3d;
+}
+.upd-badge.is-wip {
+  background: #fff1e8;
+  color: #b84418;
+}
+.upd-badge.is-milestone {
+  background: #eaf1ff;
+  color: #1948b8;
+}
+.upd-tag {
+  margin-left: auto;
+  font-size: 0.76rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--text-muted, #556070);
+}
+.update-card h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.4;
+  color: var(--text, #141923);
+}
+.update-card.is-spotlight h3 {
+  font-size: 1.24rem;
+}
+.update-card p {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  color: var(--text-muted, #4a5565);
+}
+.update-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.update-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--border, #d8d2c7);
+  background: var(--surface, #ffffff);
+  color: var(--text, #141923);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.update-link:hover {
+  border-color: #d95f34;
+  color: #c24b22;
+}
+[data-theme="dark"] .update-link {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+}
+.updates-footer-bar {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border, #e2ddd4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.updates-footer-bar .sync-bar {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted, #5c6676);
+}
+
+/* Archive Page (updates.html) */
+.archive-hero {
+  padding: clamp(28px, 4vw, 48px) 0 18px;
+}
+.archive-hero h1 {
+  margin: 8px 0 8px;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+}
+.archive-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 5. Mobile Responsive Polish */
+@media (max-width: 900px) {
+  .portfolio-home .hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .updates-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .hero-now-card {
+    padding: 16px;
+  }
+  .updates-section-redesign {
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+  .update-card,
+  .update-card.is-spotlight {
+    padding: 16px;
+  }
+  .updates-footer-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .updates-footer-bar .btn {
+    text-align: center;
+    justify-content: center;
+  }
+}

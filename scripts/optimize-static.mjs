@@ -4,7 +4,7 @@ import { gzipSync, brotliCompressSync, constants } from 'node:zlib';
 import path from 'node:path';
 
 export async function optimizeStatic(directory) {
-  const files = ['index.html', '404.html', 'agent.html', ...(await readdir(path.join(directory, 'projects'))).filter(x => x.endsWith('.html')).map(x => 'projects/' + x)];
+  const files = ['index.html', 'updates.html', '404.html', 'agent.html', ...(await readdir(path.join(directory, 'projects'))).filter(x => x.endsWith('.html')).map(x => 'projects/' + x)];
   const written = new Map();
   async function combine(filename, tags, type, label) {
     const contents = await Promise.all(tags.map(async tag => {

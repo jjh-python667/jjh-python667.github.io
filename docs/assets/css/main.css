@@ -1965,10 +1965,9 @@ a {
   top: 0;
   left: 0;
   height: 3px;
-  width: 100%;
+  width: 0%;
   z-index: 80;
   background: var(--progress);
-  transform: scaleX(0);
   transform-origin: left center;
   pointer-events: none;
 }

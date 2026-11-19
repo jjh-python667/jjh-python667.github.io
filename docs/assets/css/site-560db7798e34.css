@@ -1965,10 +1965,9 @@ a {
   top: 0;
   left: 0;
   height: 3px;
-  width: 100%;
+  width: 0%;
   z-index: 80;
   background: var(--progress);
-  transform: scaleX(0);
   transform-origin: left center;
   pointer-events: none;
 }
@@ -2818,21 +2817,14 @@ body { text-rendering: optimizeLegibility; }
 .site-header {
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   border-bottom-color: transparent;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   transition: background .22s ease, border-color .22s ease, box-shadow .22s ease;
 }
 .site-header.is-scrolled {
   background: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
   border-bottom-color: var(--border);
   box-shadow: 0 5px 22px rgba(29, 45, 78, .04);
-}
-@media (pointer: coarse) {
-  .site-header, .site-header.is-scrolled {
-    background: var(--bg-elevated);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
 }
 .site-nav a { font-size: 13px; font-weight: 550; padding-inline: 14px; }
 .brand-sub { font-size: 11px; letter-spacing: .02em; }
@@ -3422,6 +3414,9 @@ body::before, body::after { display: none; }
   display: block;
   border-radius: 50%;
   opacity: .85;
+  animation: cinema-light-drift 27s cubic-bezier(.45, 0, .55, 1) infinite alternate;
+  animation-play-state: paused;
+  transform: translate3d(0, 0, 0);
 }
 .ambient-orb.orb-one {
   left: -29vw;
@@ -3436,6 +3431,9 @@ body::before, body::after { display: none; }
   width: 106vw;
   height: 130vh;
   background: radial-gradient(ellipse at 50% 44%, rgba(var(--cinema-cyan), .22), rgba(131, 163, 230, .05) 43%, transparent 69%);
+  animation-name: cinema-light-counter;
+  animation-duration: 33s;
+  animation-delay: -13s;
 }
 .ambient-orb.orb-three {
   bottom: -67vh;
@@ -3443,6 +3441,8 @@ body::before, body::after { display: none; }
   width: 122vw;
   height: 132vh;
   background: radial-gradient(ellipse at 45% 45%, rgba(172, 143, 211, .14), rgba(219, 191, 153, .07) 36%, transparent 65%);
+  animation-duration: 39s;
+  animation-delay: -8s;
 }
 .ambient-field::before {
   content: "";
@@ -3462,12 +3462,7 @@ body::before, body::after { display: none; }
   -webkit-mask-image: linear-gradient(180deg, #000, transparent 72%);
   mask-image: linear-gradient(180deg, #000, transparent 72%);
 }
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .ambient-orb.orb-one {
-    animation: cinema-light-drift 27s cubic-bezier(.45, 0, .55, 1) infinite alternate paused;
-  }
-  [data-motion="running"][data-page-visible="true"]:not([data-opening="running"]) .ambient-orb.orb-one { animation-play-state: running; }
-}
+[data-motion="running"][data-page-visible="true"] .ambient-orb { animation-play-state: running; }
 [data-theme="dark"] .ambient-field {
   background: radial-gradient(ellipse at 82% 8%, rgba(36, 76, 160, .16), transparent 66%);
 }
@@ -3483,8 +3478,12 @@ body::before, body::after { display: none; }
 [data-theme="dark"] .ambient-field::before { opacity: .1; }
 [data-theme="dark"] .ambient-contour { opacity: .2; }
 @keyframes cinema-light-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(5vw, 3vh, 0); }
+  from { transform: translate3d(-2vw, -1vh, 0) scale(.96); }
+  to { transform: translate3d(6vw, 5vh, 0) scale(1.08); }
+}
+@keyframes cinema-light-counter {
+  from { transform: translate3d(3vw, -1vh, 0) scale(1.04); }
+  to { transform: translate3d(-6vw, 6vh, 0) scale(.96); }
 }
 
 /* The rim is a separate pointer-transparent layer, never a glow over the copy. */
@@ -3532,14 +3531,10 @@ body::before, body::after { display: none; }
   [data-theme="dark"] .glow-surface:hover { box-shadow: 0 0 34px rgba(var(--cinema-blue), .14), 0 22px 65px rgba(0, 6, 24, .3); }
 }
 
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .card > a.card-cover { overflow: hidden; }
-  [data-motion="running"] .card > a.card-cover > img {
-    transition: scale .48s cubic-bezier(.22, 1, .36, 1);
-  }
-  [data-motion="running"] .card > a.card-cover:hover > img,
-  [data-motion="running"] .card > a.card-cover:focus-visible > img { scale: 1.035; }
-}
+/* GSAP owns transforms. Avoid an additional CSS transform transition per frame. */
+[data-cinematic-module] { transition-property: box-shadow, border-color, background-color, color !important; }
+.reveal-clip { overflow: hidden; }
+.reveal-clip img { display: block; transform-origin: 50% 50%; transition: none !important; }
 
 /* A finite opening curtain reveals the real hero; the page never waits on a loader. */
 .opening-scene { position: relative; isolation: isolate; }
@@ -3633,6 +3628,7 @@ body::before, body::after { display: none; }
 .motion-toggle-header:focus-visible { outline-offset: 3px; }
 .motion-toggle-header:hover { background: var(--accent-soft); }
 
+[data-motion="paused"] .ambient-orb, [data-page-visible="false"] .ambient-orb { animation-play-state: paused; }
 [data-motion="paused"] .surface-glow { transition: none; }
 [data-opening="skipped"] .opening-shutter, [data-opening="skipped"] .opening-signature { display: none; }
 @media (max-width: 899px) {
@@ -3658,11 +3654,18 @@ body::before, body::after { display: none; }
   .motion-toggle-header .motion-control-label { display: none; }
   .header-tools { gap: 6px; }
 }
+@media (pointer: coarse) {
+  .ambient-orb { animation: none; }
+}
 @media (prefers-reduced-motion: reduce) {
+  .ambient-orb { animation: none !important; }
   .surface-glow { transition: none; }
   .opening-shutter, .opening-signature,
   [data-opening="running"] .opening-shutter, [data-opening="running"] .opening-signature { display: none !important; }
 }
+
+/* Pending cards are masked only after the animation engine has registered them. */
+[data-cinematic-module][data-module-state="pending"] { opacity:0; }
 
 /* Ink, coral and cobalt: editorial contrast with a recognisable blue workshop. */
 :root {
@@ -3835,103 +3838,4 @@ body::before, body::after { display: none; }
   .portfolio-home .section-head p { grid-column: 1 / -1; }
   .card-body { padding: 22px; }
   .card h3, .featured-grid.multi > .card:not(.large) .card-body h3 { font-size: 20px; }
-}
-
-/* Motion Design / Premium: setup → title → workshop → supporting detail.
-   The large reveals are deliberate exceptions to the short UI duration palette. */
-:root {
-  --motion-quick: 160ms;
-  --motion-standard: 480ms;
-  --motion-slow: 800ms;
-  --motion-entrance: cubic-bezier(.22, 1, .36, 1);
-  --motion-ambient: cubic-bezier(.37, 0, .63, 1);
-}
-
-/* Give the opening one focal point. Ambient layers start after it resolves. */
-[data-opening="running"] :is(.hero-line-inner, .hero-kicker, .hero-intro,
-  .hero-copy .lead, .hero-actions, .hero-footnote, .creative-stage, .stage-core,
-  .stage-ticket, .stage-caption, .hero-showcase .workbench-desktop, .preview-project) { opacity: 0; }
-[data-opening="running"] .ambient-orb,
-[data-opening="running"] .creative-stage.is-stage-visible .stage-float,
-[data-opening="running"] .creative-stage.is-stage-visible .stage-ticket-body,
-[data-opening="running"] .creative-stage.is-stage-visible .orbit-beacon,
-[data-opening="running"] .creative-stage.is-stage-visible .stage-route,
-[data-opening="running"] .creative-stage.is-stage-visible .stage-status-tick,
-[data-opening="running"] .creative-stage.is-stage-visible::before {
-  animation-play-state: paused;
-}
-.orbit-beacon { animation-timing-function: var(--motion-ambient); }
-.stage-float { animation-duration: 9.6s; animation-timing-function: var(--motion-ambient); }
-.creative-stage::before { animation-duration: 9.6s; animation-timing-function: var(--motion-ambient); }
-/* Stable project tickets make the central object the primary ambient motion. */
-.stage-ticket-body { animation: none; }
-.stage-status-tick { animation: none; }
-.creative-stage:focus-within .stage-float,
-.creative-stage:focus-within .orbit-beacon,
-.creative-stage:focus-within::before { animation-play-state: paused !important; }
-.stage-ticket .ticket-arrow { transition: translate var(--motion-quick) var(--motion-entrance); }
-.stage-ticket:hover .ticket-arrow, .stage-ticket:focus-visible .ticket-arrow { translate: 2px -2px; }
-
-/* Response begins immediately; the quiet return takes slightly longer. */
-.btn, .icon-btn, .motion-toggle, .motion-toggle-header, .filter-chip, .filter-toggle {
-  transition: background-color 180ms var(--motion-entrance), color 180ms var(--motion-entrance),
-    border-color 180ms var(--motion-entrance), box-shadow 180ms var(--motion-entrance);
-}
-.btn > span[aria-hidden="true"], .preview-arrow, .card-arrow {
-  display: inline-block;
-  transition: translate 220ms var(--motion-entrance);
-}
-.btn:hover > span[aria-hidden="true"], .btn:focus-visible > span[aria-hidden="true"],
-.preview-project:hover .preview-arrow, .preview-project:focus-visible .preview-arrow,
-.card:hover .card-arrow { translate: 3px -2px; transition-duration: 90ms; }
-.btn:active, .filter-chip:active, .icon-btn:active { opacity: .88; }
-.surface-glow { transition: opacity 220ms var(--motion-entrance); }
-.glow-surface:hover > .surface-glow { transition-duration: 90ms; }
-.flow-panel { transition: none; }
-.flow-feedback.ok::before { content: "✓"; margin-right: .4em; font-weight: 700; }
-.flow-feedback.bad::before { content: "?"; margin-right: .4em; font-weight: 700; }
-
-@media (min-width: 860px) {
-  .site-nav a { position: relative; }
-  .site-nav a::after {
-    content: "";
-    position: absolute;
-    left: 14px; right: 14px; bottom: 3px;
-    height: 2px; border-radius: 2px; background: var(--accent);
-    transform: scaleX(0); transform-origin: left center;
-    transition: transform 220ms var(--motion-entrance);
-    pointer-events: none;
-  }
-  .site-nav a:hover::after, .site-nav a:focus-visible::after,
-  .site-nav a[aria-current]::after { transform: scaleX(1); }
-}
-@media (pointer: coarse) {
-  .stage-float { --float-range: 4px; animation-duration: 10.8s; }
-}
-/* Saved pause and system reduced motion stop both the scene and micro motion. */
-[data-motion="paused"] .btn > span[aria-hidden="true"],
-[data-motion="paused"] .preview-arrow, [data-motion="paused"] .card-arrow,
-[data-motion="paused"] .ticket-arrow { translate: none !important; transition: none; }
-[data-motion="paused"] .site-nav a::after { transition: none; }
-@media (prefers-reduced-motion: reduce) {
-  .btn > span[aria-hidden="true"], .preview-arrow, .card-arrow, .ticket-arrow { translate: none !important; }
-  .site-nav a::after { transition: none; }
-}
-
-/* Final integration: the published editorial type, with a quieter workshop. */
-[hidden] { display: none !important; }
-.ambient-field::before { opacity: .022; }
-.portfolio-home .hero-shell .lead { max-width: 32em; }
-.portfolio-home .hero-footnote { gap: 8px 16px; }
-.project-preview-strip .preview-project { min-height: 88px; }
-.project-preview-strip .preview-project small { line-height: 1.6; }
-.card.large.glow-surface > .surface-glow { opacity: .34; }
-.card[data-project="newsdesk"].glow-surface > .surface-glow { opacity: .56; }
-.card.glow-surface:hover > .surface-glow, .card.glow-surface:focus-within > .surface-glow { opacity: 1; }
-.portfolio-home .section-head p { color: var(--text-muted); }
-@media (max-width: 640px) {
-  .ambient-field::before { opacity: .014; }
-  .project-preview-strip .preview-project { min-height: 82px; }
-  .portfolio-home .hero-footnote { max-width: 31em; line-height: 1.7; }
-  .portfolio-home .hero-shell .lead { font-size: 14px; line-height: 1.85; }
 }

@@ -631,37 +631,40 @@
 
   /* ---------- scroll progress + section aria-current ---------- */
   var progress = document.querySelector("[data-scroll-progress]");
+  var sectionIds = ["works", "updates", "growth"];
   var siteHeader = document.querySelector(".site-header");
-  var sectionLinks = document.querySelectorAll(".site-nav a[data-nav-section]");
-  var sections = ["works", "updates", "growth"].map(function (id) {
-    return document.getElementById(id);
-  }).filter(Boolean);
-  var currentSection;
-  function updateScrollUI() {
+  function updateHeader() { if (siteHeader) siteHeader.classList.toggle("is-scrolled", window.scrollY > 24); }
+  function updateProgress() {
+    if (!progress) return;
     var el = document.documentElement;
-    var top = window.scrollY;
-    var max = progress ? el.scrollHeight - el.clientHeight : 0;
-    var ratio = max > 0 ? Math.min(1, Math.max(0, top / max)) : 0;
-    var offset = siteHeader && sections.length ? siteHeader.getBoundingClientRect().bottom + 8 : 72;
-    var active = "";
-    sections.forEach(function (section) {
-      if (section.getBoundingClientRect().top <= offset) active = section.id;
+    var max = Math.max(0, el.scrollHeight - el.clientHeight);
+    var top = el.scrollTop || document.body.scrollTop || 0;
+    var pct = max > 0 ? (top / max) * 100 : 0;
+    pct = Math.min(100, Math.max(0, pct));
+    progress.style.width = pct + "%";
+    progress.setAttribute("data-progress", String(Math.round(pct)));
+  }
+  function updateSectionNav() {
+    var links = document.querySelectorAll(".site-nav a[data-nav-section]");
+    if (!links.length) return;
+    var header = document.querySelector(".site-header");
+    var offset = header ? header.getBoundingClientRect().bottom + 8 : 72;
+    var active = null;
+    sectionIds.forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (!sec) return;
+      var top = sec.getBoundingClientRect().top;
+      if (top <= offset) active = id;
     });
-    if (progress) {
-      progress.style.transform = "scaleX(" + ratio + ")";
-      var pct = String(Math.round(ratio * 100));
-      if (progress.dataset.progress !== pct) progress.dataset.progress = pct;
-    }
-    if (siteHeader) {
-      var scrolled = siteHeader.classList.contains("is-scrolled");
-      siteHeader.classList.toggle("is-scrolled", top > (scrolled ? 16 : 32));
-    }
-    if (active === currentSection) return;
-    currentSection = active;
-    sectionLinks.forEach(function (link) {
-      if (link.getAttribute("aria-current") === "page") return;
-      if (active && link.dataset.navSection === active) link.setAttribute("aria-current", "true");
-      else link.removeAttribute("aria-current");
+    links.forEach(function (a) {
+      var key = a.getAttribute("data-nav-section");
+      if (active && key === active) {
+        a.setAttribute("aria-current", "true");
+      } else if (a.getAttribute("aria-current") === "page") {
+        /* keep page-level current on detail pages */
+      } else {
+        a.removeAttribute("aria-current");
+      }
     });
   }
   var ticking = false;
@@ -669,14 +672,19 @@
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(function () {
-      updateScrollUI();
+      updateHeader();
+      updateProgress();
+      updateSectionNav();
       ticking = false;
     });
   }
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("hashchange", onScroll);
-  window.addEventListener("resize", onScroll, { passive: true });
-  updateScrollUI();
+  window.addEventListener("hashchange", function () {
+    updateSectionNav();
+  });
+  updateProgress();
+  updateSectionNav();
+  updateHeader();
 
   /* ---------- tag filter (R10 P0-1: mobile collapse) ---------- */
   var filterRoot = document.querySelector("[data-works-filter]");

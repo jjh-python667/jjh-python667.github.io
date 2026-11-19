@@ -631,37 +631,40 @@
 
   /* ---------- scroll progress + section aria-current ---------- */
   var progress = document.querySelector("[data-scroll-progress]");
+  var sectionIds = ["works", "updates", "growth"];
   var siteHeader = document.querySelector(".site-header");
-  var sectionLinks = document.querySelectorAll(".site-nav a[data-nav-section]");
-  var sections = ["works", "updates", "growth"].map(function (id) {
-    return document.getElementById(id);
-  }).filter(Boolean);
-  var currentSection;
-  function updateScrollUI() {
+  function updateHeader() { if (siteHeader) siteHeader.classList.toggle("is-scrolled", window.scrollY > 24); }
+  function updateProgress() {
+    if (!progress) return;
     var el = document.documentElement;
-    var top = window.scrollY;
-    var max = progress ? el.scrollHeight - el.clientHeight : 0;
-    var ratio = max > 0 ? Math.min(1, Math.max(0, top / max)) : 0;
-    var offset = siteHeader && sections.length ? siteHeader.getBoundingClientRect().bottom + 8 : 72;
-    var active = "";
-    sections.forEach(function (section) {
-      if (section.getBoundingClientRect().top <= offset) active = section.id;
+    var max = Math.max(0, el.scrollHeight - el.clientHeight);
+    var top = el.scrollTop || document.body.scrollTop || 0;
+    var pct = max > 0 ? (top / max) * 100 : 0;
+    pct = Math.min(100, Math.max(0, pct));
+    progress.style.width = pct + "%";
+    progress.setAttribute("data-progress", String(Math.round(pct)));
+  }
+  function updateSectionNav() {
+    var links = document.querySelectorAll(".site-nav a[data-nav-section]");
+    if (!links.length) return;
+    var header = document.querySelector(".site-header");
+    var offset = header ? header.getBoundingClientRect().bottom + 8 : 72;
+    var active = null;
+    sectionIds.forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (!sec) return;
+      var top = sec.getBoundingClientRect().top;
+      if (top <= offset) active = id;
     });
-    if (progress) {
-      progress.style.transform = "scaleX(" + ratio + ")";
-      var pct = String(Math.round(ratio * 100));
-      if (progress.dataset.progress !== pct) progress.dataset.progress = pct;
-    }
-    if (siteHeader) {
-      var scrolled = siteHeader.classList.contains("is-scrolled");
-      siteHeader.classList.toggle("is-scrolled", top > (scrolled ? 16 : 32));
-    }
-    if (active === currentSection) return;
-    currentSection = active;
-    sectionLinks.forEach(function (link) {
-      if (link.getAttribute("aria-current") === "page") return;
-      if (active && link.dataset.navSection === active) link.setAttribute("aria-current", "true");
-      else link.removeAttribute("aria-current");
+    links.forEach(function (a) {
+      var key = a.getAttribute("data-nav-section");
+      if (active && key === active) {
+        a.setAttribute("aria-current", "true");
+      } else if (a.getAttribute("aria-current") === "page") {
+        /* keep page-level current on detail pages */
+      } else {
+        a.removeAttribute("aria-current");
+      }
     });
   }
   var ticking = false;
@@ -669,14 +672,19 @@
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(function () {
-      updateScrollUI();
+      updateHeader();
+      updateProgress();
+      updateSectionNav();
       ticking = false;
     });
   }
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("hashchange", onScroll);
-  window.addEventListener("resize", onScroll, { passive: true });
-  updateScrollUI();
+  window.addEventListener("hashchange", function () {
+    updateSectionNav();
+  });
+  updateProgress();
+  updateSectionNav();
+  updateHeader();
 
   /* ---------- tag filter (R10 P0-1: mobile collapse) ---------- */
   var filterRoot = document.querySelector("[data-works-filter]");
@@ -1069,19 +1077,19 @@
   var root = document.documentElement;
   var main = document.querySelector("main");
   if (!main) return;
-  var gsap = window.gsap;
+  var gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
   var fine = matchMedia("(hover: hover) and (pointer: fine)");
   var mobile = matchMedia("(max-width: 640px)");
-  var opening = null, openingPlayed = false, entryObserver = null;
-  var entriesInMotion = new Map(), visited = new Set(), registry = [];
-  var previousScroll = window.scrollY, previousScrollAt = performance.now(), fastUntil = 0;
+  var context = null, opening = null, openingPlayed = false, entryObserver = null;
+  var timelines = new Map(), visited = new Set(), registry = [];
   var hoverFrame = 0, glowTarget = null, glowX = 50, glowY = 0;
-  var entranceEase = "cubic-bezier(.22, 1, .36, 1)";
-  var maxEntrances = 3;
+  // Premium: decisive starts, long quiet landings, no overshoot. Keep theatrical
+  // reveals separate from the 160/480/800ms interaction duration palette.
+  var motion = { ease: "power3.out", reveal: 1.16, card: .8, beat: .12 };
   function enabled() { return root.dataset.motion === "running"; }
   function mark(node, state) { node.dataset.moduleState = state; }
   function clear(node) {
-    if (gsap && node) gsap.set(node, { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+    if (gsap) gsap.set(node, { clearProps: "transform,opacity,visibility,clipPath,willChange" });
   }
   // Register leaf modules; a card's controls never receive separate arrival transforms.
   var selectors = [
@@ -1090,7 +1098,7 @@
     ".update-item", ".sync-bar", ".growth-grid > .panel:first-child", ".growth-grid > .panel:last-child > h3", ".timeline-item",
     ".about > .section-display", ".about > p", ".detail-hero", ".agent-launch-card", ".agent-feature-list",
     ".agent-demo-grid > .cover-flow", ".demo-companion", ".agent-progress-card", ".detail-shot",
-    ".detail-lead-card", ".detail-lead > figure", ".detail-sections > article"
+    ".detail-lead-card", ".detail-lead > figure", ".detail-sections > article", ".site-footer"
   ];
   if (!main.classList.contains("detail-page") && !document.body.classList.contains("portfolio-home")) selectors.push("main.wrap.section");
   document.querySelectorAll(selectors.join(",")).forEach(function (node, index) {
@@ -1124,122 +1132,214 @@
       node.style.setProperty("--glow-y", "0%");
     });
   });
-  var diagnostic = { version: gsap && gsap.version, personality: "premium", openingDuration: 0,
-    modules: registry.length, sectionTitles: document.querySelectorAll(".section-display").length,
-    entryStrategy: "intersection-once", maxConcurrentEntries: maxEntrances };
-  Object.defineProperty(window, "jjhMotionDiagnostics", { value: diagnostic, configurable: true });
-
-  function finishOpening() {
-    if (opening) opening.progress(1);
+  var imageTargets = Array.from(document.querySelectorAll(".cover-shot img, .detail-shot img, .preview-project > img"));
+  imageTargets.forEach(function (image) { image.parentElement.classList.add("reveal-clip"); });
+  function settle() {
+    root.dataset.opening = "complete";
+    registry.forEach(function (node) { mark(node, "entered"); });
   }
-
-  document.addEventListener("focusin", function (event) {
-    finishOpening();
-    registry.forEach(function (node) {
-      if (!node.contains(event.target)) return;
-      visited.add(node);
-      if (entryObserver) entryObserver.unobserve(node);
-      var animation = entriesInMotion.get(node);
-      if (animation) animation.cancel();
+  if (!gsap || !ScrollTrigger) { settle(); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  var diagnostic = { version: gsap.version, personality: "premium", openingDuration: 0, modules: registry.length,
+    sectionTitles: document.querySelectorAll(".section-display").length, durationPalette: [160, 480, 800], maxStagger: 480 };
+  Object.defineProperty(window, "jjhMotionDiagnostics", { value: diagnostic, configurable: true });
+  function complete(node) { mark(node, "entered"); visited.add(node); clear(node); }
+  function finishInside(node) {
+    registry.forEach(function (module) {
+      if (module === node || module.contains(node)) {
+        var timeline = timelines.get(module);
+        if (timeline) timeline.progress(1);
+        complete(module);
+      }
     });
+  }
+  document.addEventListener("focusin", function (event) {
+    if (opening && opening.isActive()) { opening.progress(1); }
+    finishInside(event.target);
   });
-
-  function playEntry(entry) {
-    var node = entry.target;
-    if (!entry.isIntersecting || visited.has(node)) return;
-    entryObserver.unobserve(node);
-    visited.add(node);
-    if (!enabled() || document.hidden || opening || performance.now() < fastUntil ||
-        entriesInMotion.size >= maxEntrances || node.offsetParent === null) return;
-
-    // Start just ahead of the viewport. Scrolling back to existing content stays still.
-    if (entry.boundingClientRect.top < innerHeight - 18) return;
-    var target = node.querySelector(".section-display > .display-inner, :scope > .card-body") || node;
-    var distance = mobile.matches ? 10 : 16;
-    var animation = target.animate([
-      { translate: "0 " + distance + "px", opacity: .9 },
-      { translate: "0 0", opacity: 1 }
-    ], { duration: mobile.matches ? 320 : 420, easing: entranceEase });
-    entriesInMotion.set(node, animation);
+  function moduleTimeline(node, index) {
+    if (visited.has(node) || node.offsetParent === null) return;
+    if (node.matches(".hero-copy, .creative-stage, .hero-showcase .workbench-desktop, .preview-project") && root.dataset.opening === "running") return;
+    var inner = node.matches(".section-display") ? node.querySelector(".display-inner") : node.querySelector(".section-display > .display-inner");
+    var isHeader = node.matches(".section-head, .detail-hero, .section-display");
+    var siblings = Array.from(node.parentElement.children).filter(function (item) { return registry.includes(item); });
+    var staggerIndex = Math.max(0, siblings.indexOf(node));
+    var tl = gsap.timeline({ paused: true, defaults: { ease: motion.ease }, onStart: function () { mark(node, "playing"); }, onComplete: function () {
+      complete(node);
+      if (inner) clear(inner);
+      Array.from(node.children).forEach(function (child) { if (!child.classList.contains("surface-glow")) clear(child); });
+    } });
+    timelines.set(node, tl);
+    if (inner) {
+      // Pixel-bounded travel avoids translating a wide English line by >1/3 screen.
+      tl.fromTo(inner, { yPercent: 105, x: -Math.min(64, innerWidth * .08), scaleX: .9, transformOrigin: "left bottom" },
+        { yPercent: 0, x: 0, scaleX: 1, duration: mobile.matches ? .9 : motion.reveal, immediateRender: true }, 0);
+      var rest = Array.from(node.children).filter(function (child) { return !child.matches(".section-display, .surface-glow"); });
+      if (rest.length) tl.fromTo(rest, { y: mobile.matches ? 16 : 28, opacity: 0 },
+        { y: 0, opacity: 1, stagger: { amount: Math.min(.24, (rest.length - 1) * .08) }, duration: .48, immediateRender: true }, mobile.matches ? .32 : .46);
+    } else {
+      var isCard = node.matches(".card, .panel, .preview-project, .detail-shot, .detail-sections > article");
+      var delay = Math.min(staggerIndex, 3) * (mobile.matches ? .08 : motion.beat);
+      tl.fromTo(node, { y: mobile.matches ? 28 : 48, scale: isCard ? .985 : 1,
+        clipPath: "inset(0 0 100% 0 round 24px)", transformOrigin: "center bottom" },
+        { y: 0, scale: 1, clipPath: "inset(0 0 0% 0 round 24px)",
+          duration: mobile.matches ? .64 : motion.card, immediateRender: false }, delay);
+      var picture = node.querySelector(".detail-shot img, :scope > img");
+      if (picture && !picture.closest(".cover-shot")) tl.fromTo(picture,
+        { scale: 1.035 }, { scale: 1, duration: mobile.matches ? .64 : .8 }, delay + .12);
+    }
+    mark(node, "pending");
+    function playEntry() {
+      if (visited.has(node)) return;
+      var section = node.closest("section");
+      var lead = section && section.querySelector(":scope > .section-head");
+      if (!lead && !node.matches(".detail-hero")) lead = document.querySelector(".detail-hero");
+      if (lead && lead !== node && lead.dataset.moduleState === "playing") tl.delay(mobile.matches ? .32 : .48);
+      tl.play(0);
+    }
     mark(node, "playing");
-    animation.onfinish = animation.oncancel = function () {
-      entriesInMotion.delete(node);
-      mark(node, "entered");
-    };
+    playEntry();
   }
   function createOpening() {
     var shell = document.querySelector(".opening-scene");
-    if (!gsap || !shell || openingPlayed || location.hash || scrollY > 40) return;
+    if (!shell || openingPlayed || location.hash || scrollY > 40) { root.dataset.opening = "complete"; return; }
     openingPlayed = true;
     root.dataset.opening = "running";
     var heroModules = registry.filter(function (node) { return node.matches(".hero-copy, .creative-stage, .hero-showcase .workbench-desktop, .preview-project"); });
-    heroModules.forEach(function (node) { visited.add(node); });
+    heroModules.forEach(function (node) { mark(node, "playing"); });
     // CSS provides the initial concealed states. Initialize each tween at its
     // own cue rather than measuring every supporting element during startup.
-    opening = gsap.timeline({ defaults: { ease: "power3.out", immediateRender: false }, onComplete: function () {
+    opening = gsap.timeline({ defaults: { ease: motion.ease, immediateRender: false }, onComplete: function () {
       root.dataset.opening = "complete";
-      heroModules.forEach(clear);
-      gsap.set(".hero-line-inner, .hero-kicker, .hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote, .opening-shutter, .opening-signature, .stage-ticket, .stage-caption", { clearProps: "transform,opacity,visibility,clipPath,willChange" });
+      heroModules.forEach(complete);
+      gsap.set(".hero-line-inner, .hero-kicker, .hero-intro, .hero-copy .lead, .hero-actions, .hero-footnote, .opening-signature, .stage-ticket, .stage-caption", { clearProps: "transform,opacity,visibility,clipPath,willChange" });
       gsap.set(".stage-core", { clearProps: "opacity,clipPath" });
       clear(document.querySelector(".stage-core strong"));
-      opening = null;
     } });
-    opening.fromTo(".opening-signature", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .24 }, 0)
-      .fromTo(".opening-shutter", { clipPath: "inset(0% 0% 0% 0%)" },
-        { clipPath: "inset(0% 0% 100% 0%)", duration: .62, ease: "power3.inOut" }, .12)
-      .fromTo(".hero-line-inner", { yPercent: 100, scaleX: .95 },
-        { yPercent: 0, scaleX: 1, opacity: 1, duration: .7, stagger: .09 }, .22)
-      .fromTo(".hero-kicker, .hero-intro", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .04 }, .46)
-      .fromTo(".hero-copy .lead, .hero-actions, .hero-footnote", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .34, stagger: .07 }, .56)
-      .fromTo(".creative-stage", { y: 20, scale: .99, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .52 }, .52)
-      .fromTo(".stage-core", { opacity: 0 }, { opacity: 1, duration: .38 }, .66)
-      .fromTo(".stage-ticket", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .38, stagger: .06 }, .75)
-      .fromTo(".stage-caption, .hero-showcase .workbench-desktop", { y: 8, opacity: 0 },
-        { y: 0, opacity: 1, duration: .34, stagger: .05 }, .95)
-      .fromTo(".preview-project", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .32, stagger: .05 }, 1.05);
+    opening.fromTo(".opening-signature", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .4 }, 0)
+      .fromTo(".opening-shutter", { clipPath: "inset(0 0 0% 0)" }, { clipPath: "inset(0 0 100% 0)", duration: .92, ease: "power3.inOut" }, .18)
+      .fromTo(".hero-line-inner", { yPercent: 108, scaleX: .88, transformOrigin: "left bottom" },
+        { yPercent: 0, scaleX: 1, opacity: 1, duration: 1.16, stagger: .14 }, .42)
+      .fromTo(".hero-kicker, .hero-intro", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .48, stagger: .08 }, .9)
+      .fromTo(".hero-copy .lead, .hero-actions, .hero-footnote", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .48, stagger: .16 }, 1.08)
+      .fromTo(".creative-stage", { y: 48, scale: .97, clipPath: "inset(0 0 100% 0 round 32px)" },
+        { y: 0, scale: 1, opacity: 1, clipPath: "inset(0 0 0% 0 round 32px)", duration: .8 }, 1.05)
+      .fromTo(".stage-core", { opacity: 0 }, { opacity: 1, duration: .64 }, 1.26)
+      .fromTo(".stage-core strong", { y: 16, scale: .98 }, { y: 0, scale: 1, duration: .64 }, 1.26)
+      .fromTo(".stage-ticket", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .6, stagger: .12 }, 1.5)
+      .fromTo(".stage-caption", { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: .48 }, 1.94)
+      .fromTo(".hero-showcase .workbench-desktop", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .55 }, 1.96)
+      .fromTo(".preview-project", { y: 28, clipPath: "inset(0 0 100% 0 round 20px)" },
+        { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0 round 20px)", duration: .48, stagger: .08 }, 2.18);
+    // Same story, smaller motion budget on touch-sized screens.
     if (mobile.matches) opening.timeScale(1.25);
     diagnostic.openingDuration = opening.duration() / opening.timeScale();
+    heroModules.forEach(function (node) { timelines.set(node, opening); });
   }
-
+  function setupParallax() {
+    if (!fine.matches || mobile.matches) return;
+    // Long product screenshots must remain complete; only cropped covers can move.
+    document.querySelectorAll(".cover-shot img").forEach(function (image) {
+      gsap.fromTo(image, { yPercent: -3, scale: 1.08 }, { yPercent: 3, scale: 1.08, ease: "none",
+        scrollTrigger: { trigger: image.parentElement, start: "top bottom", end: "bottom top", scrub: .8 } });
+    });
+  }
   function teardown() {
     if (entryObserver) { entryObserver.disconnect(); entryObserver = null; }
-    finishOpening();
-    entriesInMotion.forEach(function (animation, node) {
-      animation.cancel();
-      mark(node, "entered");
-    });
-    entriesInMotion.clear();
-    root.dataset.opening = "complete";
+    if (opening) { opening.kill(); opening = null; }
+    if (context) { context.revert(); context = null; }
+    timelines.clear();
+    settle();
   }
   function build() {
     teardown();
-    if (!enabled() || document.hidden) return;
-    createOpening();
-    if ("IntersectionObserver" in window && Element.prototype.animate) {
-      entryObserver = new IntersectionObserver(function (entries, observer) {
-        if (entryObserver === observer) entries.forEach(playEntry);
-      }, { rootMargin: "40px 0px 64px 0px" });
+    if (!enabled()) return;
+    context = gsap.context(function () {
+      createOpening();
+      setupParallax();
+    }, document.body);
+    context.add("enterModule", moduleTimeline);
+    diagnostic.entryStrategy = "intersection-on-demand";
+    if ("IntersectionObserver" in window) {
+      entryObserver = new IntersectionObserver(function (entries) {
+        entries.filter(function (entry) { return entry.isIntersecting; })
+          .sort(function (a, b) { return registry.indexOf(a.target) - registry.indexOf(b.target); })
+          .forEach(function (entry) {
+            entryObserver.unobserve(entry.target);
+            if (context && enabled()) context.enterModule(entry.target, registry.indexOf(entry.target));
+          });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: .01 });
       registry.forEach(function (node) {
-        if (!visited.has(node)) entryObserver.observe(node);
+        if (visited.has(node) || node.dataset.moduleState === "playing") return;
+        mark(node, "pending");
+        entryObserver.observe(node);
       });
+    } else {
+      registry.forEach(function (node, index) { context.enterModule(node, index); });
     }
+    requestAnimationFrame(function () { ScrollTrigger.refresh(); });
   }
-  window.addEventListener("scroll", function () {
-    var now = performance.now(), top = window.scrollY;
-    var distance = Math.abs(top - previousScroll), elapsed = now - previousScrollAt;
-    if (distance >= 120 || (distance >= 28 && elapsed < 80 && distance / Math.max(elapsed, 8) > 2)) {
-      fastUntil = now + 150;
-    }
-    previousScroll = top;
-    previousScrollAt = now;
-    if (opening && top > 96) finishOpening();
-  }, { passive: true });
   document.addEventListener("jjh:motionchange", build);
   document.addEventListener("visibilitychange", function () {
-    if (document.hidden) teardown();
-    else build();
+    timelines.forEach(function (timeline, node) {
+      if (document.hidden && timeline.isActive()) { node.dataset.wasAnimating = "true"; timeline.pause(); }
+      else if (!document.hidden && node.dataset.wasAnimating === "true" && enabled()) { delete node.dataset.wasAnimating; timeline.resume(); }
+    });
   });
   window.addEventListener("pagehide", teardown);
   window.addEventListener("pageshow", function (event) { if (event.persisted) build(); });
+  window.addEventListener("load", function () { if (enabled()) ScrollTrigger.refresh(); }, { once: true });
+  mobile.addEventListener("change", build);
   build();
+})();
+
+;
+(function () {
+  var host = document.querySelector("[data-agent-service]");
+  if (!host) return;
+  var label = host.querySelector("[data-service-label]");
+  var detail = host.querySelector("[data-service-detail]");
+  var entry = host.querySelector("[data-workspace-link]");
+  var retry = host.querySelector("[data-service-retry]");
+  async function checkService() {
+    retry.disabled = true;
+    label.textContent = "正在检测学习服务…";
+    try {
+      var response = await fetch("/api/state", { credentials: "same-origin", signal: AbortSignal.timeout(5000), cache: "no-store" });
+      if (!response.ok && response.status !== 401) throw new Error("service unavailable");
+      host.dataset.connected = "true";
+      entry.href = "/learning/";
+      entry.textContent = response.status === 401 ? "登录学习工作台" : "打开学习工作台";
+      if (response.status === 401) {
+        label.textContent = "学习服务已连接";
+        detail.textContent = "登录自己的账户，继续课程、资料和对话。";
+      } else {
+        var state = await response.json();
+        label.textContent = state.configured ? "本机已连接 · 真实模型可用" : "本机已连接 · 模型待配置";
+        detail.textContent = state.configured ? "可以上传资料、提问和继续学习。当前为本机联调，公网邀请试用仍在准备。" : "课程和资料管理已可使用，配置模型后即可生成真实回复。";
+      }
+    } catch (error) {
+      host.dataset.connected = "false";
+      label.textContent = "等待学习服务连接";
+      detail.textContent = "可以先体验下方示例，并在开放进度里查看公网试用状态。";
+      entry.href = "#trial-status";
+      entry.textContent = "查看开放进度";
+    } finally { retry.disabled = false; }
+  }
+  retry.addEventListener("click", checkService);
+  document.querySelectorAll("[data-demo-step]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var target = document.querySelector('[data-flow-step="' + button.dataset.demoStep + '"]');
+      if (target) { target.click(); target.focus({ preventScroll: true }); }
+    });
+  });
+  if (document.querySelector('meta[name="deployment-mode"][content="static-portfolio"]')) {
+    host.dataset.connected = "false";
+    label.textContent = "GitHub Pages 作品展示";
+    detail.textContent = "这里提供项目说明和固定示例；真实学习后台尚未在公网部署，不会在此索取账户或模型 Key。";
+    entry.href = "#trial-status";
+    entry.textContent = "查看开放进度";
+    retry.hidden = true;
+  } else checkService();
 })();
